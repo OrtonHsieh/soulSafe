@@ -13,8 +13,8 @@ class CIC {
     
     let M1 = "081F39"
     let M2 = "0C3855"
-    let M3 = "50BFDB"
-    let F1 = "0E4665"
+    let M3 = "0E4665"
+    let F1 = "50BFDB"
     let F2 = "7BD9F1"
 }
 // swiftlint:enable identifier_name

@@ -59,13 +59,27 @@ class MainViewController: UIViewController {
         } catch {
             print("Error setting up capture device: \(error.localizedDescription)")
         }
+        
+        view.layoutIfNeeded() // ??? 檢查是否需要以及其機制
     }
     
     override func viewDidLayoutSubviews() {
-        cameraView?.cameraDisplayView.layer.cornerRadius = 30
-        cameraView?.cameraDisplayView.layer.shadowOffset = CGSize(width: 0, height: 4)
-        cameraView?.cameraDisplayView.layer.shadowColor = UIColor(hex: "18B7E7").cgColor
-        cameraView?.cameraDisplayView.layer.shadowOpacity = 4
+//        cameraView?.cameraDisplayView.layer.masksToBounds = false
+//        cameraView?.cameraDisplayView.clipsToBounds = true
+//        cameraView?.cameraDisplayView.layer.cornerRadius = 43
+//        cameraView?.cameraDisplayView.layer.shadowOffset = CGSize(width: 0, height: 0)
+//        cameraView?.cameraDisplayView.layer.shadowColor = UIColor(red: 24/255, green: 183/255, blue: 231/255, alpha: 0.4).cgColor
+//        cameraView?.cameraDisplayView.layer.shadowOpacity = 1.0
+        
+//        cameraView?.videoPreviewLayer?.cornerRadius = 30
+        
+        // 紀錄：這邊如果是設定在 view 上面的效果較不明顯，但相同設定，設定在 AVLayer 上就會有預期的效果但會讓 raidus 消失
+        //            previewLayer.masksToBounds = false
+        //            previewLayer.shadowColor = UIColor(red: 24/255, green: 183/255, blue: 231/255, alpha: 0.4).cgColor
+        //            previewLayer.shadowOpacity = 1.0
+        //            previewLayer.shadowRadius = 43
+        //            previewLayer.shadowOffset = CGSize(width: 0, height: 0)
+        cameraView?.buttonCorner.layer.cornerRadius = 50
     }
     
     // Capture photo button action
