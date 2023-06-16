@@ -20,21 +20,6 @@ class MainViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        //        cameraView?.cameraDisplayView.layer.masksToBounds = false
-        //        cameraView?.cameraDisplayView.clipsToBounds = true
-        //        cameraView?.cameraDisplayView.layer.cornerRadius = 43
-        //        cameraView?.cameraDisplayView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        //        cameraView?.cameraDisplayView.layer.shadowColor = UIColor(red: 24/255, green: 183/255, blue: 231/255, alpha: 0.4).cgColor
-        //        cameraView?.cameraDisplayView.layer.shadowOpacity = 1.0
-        
-        //        cameraView?.videoPreviewLayer?.cornerRadius = 30
-        
-        // 紀錄：這邊如果是設定在 view 上面的效果較不明顯，但相同設定，設定在 AVLayer 上就會有預期的效果但會讓 raidus 消失
-        //            previewLayer.masksToBounds = false
-        //            previewLayer.shadowColor = UIColor(red: 24/255, green: 183/255, blue: 231/255, alpha: 0.4).cgColor
-        //            previewLayer.shadowOpacity = 1.0
-        //            previewLayer.shadowRadius = 43
-        //            previewLayer.shadowOffset = CGSize(width: 0, height: 0)
         cameraView?.buttonCorner.layer.cornerRadius = 50
     }
     
@@ -75,24 +60,6 @@ class MainViewController: UIViewController {
             cameraView.delegate = self
             view.addSubview(cameraView)
             
-//            // Create photo captured view
-//            photoImageView = UIImageView()
-//            guard let photoImageView = photoImageView else { return }
-//            cameraView.addSubview(photoImageView)
-//            photoImageView.translatesAutoresizingMaskIntoConstraints = false
-//            let cameraWidth: CGFloat = view.frame.width
-//            let cameraHeight: CGFloat = (cameraWidth / 325) * 404
-//            NSLayoutConstraint.activate([
-//                photoImageView.leadingAnchor.constraint(equalTo: cameraView.leadingAnchor),
-//                photoImageView.trailingAnchor.constraint(equalTo: cameraView.trailingAnchor),
-//                photoImageView.centerXAnchor.constraint(equalTo: cameraView.centerXAnchor),
-//                photoImageView.centerYAnchor.constraint(equalTo: cameraView.centerYAnchor, constant: -62),
-//                photoImageView.widthAnchor.constraint(equalToConstant: cameraWidth),
-//                photoImageView.heightAnchor.constraint(equalToConstant: cameraHeight)
-//            ])
-//            photoImageView.contentMode = .scaleAspectFit
-//            photoImageView.isHidden = true
-            
             DispatchQueue.global(qos: .background).async {
                 // Start running the capture session
                 captureSession.startRunning()
@@ -118,6 +85,10 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             cameraView?.photoImageView.contentMode = .scaleAspectFill
             cameraView?.photoImageView.isHidden = false
             cameraView?.cameraDisplayView.isHidden = true
+            cameraView?.closeButton.isHidden = false
+            cameraView?.picButton.isHidden = true
+            cameraView?.buttonCorner.isHidden = true
+            cameraView?.sendButton.isHidden = false
         }
     }
 }
@@ -134,5 +105,9 @@ extension MainViewController: CameraViewDelegate {
         Vibration.shared.mediumV()
         cameraView?.photoImageView.isHidden = true
         cameraView?.cameraDisplayView.isHidden = false
+        cameraView?.closeButton.isHidden = true
+        cameraView?.buttonCorner.isHidden = false
+        cameraView?.picButton.isHidden = false
+        cameraView?.sendButton.isHidden = true
     }
 }

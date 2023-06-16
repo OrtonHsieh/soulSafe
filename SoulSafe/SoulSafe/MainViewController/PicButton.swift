@@ -52,7 +52,7 @@ class PicButton: UIButton {
     private func updateButtonAppearance() {
         if isButtonHighlighted {
             // Update the button's appearance for the highlighted state
-            Vibration.shared.hardV()
+            Vibration.shared.mediumV()
             value = 80
             layer.borderWidth = 8
             layer.cornerRadius = 42

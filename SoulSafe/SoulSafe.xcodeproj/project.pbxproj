@@ -53,6 +53,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9127BBD32A3C66D8008DB929 /* BaseViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9127BBC32A3ABCD5008DB929 /* BSViewController.swift */,
+			);
+			path = BaseViewController;
+			sourceTree = "<group>";
+		};
+		9127BBD42A3C66EC008DB929 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */,
+				9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */,
+				9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9127BBD52A3C6713008DB929 /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				91D5A07C2A39CC3500B093AE /* MainViewController.swift */,
+				9127BBCB2A3AE197008DB929 /* MainView.swift */,
+				9127BBCD2A3C100A008DB929 /* PicButton.swift */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
+		9127BBD62A3C6809008DB929 /* MemoriesViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */,
+			);
+			path = MemoriesViewController;
+			sourceTree = "<group>";
+		};
+		9127BBD72A3C6813008DB929 /* SettingViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */,
+			);
+			path = SettingViewController;
+			sourceTree = "<group>";
+		};
 		91D5A06C2A39CC3500B093AE = {
 			isa = PBXGroup;
 			children = (
@@ -74,15 +118,11 @@
 			children = (
 				91D5A0782A39CC3500B093AE /* AppDelegate.swift */,
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
-				9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */,
-				9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */,
-				9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */,
-				9127BBC32A3ABCD5008DB929 /* BSViewController.swift */,
-				91D5A07C2A39CC3500B093AE /* MainViewController.swift */,
-				9127BBCB2A3AE197008DB929 /* MainView.swift */,
-				9127BBCD2A3C100A008DB929 /* PicButton.swift */,
-				9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */,
-				9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */,
+				9127BBD72A3C6813008DB929 /* SettingViewController */,
+				9127BBD62A3C6809008DB929 /* MemoriesViewController */,
+				9127BBD42A3C66EC008DB929 /* Extensions */,
+				9127BBD32A3C66D8008DB929 /* BaseViewController */,
+				9127BBD52A3C6713008DB929 /* MainViewController */,
 				91D5A07E2A39CC3500B093AE /* Main.storyboard */,
 				91D5A0812A39CC3600B093AE /* Assets.xcassets */,
 				91D5A0832A39CC3600B093AE /* LaunchScreen.storyboard */,

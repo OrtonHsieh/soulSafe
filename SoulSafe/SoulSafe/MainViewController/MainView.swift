@@ -22,6 +22,7 @@ class CameraView: UIView {
     let flashButton = UIButton()
     let reverseButton = UIButton()
     let closeButton = UIButton()
+    lazy var sendButton = UIButton()
     lazy var photoImageView = UIImageView()
     weak var delegate: CameraViewDelegate?
     
@@ -38,26 +39,31 @@ class CameraView: UIView {
     }
     
     func setupView() {
-        [cameraDisplayView, buttonCorner, flashButton, reverseButton, closeButton, photoImageView].forEach {
+        [cameraDisplayView, buttonCorner, flashButton, reverseButton, closeButton, photoImageView, sendButton].forEach {
             addSubview($0)
         }
         buttonCorner.addSubview(picButton)
         buttonCorner.backgroundColor = UIColor(hex: CIC.shared.F2)
         buttonCorner = Blur.shared.setViewShadow(buttonCorner)
-
+        
         picButton.addTarget(self, action: #selector(takePic), for: .touchUpInside)
         
         closeButton.setImage(UIImage(named: "icon-return"), for: .normal)
         closeButton.backgroundColor = UIColor.clear
         closeButton.addTarget(self, action: #selector(closeBtmPressed), for: .touchUpInside)
+        closeButton.isHidden = true
         
         photoImageView.contentMode = .scaleAspectFit
         photoImageView = Blur.shared.setImgViewShadow(photoImageView)
         photoImageView.isHidden = true
+        
+        sendButton = Blur.shared.setButtonShadow(sendButton)
+        sendButton.setImage(UIImage(named: "icon-send"), for: .normal)
+        sendButton.isHidden = true
     }
-
+    
     func setupConstrants() {
-        [cameraDisplayView, buttonCorner, flashButton, reverseButton, picButton, closeButton, photoImageView].forEach {
+        [cameraDisplayView, buttonCorner, flashButton, reverseButton, picButton, closeButton, photoImageView, sendButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         let cameraWidth: CGFloat = frame.width
@@ -88,7 +94,12 @@ class CameraView: UIView {
             photoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             photoImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -62),
             photoImageView.widthAnchor.constraint(equalToConstant: cameraWidth),
-            photoImageView.heightAnchor.constraint(equalToConstant: cameraHeight)
+            photoImageView.heightAnchor.constraint(equalToConstant: cameraHeight),
+            
+            sendButton.centerXAnchor.constraint(equalTo: buttonCorner.centerXAnchor),
+            sendButton.centerYAnchor.constraint(equalTo: buttonCorner.centerYAnchor),
+            sendButton.heightAnchor.constraint(equalToConstant: 100),
+            sendButton.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
     
@@ -97,7 +108,7 @@ class CameraView: UIView {
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
         videoPreviewLayer?.videoGravity = .resizeAspectFill
         videoPreviewLayer?.frame = bounds
-
+        
         if let previewLayer = videoPreviewLayer {
             cameraDisplayView.layer.addSublayer(previewLayer)
             
@@ -106,14 +117,13 @@ class CameraView: UIView {
             previewLayer.shadowOpacity = 1.0
             previewLayer.shadowRadius = 43
             previewLayer.shadowOffset = CGSize(width: 0, height: 0)
-//            previewLayer.cornerRadius = 30
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         videoPreviewLayer?.frame = CGRect(x: 0, y: 0, width: 390, height: 484.79999999999995)
-//        videoPreviewLayer?.cornerRadius = 30
+        //        videoPreviewLayer?.cornerRadius = 30
     }
     
     @objc func takePic() {
