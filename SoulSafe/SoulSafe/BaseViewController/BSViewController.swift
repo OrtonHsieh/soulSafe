@@ -46,7 +46,10 @@ class BSViewController: UIViewController {
         }
         
         // Update the content size of the scroll view
-        scrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(viewControllers.count), height: view.bounds.height)
+        scrollView.contentSize = CGSize(
+            width: view.bounds.width * CGFloat(viewControllers.count),
+            height: view.bounds.height
+        )
         
         // Set the initial content offset to show the second view controller
         scrollView.contentOffset = CGPoint(x: view.bounds.width, y: 0)

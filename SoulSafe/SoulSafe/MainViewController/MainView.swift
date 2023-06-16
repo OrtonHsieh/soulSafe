@@ -11,6 +11,7 @@ import AVFoundation
 protocol CameraViewDelegate: AnyObject {
     func didTakePic(_ view: CameraView)
     func didPressCloseBtm(_ view: CameraView)
+    func didPressSendBtm(_ view: CameraView, image: UIImage)
 }
 
 class CameraView: UIView {
@@ -59,6 +60,7 @@ class CameraView: UIView {
         
         sendButton = Blur.shared.setButtonShadow(sendButton)
         sendButton.setImage(UIImage(named: "icon-send"), for: .normal)
+        sendButton.addTarget(self, action: #selector(sendBtmPressed), for: .touchUpInside)
         sendButton.isHidden = true
     }
     
@@ -132,5 +134,10 @@ class CameraView: UIView {
     
     @objc func closeBtmPressed() {
         delegate?.didPressCloseBtm(self)
+    }
+    
+    @objc func sendBtmPressed() {
+        guard let picImage = photoImageView.image else { return }
+        delegate?.didPressSendBtm(self, image: picImage)
     }
 }

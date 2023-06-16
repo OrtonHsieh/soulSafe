@@ -12,6 +12,7 @@ class MainViewController: UIViewController {
     var captureSession: AVCaptureSession?
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
+    var images: [UIImage] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,5 +110,17 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.buttonCorner.isHidden = false
         cameraView?.picButton.isHidden = false
         cameraView?.sendButton.isHidden = true
+    }
+    
+    func didPressSendBtm(_ view: CameraView, image: UIImage) {
+        Vibration.shared.lightV()
+        cameraView?.photoImageView.isHidden = true
+        cameraView?.cameraDisplayView.isHidden = false
+        cameraView?.closeButton.isHidden = true
+        cameraView?.buttonCorner.isHidden = false
+        cameraView?.picButton.isHidden = false
+        cameraView?.sendButton.isHidden = true
+        images.append(image)
+        print(images)
     }
 }
