@@ -19,6 +19,7 @@ class BSViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         setupScrollView()
         setupScrollViewConponents()
+        mainVC.deletage = self
     }
     
     func setupScrollView() {
@@ -53,6 +54,7 @@ class BSViewController: UIViewController {
         
         // Set the initial content offset to show the second view controller
         scrollView.contentOffset = CGPoint(x: view.bounds.width, y: 0)
+        scrollView.bringSubviewToFront(viewControllers[1].view)
     }
 }
 
@@ -62,6 +64,14 @@ extension BSViewController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollView.contentOffset.y = 0 // 鎖住垂直滾動，將 y 軸偏移量設為 0
+        // 鎖住垂直滾動，將 y 軸偏移量設為 0
+        scrollView.contentOffset.y = 0
+    }
+}
+
+extension BSViewController: MainViewControllerDelegate {
+    func didSentImg(_ VC: MainViewController, image: UIImage) {
+        memoriesVC.images.append(image)
+        memoriesVC.galleryCollection.reloadData()
     }
 }

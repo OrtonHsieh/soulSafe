@@ -8,11 +8,15 @@
 import AVFoundation
 import UIKit
 
+protocol MainViewControllerDelegate: AnyObject {
+    func didSentImg(_ mainVC: MainViewController, image: UIImage)
+}
+
 class MainViewController: UIViewController {
     var captureSession: AVCaptureSession?
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
-    var images: [UIImage] = []
+    weak var deletage: MainViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,7 +124,6 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.buttonCorner.isHidden = false
         cameraView?.picButton.isHidden = false
         cameraView?.sendButton.isHidden = true
-        images.append(image)
-        print(images)
+        deletage?.didSentImg(self, image: image)
     }
 }

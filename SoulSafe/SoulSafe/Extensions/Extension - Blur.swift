@@ -10,6 +10,8 @@ import UIKit
 class Blur {
     static let shared = Blur()
     
+    private init() {}
+    
     func setViewShadow(_ inputView: UIView) -> UIView {
         let inputView = inputView
         inputView.layer.masksToBounds = false
