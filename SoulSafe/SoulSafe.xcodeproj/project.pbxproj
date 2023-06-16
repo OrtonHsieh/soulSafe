@@ -14,6 +14,7 @@
 		9127BBCC2A3AE197008DB929 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBCB2A3AE197008DB929 /* MainView.swift */; };
 		9127BBCE2A3C100A008DB929 /* PicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBCD2A3C100A008DB929 /* PicButton.swift */; };
 		9127BBD02A3C381B008DB929 /* Extension - Vibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */; };
+		9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -30,6 +31,7 @@
 		9127BBCB2A3AE197008DB929 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9127BBCD2A3C100A008DB929 /* PicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicButton.swift; sourceTree = "<group>"; };
 		9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - Vibration.swift"; sourceTree = "<group>"; };
+		9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - Blur.swift"; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
 				9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */,
 				9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */,
+				9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */,
 				9127BBC32A3ABCD5008DB929 /* BSViewController.swift */,
 				91D5A07C2A39CC3500B093AE /* MainViewController.swift */,
 				9127BBCB2A3AE197008DB929 /* MainView.swift */,
@@ -188,6 +191,7 @@
 				91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */,
 				9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */,
 				9127BBD02A3C381B008DB929 /* Extension - Vibration.swift in Sources */,
+				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,

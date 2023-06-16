@@ -35,24 +35,10 @@ class PicButton: UIButton {
         HAForButton?.isActive = true
         layer.borderWidth = 4
         layer.cornerRadius = 42
-        
-        addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        // Customize the button appearance
-        setupButton()
-        
-        WAForButton = widthAnchor.constraint(equalToConstant: value)
-        WAForButton?.isActive = true
-        HAForButton = heightAnchor.constraint(equalToConstant: value)
-        HAForButton?.isActive = true
-        layer.borderWidth = 4
-        layer.cornerRadius = 42
-        
-        addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
     private func setupButton() {
@@ -70,7 +56,6 @@ class PicButton: UIButton {
             value = 80
             layer.borderWidth = 8
             layer.cornerRadius = 42
-            print("isHighlighted")
         } else {
             // Update the button's appearance for the normal state
             Vibration.shared.lightV()
@@ -78,11 +63,5 @@ class PicButton: UIButton {
             layer.borderWidth = 4
             layer.cornerRadius = 42
         }
-    }
-    
-    @objc private func buttonTapped() {
-        // Handle the button tap event here
-        // You can add your own implementation for the button tap action
-        print("Button tapped")
     }
 }
