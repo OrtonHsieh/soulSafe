@@ -7,5 +7,6 @@ target 'SoulSafe' do
 
   # Pods for SoulSafe
   pod 'IQKeyboardManagerSwift'
+  pod 'GrowingTextView', '0.7.2'
 
 end
