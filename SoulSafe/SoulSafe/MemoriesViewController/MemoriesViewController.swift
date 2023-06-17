@@ -44,6 +44,20 @@ class MemoriesViewController: UIViewController {
             galleryCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    func presentPostViewController(_ image: UIImage) {
+        let postVC = PostViewController()
+        postVC.modalPresentationStyle = .formSheet
+        postVC.imageView.image = image
+        present(postVC, animated: true)
+        
+        if let sheetPC = postVC.sheetPresentationController {
+            sheetPC.detents = [.large()]
+            sheetPC.prefersGrabberVisible = true
+            sheetPC.delegate = self
+            sheetPC.preferredCornerRadius = 30
+        }
+    }
 }
 
 extension MemoriesViewController: UICollectionViewDelegateFlowLayout {
@@ -58,7 +72,17 @@ extension MemoriesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
+        presentPostViewController(images[indexPath.row])
     }
+}
+
+extension MemoriesViewController: UIAdaptivePresentationControllerDelegate {
+    // 可选的委托方法，用于自定义表单的交互和动画等
+    // 在这里可以实现 presentationControllerDidDismiss 方法，用于在表单被关闭时执行一些操作
+}
+
+extension MemoriesViewController: UISheetPresentationControllerDelegate{
+    
 }
 
 extension MemoriesViewController: UICollectionViewDelegate {

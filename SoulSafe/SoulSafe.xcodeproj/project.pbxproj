@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2BA622A3FDB341C77624419C /* Pods_SoulSafe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */; };
 		9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC32A3ABCD5008DB929 /* BSViewController.swift */; };
 		9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */; };
 		9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */; };
@@ -17,6 +18,9 @@
 		9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */; };
 		9127BBD92A3C8131008DB929 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBD82A3C8131008DB929 /* MemoriesView.swift */; };
 		9127BBDB2A3C8A0C008DB929 /* MemoriesCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBDA2A3C8A0C008DB929 /* MemoriesCollectionViewItem.swift */; };
+		9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBDE2A3D8C05008DB929 /* PostViewController.swift */; };
+		9127BBE22A3D8C3B008DB929 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBE12A3D8C3B008DB929 /* PostTableViewCell.swift */; };
+		9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBE32A3D958B008DB929 /* TextAreaView.swift */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -26,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0494520C1224165E0ED5398A /* Pods-SoulSafe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.debug.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.debug.xcconfig"; sourceTree = "<group>"; };
+		35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSafe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9127BBC32A3ABCD5008DB929 /* BSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSViewController.swift; sourceTree = "<group>"; };
 		9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
 		9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -36,6 +42,9 @@
 		9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - Blur.swift"; sourceTree = "<group>"; };
 		9127BBD82A3C8131008DB929 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		9127BBDA2A3C8A0C008DB929 /* MemoriesCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesCollectionViewItem.swift; sourceTree = "<group>"; };
+		9127BBDE2A3D8C05008DB929 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		9127BBE12A3D8C3B008DB929 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		9127BBE32A3D958B008DB929 /* TextAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaView.swift; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +53,7 @@
 		91D5A0812A39CC3600B093AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91D5A0842A39CC3600B093AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91D5A0862A39CC3600B093AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FD7B7C8562038BE58B555248 /* Pods-SoulSafe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.release.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,12 +61,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BA622A3FDB341C77624419C /* Pods_SoulSafe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C67271D51CD525D3F222DA2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9127BBD32A3C66D8008DB929 /* BaseViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +110,7 @@
 				9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */,
 				9127BBD82A3C8131008DB929 /* MemoriesView.swift */,
 				9127BBDA2A3C8A0C008DB929 /* MemoriesCollectionViewItem.swift */,
+				9127BBE02A3D8C09008DB929 /* PostViewController */,
 			);
 			path = MemoriesViewController;
 			sourceTree = "<group>";
@@ -103,11 +123,23 @@
 			path = SettingViewController;
 			sourceTree = "<group>";
 		};
+		9127BBE02A3D8C09008DB929 /* PostViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9127BBDE2A3D8C05008DB929 /* PostViewController.swift */,
+				9127BBE12A3D8C3B008DB929 /* PostTableViewCell.swift */,
+				9127BBE32A3D958B008DB929 /* TextAreaView.swift */,
+			);
+			path = PostViewController;
+			sourceTree = "<group>";
+		};
 		91D5A06C2A39CC3500B093AE = {
 			isa = PBXGroup;
 			children = (
 				91D5A0772A39CC3500B093AE /* SoulSafe */,
 				91D5A0762A39CC3500B093AE /* Products */,
+				A79C49737D22B4728B07C1B4 /* Pods */,
+				5C67271D51CD525D3F222DA2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,6 +169,16 @@
 			path = SoulSafe;
 			sourceTree = "<group>";
 		};
+		A79C49737D22B4728B07C1B4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0494520C1224165E0ED5398A /* Pods-SoulSafe.debug.xcconfig */,
+				FD7B7C8562038BE58B555248 /* Pods-SoulSafe.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -144,10 +186,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91D5A0892A39CC3600B093AE /* Build configuration list for PBXNativeTarget "SoulSafe" */;
 			buildPhases = (
+				C0395170E757759FA0B3B341 /* [CP] Check Pods Manifest.lock */,
 				91D5A0712A39CC3500B093AE /* Sources */,
 				91D5A0722A39CC3500B093AE /* Frameworks */,
 				91D5A0732A39CC3500B093AE /* Resources */,
 				917FBE212A3AA0CE00B7C95C /* ShellScript */,
+				A0136ED55C9CB450BA2C3CC3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -223,6 +267,45 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		A0136ED55C9CB450BA2C3CC3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SoulSafe/Pods-SoulSafe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SoulSafe/Pods-SoulSafe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SoulSafe/Pods-SoulSafe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0395170E757759FA0B3B341 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SoulSafe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -232,8 +315,11 @@
 			files = (
 				91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */,
 				9127BBDB2A3C8A0C008DB929 /* MemoriesCollectionViewItem.swift in Sources */,
+				9127BBE22A3D8C3B008DB929 /* PostTableViewCell.swift in Sources */,
+				9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */,
 				9127BBCC2A3AE197008DB929 /* MainView.swift in Sources */,
 				9127BBCE2A3C100A008DB929 /* PicButton.swift in Sources */,
+				9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */,
 				9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */,
 				91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */,
 				9127BBD92A3C8131008DB929 /* MemoriesView.swift in Sources */,
@@ -318,7 +404,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -372,7 +458,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -384,6 +470,7 @@
 		};
 		91D5A08A2A39CC3600B093AE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0494520C1224165E0ED5398A /* Pods-SoulSafe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -414,6 +501,7 @@
 		};
 		91D5A08B2A39CC3600B093AE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD7B7C8562038BE58B555248 /* Pods-SoulSafe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

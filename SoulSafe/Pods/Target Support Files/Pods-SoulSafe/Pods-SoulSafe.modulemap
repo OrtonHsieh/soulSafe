@@ -1,0 +1,6 @@
+framework module Pods_SoulSafe {
+  umbrella header "Pods-SoulSafe-umbrella.h"
+
+  export *
+  module * { export * }
+}
