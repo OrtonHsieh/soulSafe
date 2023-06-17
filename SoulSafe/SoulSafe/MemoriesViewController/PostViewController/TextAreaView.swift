@@ -8,7 +8,13 @@
 import UIKit
 import GrowingTextView
 
+protocol TextAreaViewDelegate: AnyObject {
+    func didSendCmt(_ view: TextAreaView, comment: String)
+}
+
 class TextAreaView: UIView {
+    weak var delegate: TextAreaViewDelegate?
+    
     lazy var inputTextView: UITextView = {
         let textView = GrowingTextView()
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 36)
@@ -64,9 +70,8 @@ class TextAreaView: UIView {
     
     @objc private func buttonDidPress() {
         print("send message")
+        delegate?.didSendCmt(self, comment: inputTextView.text)
     }
 }
 
-extension TextAreaView: UITextViewDelegate {
-    
-}
+extension TextAreaView: UITextViewDelegate {}

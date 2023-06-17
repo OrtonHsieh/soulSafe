@@ -49,13 +49,14 @@ class MemoriesViewController: UIViewController {
         let postVC = PostViewController()
         postVC.modalPresentationStyle = .formSheet
         postVC.imageView.image = image
+        Vibration.shared.lightV()
         present(postVC, animated: true)
         
         if let sheetPC = postVC.sheetPresentationController {
             sheetPC.detents = [.large()]
             sheetPC.prefersGrabberVisible = true
             sheetPC.delegate = self
-            sheetPC.preferredCornerRadius = 30
+            sheetPC.preferredCornerRadius = 20
         }
     }
 }

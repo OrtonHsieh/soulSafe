@@ -95,7 +95,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             cameraView?.photoImageView.layer.rasterizationScale = UIScreen.main.scale
 
             cameraView?.photoImageView.isHidden = false
-            cameraView?.cameraDisplayView.isHidden = true
+            cameraView?.cameraView.isHidden = true
             cameraView?.closeButton.isHidden = false
             cameraView?.picButton.isHidden = true
             cameraView?.buttonCorner.isHidden = true
@@ -115,7 +115,7 @@ extension MainViewController: CameraViewDelegate {
     func didPressCloseBtm(_ view: CameraView) {
         Vibration.shared.mediumV()
         cameraView?.photoImageView.isHidden = true
-        cameraView?.cameraDisplayView.isHidden = false
+        cameraView?.cameraView.isHidden = false
         cameraView?.closeButton.isHidden = true
         cameraView?.buttonCorner.isHidden = false
         cameraView?.picButton.isHidden = false
@@ -125,7 +125,7 @@ extension MainViewController: CameraViewDelegate {
     func didPressSendBtm(_ view: CameraView, image: UIImage) {
         Vibration.shared.lightV()
         cameraView?.photoImageView.isHidden = true
-        cameraView?.cameraDisplayView.isHidden = false
+        cameraView?.cameraView.isHidden = false
         cameraView?.closeButton.isHidden = true
         cameraView?.buttonCorner.isHidden = false
         cameraView?.picButton.isHidden = false

@@ -17,7 +17,7 @@ protocol CameraViewDelegate: AnyObject {
 class CameraView: UIView {
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     
-    let cameraDisplayView = UIView()
+    let cameraView = UIView()
     let picButton = PicButton()
     lazy var buttonCorner = UIView()
     let flashButton = UIButton()
@@ -40,7 +40,7 @@ class CameraView: UIView {
     }
     
     func setupView() {
-        [cameraDisplayView, buttonCorner, flashButton, reverseButton, closeButton, photoImageView, sendButton].forEach {
+        [cameraView, buttonCorner, flashButton, reverseButton, closeButton, photoImageView, sendButton].forEach {
             addSubview($0)
         }
         buttonCorner.addSubview(picButton)
@@ -65,20 +65,21 @@ class CameraView: UIView {
     }
     
     func setupConstrants() {
-        [cameraDisplayView, buttonCorner, flashButton, reverseButton, picButton, closeButton, photoImageView, sendButton].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+        let list = [
+            cameraView, buttonCorner, flashButton, reverseButton, picButton, closeButton, photoImageView, sendButton
+        ]
+        list.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         let cameraWidth: CGFloat = frame.width
         let cameraHeight: CGFloat = (cameraWidth / 325) * 404
         NSLayoutConstraint.activate([
-            cameraDisplayView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            cameraDisplayView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            cameraDisplayView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            cameraDisplayView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -62),
-            cameraDisplayView.widthAnchor.constraint(equalToConstant: cameraWidth),
-            cameraDisplayView.heightAnchor.constraint(equalToConstant: cameraHeight),
+            cameraView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            cameraView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            cameraView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            cameraView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -62),
+            cameraView.widthAnchor.constraint(equalToConstant: cameraWidth),
+            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight),
             
-            buttonCorner.topAnchor.constraint(equalTo: cameraDisplayView.bottomAnchor, constant: 52),
+            buttonCorner.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 52),
             buttonCorner.centerXAnchor.constraint(equalTo: centerXAnchor),
             buttonCorner.heightAnchor.constraint(equalToConstant: 100),
             buttonCorner.widthAnchor.constraint(equalToConstant: 100),
@@ -112,12 +113,12 @@ class CameraView: UIView {
         videoPreviewLayer?.frame = bounds
         
         if let previewLayer = videoPreviewLayer {
-            cameraDisplayView.layer.addSublayer(previewLayer)
+            cameraView.layer.addSublayer(previewLayer)
             
-            cameraDisplayView.layer.masksToBounds = true
-            cameraDisplayView.layer.cornerRadius = 30
-            cameraDisplayView.layer.shouldRasterize = true
-            cameraDisplayView.layer.rasterizationScale = UIScreen.main.scale
+            cameraView.layer.masksToBounds = true
+            cameraView.layer.cornerRadius = 30
+            cameraView.layer.shouldRasterize = true
+            cameraView.layer.rasterizationScale = UIScreen.main.scale
             
             // 這邊光暈現在吃不到參數
 //            previewLayer.masksToBounds = false
