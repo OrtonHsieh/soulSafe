@@ -53,7 +53,7 @@ class CameraView: UIView {
         closeButton.backgroundColor = UIColor.clear
         closeButton.addTarget(self, action: #selector(closeBtmPressed), for: .touchUpInside)
         closeButton.isHidden = true
-        
+        // 光暈沒有真正吃到參數
         photoImageView.contentMode = .scaleAspectFit
         photoImageView = Blur.shared.setImgViewShadow(photoImageView)
         photoImageView.isHidden = true
@@ -114,11 +114,21 @@ class CameraView: UIView {
         if let previewLayer = videoPreviewLayer {
             cameraDisplayView.layer.addSublayer(previewLayer)
             
-            previewLayer.masksToBounds = false
-            previewLayer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
-            previewLayer.shadowOpacity = 1.0
-            previewLayer.shadowRadius = 43
-            previewLayer.shadowOffset = CGSize(width: 0, height: 0)
+            cameraDisplayView.layer.masksToBounds = true
+            cameraDisplayView.layer.cornerRadius = 30
+            cameraDisplayView.layer.shouldRasterize = true
+            cameraDisplayView.layer.rasterizationScale = UIScreen.main.scale
+            
+            // 這邊光暈現在吃不到參數
+//            previewLayer.masksToBounds = false
+//            previewLayer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
+//            previewLayer.shadowOpacity = 1.0
+//            previewLayer.shadowRadius = 43
+//            previewLayer.shadowOffset = CGSize(width: 0, height: 0)
+//
+//            previewLayer.cornerRadius = 30
+//            previewLayer.shouldRasterize = true
+//            previewLayer.rasterizationScale = UIScreen.main.scale
         }
     }
     

@@ -88,6 +88,12 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
         if let image = UIImage(data: imageData) {
             cameraView?.photoImageView.image = image
             cameraView?.photoImageView.contentMode = .scaleAspectFill
+            // 設置圓角目前會導致光暈吃不到參數
+            cameraView?.photoImageView.layer.cornerRadius = 30
+            cameraView?.photoImageView.layer.masksToBounds = true
+            cameraView?.photoImageView.layer.shouldRasterize = true
+            cameraView?.photoImageView.layer.rasterizationScale = UIScreen.main.scale
+
             cameraView?.photoImageView.isHidden = false
             cameraView?.cameraDisplayView.isHidden = true
             cameraView?.closeButton.isHidden = false

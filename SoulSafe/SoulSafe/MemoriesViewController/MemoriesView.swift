@@ -22,10 +22,7 @@ class MemoriesView: UIView {
     
     func setupView() {
         [backButton].forEach { addSubview($0) }
-        if let image = UIImage(named: "icon-bigBack") {
-            let flippedImage = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .downMirrored)
-            backButton.setImage(flippedImage.withRenderingMode(.alwaysTemplate), for: .normal)
-        }
+        backButton.setImage(UIImage(named: "icon-bigBack"), for: .normal)
         backButton.addTarget(self, action: #selector(buttonDidPress), for: .touchUpInside)
     }
     
