@@ -25,6 +25,9 @@
 		917CF54D2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */; };
 		917CF5502A3EFB1A00F02D48 /* MyGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54F2A3EFB1A00F02D48 /* MyGroupViewController.swift */; };
 		917CF5522A3EFB8E00F02D48 /* MyGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5512A3EFB8E00F02D48 /* MyGroupTableViewCell.swift */; };
+		917CF5552A3F1B8E00F02D48 /* EditGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5542A3F1B8E00F02D48 /* EditGroupViewController.swift */; };
+		917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5562A3F1B9600F02D48 /* EditGroupView.swift */; };
+		917CF5592A3F1BA100F02D48 /* EditGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -53,6 +56,9 @@
 		917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - GroupList.swift"; sourceTree = "<group>"; };
 		917CF54F2A3EFB1A00F02D48 /* MyGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupViewController.swift; sourceTree = "<group>"; };
 		917CF5512A3EFB8E00F02D48 /* MyGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupTableViewCell.swift; sourceTree = "<group>"; };
+		917CF5542A3F1B8E00F02D48 /* EditGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupViewController.swift; sourceTree = "<group>"; };
+		917CF5562A3F1B9600F02D48 /* EditGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupView.swift; sourceTree = "<group>"; };
+		917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupTableViewCell.swift; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +162,9 @@
 		917CF5532A3F18F000F02D48 /* EditGroupViewController */ = {
 			isa = PBXGroup;
 			children = (
+				917CF5542A3F1B8E00F02D48 /* EditGroupViewController.swift */,
+				917CF5562A3F1B9600F02D48 /* EditGroupView.swift */,
+				917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */,
 			);
 			path = EditGroupViewController;
 			sourceTree = "<group>";
@@ -341,11 +350,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */,
+				917CF5552A3F1B8E00F02D48 /* EditGroupViewController.swift in Sources */,
 				9127BBDB2A3C8A0C008DB929 /* MemoriesCollectionViewItem.swift in Sources */,
 				9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */,
+				917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */,
 				917CF5522A3EFB8E00F02D48 /* MyGroupTableViewCell.swift in Sources */,
 				9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */,
 				9127BBCC2A3AE197008DB929 /* MainView.swift in Sources */,
+				917CF5592A3F1BA100F02D48 /* EditGroupTableViewCell.swift in Sources */,
 				9127BBCE2A3C100A008DB929 /* PicButton.swift in Sources */,
 				9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */,
 				9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */,

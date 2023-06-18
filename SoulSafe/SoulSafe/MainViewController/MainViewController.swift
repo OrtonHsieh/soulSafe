@@ -151,5 +151,4 @@ extension MainViewController: CameraViewDelegate {
 }
 
 extension MainViewController: UISheetPresentationControllerDelegate {
-    
 }

@@ -64,25 +64,24 @@ class GroupViewController: UIViewController {
             editGroupBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editGroupBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             editGroupBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            editGroupBtn.widthAnchor.constraint(equalToConstant: 111),
             editGroupBtn.heightAnchor.constraint(equalToConstant: 54)
         ])
     }
     
     @objc func didPressGroupBtn() {
         Vibration.shared.lightV()
-//        let groupVC = GroupViewController()
-//        groupVC.modalPresentationStyle = .formSheet
-//        Vibration.shared.lightV()
-//        
-//        present(groupVC, animated: true)
-//        
-//        if let sheetPC = groupVC.sheetPresentationController {
-//            sheetPC.detents = [.medium()]
-//            sheetPC.prefersGrabberVisible = true
-//            sheetPC.delegate = self
-//            sheetPC.preferredCornerRadius = 20
-//        }
+        let groupVC = EditGroupViewController()
+        groupVC.modalPresentationStyle = .formSheet
+        Vibration.shared.lightV()
+        
+        present(groupVC, animated: true)
+        
+        if let sheetPC = groupVC.sheetPresentationController {
+            sheetPC.detents = [.large()]
+            sheetPC.prefersGrabberVisible = true
+            sheetPC.delegate = self
+            sheetPC.preferredCornerRadius = 20
+        }
     }
 }
 
@@ -105,4 +104,7 @@ extension GroupViewController: UITableViewDataSource {
         cell.groupLabel.text = mockData[indexPath.row]
         return cell
     }
+}
+
+extension GroupViewController: UISheetPresentationControllerDelegate {
 }
