@@ -116,8 +116,8 @@ extension MemoriesViewController: UICollectionViewDataSource {
         cell.layer.masksToBounds = false
         cell.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
         cell.layer.shadowOpacity = 1.0
-        cell.layer.shadowRadius = 43
-        cell.layer.shadowOffset = CGSize(width: 0, height: 70)
+        cell.layer.shadowRadius = 80
+        cell.layer.shadowOffset = CGSize(width: 0, height: 150)
         // 帶入圖片資料
         cell.memoryImgView.image = images[indexPath.row]
         return cell

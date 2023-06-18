@@ -12,21 +12,6 @@ class PostViewController: UIViewController {
     lazy var textAreaView = TextAreaView()
     lazy var postTableView = UITableView()
     
-//    lazy var groupView: UIView = {
-//        let groupView = UIView()
-//        groupView.frame = CGRect(x: 16, y: 12, width: 120, height: 36)
-//        groupView.layer.borderWidth = 1
-//        groupView.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
-//        groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
-//        groupView.layer.cornerRadius = 15
-//        let groupLabel = UILabel()
-//        groupLabel.text = "選擇留言串"
-//        groupLabel.frame = CGRect(x: 11, y: 6, width: groupView.frame.width - 22, height: groupView.frame.height - 12)
-//        groupLabel.font = .systemFont(ofSize: 16, weight: .medium)
-//        groupView.addSubview(groupLabel)
-//        return groupView
-//    }()
-    
     var comments: [String] = ["今天跟高中同學出去（有你前男友", "他去幹嘛拉去搞笑ㄛ", "笑死超氣耶哈哈哈哈哈哈"]
     var avatars: [UIImage?] = [UIImage(named: "avatar-1"), UIImage(named: "avatar-2"), UIImage(named: "avatar-3")]
     

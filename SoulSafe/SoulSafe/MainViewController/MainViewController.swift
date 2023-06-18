@@ -26,6 +26,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         cameraView?.buttonCorner.layer.cornerRadius = 50
+        cameraView?.groupContainerView.layer.cornerRadius = 18
     }
     
     func createCamera() {
@@ -112,7 +113,7 @@ extension MainViewController: CameraViewDelegate {
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
     
-    func didPressCloseBtm(_ view: CameraView) {
+    func didPressCloseBtn(_ view: CameraView) {
         Vibration.shared.mediumV()
         cameraView?.photoImageView.isHidden = true
         cameraView?.cameraView.isHidden = false
@@ -122,7 +123,7 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.sendButton.isHidden = true
     }
     
-    func didPressSendBtm(_ view: CameraView, image: UIImage) {
+    func didPressSendBtn(_ view: CameraView, image: UIImage) {
         Vibration.shared.lightV()
         cameraView?.photoImageView.isHidden = true
         cameraView?.cameraView.isHidden = false
@@ -132,4 +133,23 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.sendButton.isHidden = true
         deletage?.didSentImg(self, image: image)
     }
+    
+    func didPressGroupBtn(_ view: CameraView) {
+        let groupVC = GroupViewController()
+        groupVC.modalPresentationStyle = .formSheet
+        Vibration.shared.lightV()
+        
+        present(groupVC, animated: true)
+        
+        if let sheetPC = groupVC.sheetPresentationController {
+            sheetPC.detents = [.medium()]
+            sheetPC.prefersGrabberVisible = true
+            sheetPC.delegate = self
+            sheetPC.preferredCornerRadius = 20
+        }
+    }
+}
+
+extension MainViewController: UISheetPresentationControllerDelegate {
+    
 }
