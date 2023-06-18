@@ -91,7 +91,9 @@ class EditGroupView: UIView {
             copyLinkBtn.centerYAnchor.constraint(equalTo: getGroupLinkView.centerYAnchor, constant: -1),
             copyLinkBtn.widthAnchor.constraint(equalToConstant: 35),
             copyLinkBtn.heightAnchor.constraint(equalToConstant: 35),
-            copyLinkBtn.trailingAnchor.constraint(equalTo: getGroupLinkView.trailingAnchor, constant: -copyLinkConstant),
+            copyLinkBtn.trailingAnchor.constraint(
+                equalTo: getGroupLinkView.trailingAnchor, constant: -copyLinkConstant
+            ),
             
             editGroupLabel.topAnchor.constraint(equalTo: getGroupLinkView.bottomAnchor, constant: 28),
             editGroupLabel.centerXAnchor.constraint(equalTo: centerXAnchor)

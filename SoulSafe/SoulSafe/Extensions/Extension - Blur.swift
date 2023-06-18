@@ -44,4 +44,15 @@ class Blur {
         inputButton.layer.shadowOffset = CGSize(width: 0, height: 0)
         return inputButton
     }
+    
+    func setTableViewShadow(_ inputTableView: UITableView) -> UITableView {
+        let inputTableView = inputTableView
+        inputTableView.layer.masksToBounds = false
+        
+        inputTableView.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
+        inputTableView.layer.shadowOpacity = 1.0
+        inputTableView.layer.shadowRadius = 43
+        inputTableView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        return inputTableView
+    }
 }
