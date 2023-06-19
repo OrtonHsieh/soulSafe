@@ -87,6 +87,7 @@ extension EditGroupViewController: UITableViewDelegate {
         
         let confirmAction = UIAlertAction(title: "退出", style: .default) { _ in
             self.mockData.remove(at: indexPath.row)
+            self.viewDidLoad()
             tableView.reloadData()
         }
         
