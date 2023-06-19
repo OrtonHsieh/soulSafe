@@ -28,6 +28,7 @@
 		917CF5552A3F1B8E00F02D48 /* EditGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5542A3F1B8E00F02D48 /* EditGroupViewController.swift */; };
 		917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5562A3F1B9600F02D48 /* EditGroupView.swift */; };
 		917CF5592A3F1BA100F02D48 /* EditGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */; };
+		917CF55B2A3FFEC700F02D48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -59,6 +60,7 @@
 		917CF5542A3F1B8E00F02D48 /* EditGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupViewController.swift; sourceTree = "<group>"; };
 		917CF5562A3F1B9600F02D48 /* EditGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupView.swift; sourceTree = "<group>"; };
 		917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupTableViewCell.swift; sourceTree = "<group>"; };
+		917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				91D5A0812A39CC3600B093AE /* Assets.xcassets */,
 				91D5A0832A39CC3600B093AE /* LaunchScreen.storyboard */,
 				91D5A0862A39CC3600B093AE /* Info.plist */,
+				917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */,
 			);
 			path = SoulSafe;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 				91D5A0852A39CC3600B093AE /* LaunchScreen.storyboard in Resources */,
 				91D5A0822A39CC3600B093AE /* Assets.xcassets in Resources */,
 				91D5A0802A39CC3500B093AE /* Main.storyboard in Resources */,
+				917CF55B2A3FFEC700F02D48 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,7 +523,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QC3WT35T4Y;
+				DEVELOPMENT_TEAM = 7953TRA3N2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoulSafe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
@@ -534,7 +538,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsieh.SoulSafe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsiehpapaj.SoulSafe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -550,7 +554,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QC3WT35T4Y;
+				DEVELOPMENT_TEAM = 7953TRA3N2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoulSafe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
@@ -565,7 +569,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsieh.SoulSafe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsiehpapaj.SoulSafe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

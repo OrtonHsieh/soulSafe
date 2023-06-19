@@ -8,5 +8,7 @@ target 'SoulSafe' do
   # Pods for SoulSafe
   pod 'IQKeyboardManagerSwift'
   pod 'GrowingTextView', '0.7.2'
+  pod 'FirebaseAuth', '9.0'
+  pod 'FirebaseFirestore', '9.0'
 
 end
