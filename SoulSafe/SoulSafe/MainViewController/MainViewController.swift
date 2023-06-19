@@ -7,6 +7,9 @@
 
 import AVFoundation
 import UIKit
+import FirebaseStorage
+import FirebaseCore
+import FirebaseFirestore
 
 protocol MainViewControllerDelegate: AnyObject {
     func didSentImg(_ mainVC: MainViewController, image: UIImage)
@@ -17,6 +20,7 @@ class MainViewController: UIViewController {
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
     weak var deletage: MainViewControllerDelegate?
+    let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +78,22 @@ class MainViewController: UIViewController {
             print("Error setting up capture device: \(error.localizedDescription)")
         }
     }
+    
+    func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+        
+        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
+        if let data = image.jpegData(compressionQuality: 0.9) {
+            
+            fileReference.putData(data, metadata: nil) { result in
+                switch result {
+                case .success:
+                    fileReference.downloadURL(completion: completion)
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }
 
 extension MainViewController: AVCapturePhotoCaptureDelegate {
@@ -94,7 +114,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             cameraView?.photoImageView.layer.masksToBounds = true
             cameraView?.photoImageView.layer.shouldRasterize = true
             cameraView?.photoImageView.layer.rasterizationScale = UIScreen.main.scale
-
+            
             cameraView?.photoImageView.isHidden = false
             cameraView?.cameraView.isHidden = true
             cameraView?.closeButton.isHidden = false
@@ -131,7 +151,32 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.buttonCorner.isHidden = false
         cameraView?.picButton.isHidden = false
         cameraView?.sendButton.isHidden = true
+        
+        // 把資料傳給 BaseVC
         deletage?.didSentImg(self, image: image)
+        
+        uploadPhoto(image: image) { result in
+            switch result {
+            case .success(let url):
+                print(url)
+                // 上傳資料
+                let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+                
+                postPath.document().setData([
+                    "postImgURL": "\(url)",
+                    "postID": "\(postPath.document().documentID)"
+                ]) { err in
+                    if let err = err {
+                        print("Error writing document: \(err)")
+                    } else {
+                        print("Document successfully written!")
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     func didPressGroupBtn(_ view: CameraView) {

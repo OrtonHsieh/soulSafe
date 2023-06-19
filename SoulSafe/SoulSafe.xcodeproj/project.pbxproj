@@ -29,6 +29,8 @@
 		917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5562A3F1B9600F02D48 /* EditGroupView.swift */; };
 		917CF5592A3F1BA100F02D48 /* EditGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */; };
 		917CF55B2A3FFEC700F02D48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */; };
+		917CF55E2A407FAF00F02D48 /* Struct - User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF55D2A407FAF00F02D48 /* Struct - User.swift */; };
+		917CF5602A40809200F02D48 /* Struct - UploadImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -61,6 +63,8 @@
 		917CF5562A3F1B9600F02D48 /* EditGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupView.swift; sourceTree = "<group>"; };
 		917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupTableViewCell.swift; sourceTree = "<group>"; };
 		917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		917CF55D2A407FAF00F02D48 /* Struct - User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct - User.swift"; sourceTree = "<group>"; };
+		917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct - UploadImg.swift"; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -171,6 +175,15 @@
 			path = EditGroupViewController;
 			sourceTree = "<group>";
 		};
+		917CF55C2A407F5E00F02D48 /* Struct */ = {
+			isa = PBXGroup;
+			children = (
+				917CF55D2A407FAF00F02D48 /* Struct - User.swift */,
+				917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */,
+			);
+			path = Struct;
+			sourceTree = "<group>";
+		};
 		91D5A06C2A39CC3500B093AE = {
 			isa = PBXGroup;
 			children = (
@@ -194,6 +207,7 @@
 			children = (
 				91D5A0782A39CC3500B093AE /* AppDelegate.swift */,
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
+				917CF55C2A407F5E00F02D48 /* Struct */,
 				9127BBD72A3C6813008DB929 /* SettingViewController */,
 				9127BBD42A3C66EC008DB929 /* Extensions */,
 				9127BBD32A3C66D8008DB929 /* BaseViewController */,
@@ -376,6 +390,8 @@
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,
+				917CF5602A40809200F02D48 /* Struct - UploadImg.swift in Sources */,
+				917CF55E2A407FAF00F02D48 /* Struct - User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,7 @@ import UIKit
 class MemoriesViewController: UIViewController {
     let galleryCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let memoriesView = MemoriesView()
-    var images: [UIImage] = [UIImage(named: "fakePost")!]
+    var images: [UIImage] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +83,6 @@ extension MemoriesViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension MemoriesViewController: UISheetPresentationControllerDelegate{
-    
 }
 
 extension MemoriesViewController: UICollectionViewDelegate {
@@ -104,7 +103,9 @@ extension MemoriesViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemoriesCVI", for: indexPath) as? MemoriesCVI else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "MemoriesCVI",
+            for: indexPath) as? MemoriesCVI else {
             fatalError("Could not create Cell")
         }
         // 設置圖片呈現方式
