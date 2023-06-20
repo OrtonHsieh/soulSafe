@@ -184,24 +184,26 @@ extension PostViewController: TextAreaViewDelegate {
     func didSendCmt(_ view: TextAreaView, comment: String) {
         Vibration.shared.lightV()
         
-        let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts")
-        let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
-        
-        postCommentPath.setData([
-            "userID": "userIDOrton",
-            "commentID": "\(postCommentPath.documentID)",
-            "timeStamp": Timestamp(date: Date()),
-            "comment": comment
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
+        if textAreaView.inputTextView.text.isEmpty == false {
+            let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+            let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
+            
+            postCommentPath.setData([
+                "userID": "userIDOrton",
+                "commentID": "\(postCommentPath.documentID)",
+                "timeStamp": Timestamp(date: Date()),
+                "comment": comment
+            ]) { err in
+                if let err = err {
+                    print("Error writing document: \(err)")
+                } else {
+                    print("Document successfully written!")
+                }
             }
+            
+            textAreaView.inputTextView.text = ""
+            
+            viewDidLoad()
         }
-        
-        textAreaView.inputTextView.text = ""
-        
-        viewDidLoad()
     }
 }
