@@ -6,14 +6,18 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseFirestore
 
 class PostViewController: UIViewController {
     lazy var imageView = UIImageView()
     lazy var textAreaView = TextAreaView()
     lazy var postTableView = UITableView()
+    let db = Firestore.firestore()
+    var currentPostID = String()
     
-    var comments: [String] = ["今天跟高中同學出去（有你前男友", "他去幹嘛拉去搞笑ㄛ", "笑死超氣耶哈哈哈哈哈哈"]
-    var avatars: [UIImage?] = [UIImage(named: "avatar-1"), UIImage(named: "avatar-2"), UIImage(named: "avatar-3")]
+    var comments: [String] = []
+    var timeStamps: [Timestamp] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +25,7 @@ class PostViewController: UIViewController {
         setupInputView()
         setupTableViewConstraints()
         setupInputViewConstraints()
+        getPostComment()
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,6 +71,35 @@ class PostViewController: UIViewController {
             textAreaView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             textAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    func getPostComment() {
+        let docRef = db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+        let commentRef = docRef.document("\(currentPostID)").collection("comments").order(by: "timeStamp", descending: true)
+        commentRef.getDocuments {
+            (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                var index = 0
+                for document in querySnapshot!.documents {
+                    print("\(document.documentID) => \(document.data())")
+                    let data = document.data()
+                    guard let comment = data["comment"] as? String else { return }
+                    guard let timeStamp = data["timeStamp"] as? Timestamp else { return }
+                    
+                    if index <= self.comments.count - 1 {
+                        self.comments[index] = comment
+                        self.timeStamps[index] = timeStamp
+                    } else {
+                        self.comments.append(comment)
+                        self.timeStamps.append(timeStamp)
+                    }
+                    index += 1
+                }
+            }
+            self.postTableView.reloadData()
+        }
     }
 }
 
@@ -136,10 +170,11 @@ extension PostViewController: UITableViewDataSource {
                 for: indexPath) as? PostTBCellCmt else {
                 fatalError("Could not create cell")
             }
+            // 還要將 comments 放入資料 array
             cell.backgroundColor = UIColor(hex: CIC.shared.M1)
             cell.selectionStyle = .none
             cell.commentLabel.text = comments[indexPath.row]
-            cell.avatarView.image = avatars[indexPath.row]
+            cell.avatarView.image = UIImage(named: "avatar-1")
             return cell
         }
     }
@@ -148,9 +183,25 @@ extension PostViewController: UITableViewDataSource {
 extension PostViewController: TextAreaViewDelegate {
     func didSendCmt(_ view: TextAreaView, comment: String) {
         Vibration.shared.lightV()
-        comments.append(comment)
-        avatars.append(UIImage(named: "avatar-1"))
+        
+        let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+        let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
+        
+        postCommentPath.setData([
+            "userID": "userIDOrton",
+            "commentID": "\(postCommentPath.documentID)",
+            "timeStamp": Timestamp(date: Date()),
+            "comment": comment
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+        
         textAreaView.inputTextView.text = ""
-        postTableView.reloadData()
+        
+        viewDidLoad()
     }
 }

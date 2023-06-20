@@ -50,11 +50,12 @@ class MemoriesViewController: UIViewController {
         ])
     }
     
-    func presentPostViewController(_ imageURL: String) {
+    func presentPostViewController(_ imageURL: String, postID: String) {
         let postVC = PostViewController()
         postVC.modalPresentationStyle = .formSheet
         let url = URL(string: imageURL)
         postVC.imageView.kf.setImage(with: url)
+        postVC.currentPostID = postID
         Vibration.shared.lightV()
         present(postVC, animated: true)
         
@@ -63,31 +64,6 @@ class MemoriesViewController: UIViewController {
             sheetPC.prefersGrabberVisible = true
             sheetPC.delegate = self
             sheetPC.preferredCornerRadius = 20
-        }
-    }
-    
-    func getGalleryPics() {
-        let docRef = db.collection("testingUploadImg").document("userIDOrton").collection("posts")
-        docRef.getDocuments { snapshot, error in
-            if let error = error {
-                print("Error fetching collection: \(error)")
-                return
-            }
-            
-            guard let documents = snapshot?.documents else {
-                print("No documents in collection")
-                return
-            }
-            
-            for document in documents {
-                let data = document.data()
-                guard let imageURL = data["postImgURL"] as? String else { return }
-                guard let postID = data["postID"] as? String else { return }
-                
-                self.imageURLs.append(imageURL)
-                self.postIDs.append(postID)
-            }
-            self.galleryCollection.reloadData()
         }
     }
     
@@ -137,7 +113,7 @@ extension MemoriesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
-        presentPostViewController(imageURLs[indexPath.row])
+        presentPostViewController(imageURLs[indexPath.row], postID: postIDs[indexPath.row])
     }
 }
 
