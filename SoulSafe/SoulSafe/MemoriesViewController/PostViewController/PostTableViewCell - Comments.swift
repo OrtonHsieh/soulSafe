@@ -25,21 +25,21 @@ class PostTBCellCmt: UITableViewCell {
     
     func setupView() {
         basicList.forEach { addSubview($0) }
+        commentLabel.numberOfLines = 0
     }
     
     func setupConstraints() {
         basicList.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
-            avatarView.topAnchor.constraint(equalTo: topAnchor, constant: 6),
-            avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            avatarView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
-            avatarView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            avatarView.heightAnchor.constraint(equalToConstant: 16),
-            avatarView.widthAnchor.constraint(equalToConstant: 16),
+            commentLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            commentLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            commentLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 44),
+            commentLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            commentLabel.topAnchor.constraint(equalTo: avatarView.topAnchor),
-            commentLabel.bottomAnchor.constraint(equalTo: avatarView.bottomAnchor),
-            commentLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 8)
+            avatarView.topAnchor.constraint(equalTo: commentLabel.topAnchor, constant: 1),
+            avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            avatarView.heightAnchor.constraint(equalToConstant: 20),
+            avatarView.widthAnchor.constraint(equalToConstant: 20)
         ])
     }
 }
