@@ -58,29 +58,6 @@ class BSViewController: UIViewController {
         scrollView.contentOffset = CGPoint(x: view.bounds.width, y: 0)
         scrollView.bringSubviewToFront(viewControllers[1].view)
     }
-    
-    func getImgData() {
-        let docRef = db.collection("testingUploadImg")
-        
-        docRef.getDocuments { querySnapshot, error in
-            if let error = error {
-                print("Error fetching collection: \(error)")
-                return
-            }
-            
-            guard let documents = querySnapshot?.documents else {
-                print("No documents in collection")
-                return
-            }
-            
-            for document in documents {
-                let data = document.data()
-                let images = data["postImgURL"]
-                let postIDs = [data]
-            }
-            
-        }
-    }
 }
 
 extension BSViewController: UIScrollViewDelegate {
@@ -95,8 +72,7 @@ extension BSViewController: UIScrollViewDelegate {
 }
 
 extension BSViewController: MainViewControllerDelegate {
-    func didSentImg(_ VC: MainViewController, image: UIImage) {
-        memoriesVC.images =
-        memoriesVC.galleryCollection.reloadData()
+    func didSentImg(_ VC: MainViewController, postID: String) {
+//        memoriesVC.getNewGalleryPics()
     }
 }

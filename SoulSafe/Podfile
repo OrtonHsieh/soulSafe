@@ -11,5 +11,6 @@ target 'SoulSafe' do
   pod 'FirebaseAuth', '9.0'
   pod 'FirebaseFirestore', '9.0'
   pod 'FirebaseStorage', '9.0'
+  pod 'Kingfisher', '~> 7.0'
 
 end

@@ -44,7 +44,10 @@ class CameraView: UIView {
     }
     
     func setupView() {
-        [cameraView, buttonCorner, flashButton, reverseButton, closeButton, photoImageView, sendButton, groupContainerView].forEach {
+        [
+            cameraView, buttonCorner, flashButton, reverseButton,
+            closeButton, photoImageView, sendButton, groupContainerView
+        ].forEach {
             addSubview($0)
         }
         [groupImgView, groupLabel].forEach {

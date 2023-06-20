@@ -12,7 +12,7 @@ import FirebaseCore
 import FirebaseFirestore
 
 protocol MainViewControllerDelegate: AnyObject {
-    func didSentImg(_ mainVC: MainViewController, image: UIImage)
+    func didSentImg(_ mainVC: MainViewController, postID: String)
 }
 
 class MainViewController: UIViewController {
@@ -80,10 +80,8 @@ class MainViewController: UIViewController {
     }
     
     func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
-        
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        if let data = image.jpegData(compressionQuality: 0.9) {
-            
+        if let data = image.jpegData(compressionQuality: 0.2) {
             fileReference.putData(data, metadata: nil) { result in
                 switch result {
                 case .success:
@@ -152,19 +150,16 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.picButton.isHidden = false
         cameraView?.sendButton.isHidden = true
         
-        // 把資料傳給 BaseVC
-        deletage?.didSentImg(self, image: image)
-        
         uploadPhoto(image: image) { result in
             switch result {
             case .success(let url):
                 print(url)
                 // 上傳資料
-                let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+                let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts").document()
                 
-                postPath.document().setData([
+                postPath.setData([
                     "postImgURL": "\(url)",
-                    "postID": "\(postPath.document().documentID)"
+                    "postID": "\(postPath.documentID)"
                 ]) { err in
                     if let err = err {
                         print("Error writing document: \(err)")
@@ -172,6 +167,8 @@ extension MainViewController: CameraViewDelegate {
                         print("Document successfully written!")
                     }
                 }
+                // 把資料傳給 BaseVC
+                self.deletage?.didSentImg(self, postID: postPath.documentID)
                 
             case .failure(let error):
                 print(error)

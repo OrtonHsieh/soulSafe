@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class MemoriesCVI: UICollectionViewCell {
     lazy var memoryImgView = UIImageView()
