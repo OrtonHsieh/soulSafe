@@ -10,7 +10,7 @@ import UIKit
 class EditGroupViewController: UIViewController {
     lazy var editGroupTBView = UITableView()
     lazy var editGroupView = EditGroupView()
-    var mockData = ["2Real", "RealChillSquad", "系籃一家親"]
+    var mockData: [String] = ["2Real", "RealChillSquad"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,12 +92,68 @@ extension EditGroupViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditGroupTBCell", for: indexPath) as? EditGroupTBCell else { fatalError() }
         
+        if indexPath.row == 0 {
+            cell.groupView.backgroundColor = UIColor(hex: CIC.shared.F1)
+        }
+        
+        cell.delegate = self
         cell.backgroundColor = UIColor(hex: CIC.shared.M1)
-        cell.groupLabel.text = mockData[indexPath.row]
+        if mockData.count - 1 >= indexPath.row {
+            cell.groupLabel.text = mockData[indexPath.row]
+            editGroupView.createGroupLabel.text = "分享我的群組"
+            editGroupView.leftHintLabel.text = editGroupView.titleForLeave
+            editGroupView.rightHintLabel.text = editGroupView.titleForCopylink
+            editGroupView.leaveBtn.isHidden = false
+            editGroupView.shareLinkBtn.isHidden = false
+            editGroupView.QRCodeBtn.isHidden = true
+            editGroupView.copyLinkBtn.isHidden = true
+        } else {
+            cell.groupView.isHidden = true
+        }
+        
         cell.baseGroupView.layer.cornerRadius = 12
         cell.groupView.layer.cornerRadius = 8
         cell.selectionStyle = .none
         
         return cell
+    }
+}
+
+extension EditGroupViewController: EditGroupTBCellDelegate {
+    func didPressBaseGroupView(_ cell: EditGroupTBCell, view: UIView) {
+        print("didPressBaseGroupView")
+        editGroupView.createGroupLabel.text = "建立新的群組"
+        editGroupView.leftHintLabel.text = editGroupView.titleForQRCode
+        editGroupView.rightHintLabel.text = editGroupView.titleForCreateLink
+        editGroupView.leaveBtn.isHidden = true
+        editGroupView.shareLinkBtn.isHidden = true
+        editGroupView.QRCodeBtn.isHidden = false
+        editGroupView.copyLinkBtn.isHidden = false
+        
+        // 將其他 View 變成 M3
+        for visibleCell in editGroupTBView.visibleCells {
+            if let cell = visibleCell as? EditGroupTBCell {
+                cell.groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
+            }
+        }
+    }
+    
+    func didPressGroupView(_ cell: EditGroupTBCell, view: UIView) {
+        editGroupView.createGroupLabel.text = "分享我的群組"
+        editGroupView.leftHintLabel.text = editGroupView.titleForLeave
+        editGroupView.rightHintLabel.text = editGroupView.titleForCopylink
+        editGroupView.leaveBtn.isHidden = false
+        editGroupView.shareLinkBtn.isHidden = false
+        editGroupView.QRCodeBtn.isHidden = true
+        editGroupView.copyLinkBtn.isHidden = true
+        
+        // 將其他 View 變成 M3
+        for visibleCell in editGroupTBView.visibleCells {
+            if let cell = visibleCell as? EditGroupTBCell {
+                cell.groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
+            }
+        }
+        // 點擊的 View 變成 F1
+        cell.groupView.backgroundColor = UIColor(hex: CIC.shared.F1)
     }
 }

@@ -38,6 +38,11 @@ class EditGroupView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    override func layoutSubviews() {
+        setupAdditionalConstraints()
+    }
 
     func setupView() {
         basicView.forEach { addSubview($0) }
@@ -60,25 +65,26 @@ class EditGroupView: UIView {
         rightActionView.backgroundColor = UIColor(hex: CIC.shared.M1)
 
         leftHintLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        leftHintLabel.text = titleForLeave
+        leftHintLabel.text = titleForQRCode
         leftHintLabel.textAlignment = .center
         
         rightHintLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        rightHintLabel.text = titleForCopylink
+        rightHintLabel.text = titleForCreateLink
         rightHintLabel.textAlignment = .center
 
         QRCodeBtn.setImage(UIImage(named: "icon-QRcode"), for: .normal)
         QRCodeBtn.addTarget(self, action: #selector(didPressQRCodeBtn), for: .touchUpInside)
-        QRCodeBtn.isHidden = true
         
         copyLinkBtn.setImage(UIImage(named: "icon-link"), for: .normal)
         copyLinkBtn.addTarget(self, action: #selector(didPressGetLinkBtn), for: .touchUpInside)
         
         leaveBtn.setImage(UIImage(named: "icon-leave"), for: .normal)
         leaveBtn.addTarget(self, action: #selector(didPressLeaveBtn), for: .touchUpInside)
+        leaveBtn.isHidden = true
         
         shareLinkBtn.setImage(UIImage(named: "icon-copyLink"), for: .normal)
         shareLinkBtn.addTarget(self, action: #selector(didPressCopyLinkBtn), for: .touchUpInside)
+        shareLinkBtn.isHidden = true
     }
 
     func setupConstraints() {
@@ -107,7 +113,7 @@ class EditGroupView: UIView {
         ])
     }
     
-    override func layoutSubviews() {
+    func setupAdditionalConstraints() {
         let constant: CGFloat = 16
         let separatorConstant: CGFloat = 8
         guard let viewWidth = superview?.frame.width else { return }
