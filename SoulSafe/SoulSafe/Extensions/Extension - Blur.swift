@@ -23,6 +23,17 @@ class Blur {
         return inputView
     }
     
+    func setViewShadowLess(_ inputView: UIView) -> UIView {
+        let inputView = inputView
+        inputView.layer.masksToBounds = false
+        
+        inputView.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
+        inputView.layer.shadowOpacity = 1.0
+        inputView.layer.shadowRadius = 9
+        inputView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        return inputView
+    }
+    
     func setImgViewShadow(_ inputView: UIImageView) -> UIImageView {
         let inputView = inputView
         inputView.layer.masksToBounds = false
@@ -52,6 +63,17 @@ class Blur {
         inputTableView.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
         inputTableView.layer.shadowOpacity = 1.0
         inputTableView.layer.shadowRadius = 43
+        inputTableView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        return inputTableView
+    }
+    
+    func setTableViewShadowLess(_ inputTableView: UITableView) -> UITableView {
+        let inputTableView = inputTableView
+        inputTableView.layer.masksToBounds = false
+        
+        inputTableView.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
+        inputTableView.layer.shadowOpacity = 1.0
+        inputTableView.layer.shadowRadius = 9
         inputTableView.layer.shadowOffset = CGSize(width: 0, height: 0)
         return inputTableView
     }

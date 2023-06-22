@@ -122,7 +122,7 @@ extension MemoriesViewController: UIAdaptivePresentationControllerDelegate {
     // 在这里可以实现 presentationControllerDidDismiss 方法，用于在表单被关闭时执行一些操作
 }
 
-extension MemoriesViewController: UISheetPresentationControllerDelegate{
+extension MemoriesViewController: UISheetPresentationControllerDelegate {
 }
 
 extension MemoriesViewController: UICollectionViewDelegate {

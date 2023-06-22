@@ -47,6 +47,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
     
-    
+    // 在這個方法中處理來自 URL 的操作
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        // 檢查是否有傳遞的 URLContext
+        guard let urlContext = URLContexts.first else {
+            return
+        }
+        
+        // 從 URLContext 中獲取 URL
+        let url = urlContext.url
+        
+        // 在此處執行處理 URL 的邏輯，例如解析 URL、檢查 URL 的內容等
+        // ...
+        
+        // 處理完成後，確定是否要呈現視圖控制器或執行其他相應操作
+        // ...
+    }
 }
 

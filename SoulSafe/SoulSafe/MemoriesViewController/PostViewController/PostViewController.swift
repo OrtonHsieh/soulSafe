@@ -75,7 +75,9 @@ class PostViewController: UIViewController {
     
     func getPostComment() {
         let docRef = db.collection("testingUploadImg").document("userIDOrton").collection("posts")
-        let commentRef = docRef.document("\(currentPostID)").collection("comments").order(by: "timeStamp", descending: true)
+        let commentRef = docRef.document("\(currentPostID)").collection("comments").order(
+            by: "timeStamp", descending: true
+        )
         commentRef.getDocuments {
             (querySnapshot, err) in
             if let err = err {

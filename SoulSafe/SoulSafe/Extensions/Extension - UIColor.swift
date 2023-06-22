@@ -11,6 +11,8 @@ import UIKit
 class CIC {
     static let shared = CIC()
     
+    private init() {}
+    
     let M1 = "081F39"
     let M2 = "0C3855"
     let M3 = "0E4665"

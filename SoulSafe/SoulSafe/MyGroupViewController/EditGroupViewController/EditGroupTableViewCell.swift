@@ -8,9 +8,10 @@
 import UIKit
 
 class EditGroupTBCell: UITableViewCell {
-    let groupView = UIView()
-    let groupTitleLabel = UILabel()
-    let separatorView = UIView()
+    lazy var baseGroupView = UIView()
+    lazy var baseGroupLabel = UILabel()
+    lazy var groupView = UIView()
+    lazy var groupLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,35 +24,46 @@ class EditGroupTBCell: UITableViewCell {
     }
     
     func setupView() {
-        addSubview(groupView)
-        [groupTitleLabel, separatorView].forEach { addSubview($0) }
+        addSubview(baseGroupView)
+        [baseGroupLabel, groupView].forEach { baseGroupView.addSubview($0) }
+        groupView.addSubview(groupLabel)
         
-        groupView.backgroundColor = .clear
+        baseGroupView = Blur.shared.setViewShadowLess(baseGroupView)
+        baseGroupView.backgroundColor = UIColor(hex: CIC.shared.M1)
         
-        groupTitleLabel.textColor = .white
+        baseGroupLabel.text = "+ 新增群組"
+        baseGroupLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        baseGroupLabel.textColor = UIColor.white
         
-        separatorView.backgroundColor = UIColor(hex: CIC.shared.M2)
+        groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
+        
+        groupLabel.textColor = UIColor.white
     }
     
     func setupConstraints() {
-        [groupView, groupTitleLabel, separatorView].forEach {
+        [baseGroupView, baseGroupLabel, groupView, groupLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            groupView.topAnchor.constraint(equalTo: topAnchor),
-            groupView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            groupView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            groupView.heightAnchor.constraint(equalToConstant: 54),
+            baseGroupView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+            baseGroupView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            baseGroupView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            baseGroupView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            baseGroupView.heightAnchor.constraint(equalToConstant: 58),
             
-            groupTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            groupTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            baseGroupLabel.leadingAnchor.constraint(equalTo: baseGroupView.leadingAnchor, constant: 16),
+            baseGroupLabel.topAnchor.constraint(equalTo: baseGroupView.topAnchor),
+            baseGroupLabel.bottomAnchor.constraint(equalTo: baseGroupView.bottomAnchor),
             
-            separatorView.topAnchor.constraint(equalTo: groupView.bottomAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 3),
-            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            separatorView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            groupView.topAnchor.constraint(equalTo: baseGroupView.topAnchor, constant: 4),
+            groupView.leadingAnchor.constraint(equalTo: baseGroupView.leadingAnchor, constant: 4),
+            groupView.trailingAnchor.constraint(equalTo: baseGroupView.trailingAnchor, constant: -4),
+            groupView.bottomAnchor.constraint(equalTo: baseGroupView.bottomAnchor, constant: -4),
+            
+            groupLabel.leadingAnchor.constraint(equalTo: groupView.leadingAnchor, constant: 12),
+            groupLabel.topAnchor.constraint(equalTo: groupView.topAnchor),
+            groupLabel.bottomAnchor.constraint(equalTo: groupView.bottomAnchor)
         ])
     }
 }
