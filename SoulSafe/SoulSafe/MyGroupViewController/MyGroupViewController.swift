@@ -16,7 +16,7 @@ class GroupViewController: UIViewController {
         return editGroupBtn
     }()
     
-    let mockData = ["2real", "球隊一家親", "RealChillSquad"]
+    let mockData = ["2real", "RealChillSquad"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,7 +101,12 @@ extension GroupViewController: UITableViewDataSource {
         }
         cell.selectionStyle = .none
         cell.backgroundColor = UIColor(hex: CIC.shared.M1)
-        cell.groupLabel.text = mockData[indexPath.row]
+        
+        if mockData.count - 1 >= indexPath.row {
+            cell.groupLabel.text = mockData[indexPath.row]
+        } else {
+            cell.groupView.isHidden = true
+        }
         return cell
     }
 }
