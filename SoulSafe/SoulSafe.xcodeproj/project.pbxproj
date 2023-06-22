@@ -37,6 +37,7 @@
 		91D5A0802A39CC3500B093AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D5A07E2A39CC3500B093AE /* Main.storyboard */; };
 		91D5A0822A39CC3600B093AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91D5A0812A39CC3600B093AE /* Assets.xcassets */; };
 		91D5A0852A39CC3600B093AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D5A0832A39CC3600B093AE /* LaunchScreen.storyboard */; };
+		91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,7 @@
 		91D5A0812A39CC3600B093AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91D5A0842A39CC3600B093AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91D5A0862A39CC3600B093AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditGroupViewController - Alert.swift"; sourceTree = "<group>"; };
 		FD7B7C8562038BE58B555248 /* Pods-SoulSafe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.release.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				917CF5542A3F1B8E00F02D48 /* EditGroupViewController.swift */,
+				91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */,
 				917CF5562A3F1B9600F02D48 /* EditGroupView.swift */,
 				917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */,
 			);
@@ -389,6 +392,7 @@
 				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
+				91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,
 				917CF5602A40809200F02D48 /* Struct - UploadImg.swift in Sources */,
 				917CF55E2A407FAF00F02D48 /* Struct - User.swift in Sources */,

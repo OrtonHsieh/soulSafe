@@ -6,11 +6,17 @@
 //
 
 import UIKit
+import FirebaseStorage
+import FirebaseCore
+import FirebaseFirestore
 
 class EditGroupViewController: UIViewController {
     lazy var editGroupTBView = UITableView()
     lazy var editGroupView = EditGroupView()
-    var mockData: [String] = ["2Real", "RealChillSquad"]
+    let db = Firestore.firestore()
+    lazy var groupID = String()
+    var groupTitle: [String] = []
+    weak var delegate: EditGroupViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +45,7 @@ class EditGroupViewController: UIViewController {
     func setupView() {
         view.addSubview(editGroupView)
         view.backgroundColor = UIColor(hex: CIC.shared.M1)
+        editGroupView.delegate = self
     }
     
     func setupTableViewConstraints() {
@@ -98,8 +105,9 @@ extension EditGroupViewController: UITableViewDataSource {
         
         cell.delegate = self
         cell.backgroundColor = UIColor(hex: CIC.shared.M1)
-        if mockData.count - 1 >= indexPath.row {
-            cell.groupLabel.text = mockData[indexPath.row]
+        if groupTitle.count - 1 >= indexPath.row {
+            cell.groupView.isHidden = false
+            cell.groupLabel.text = groupTitle[indexPath.row]
             editGroupView.createGroupLabel.text = "分享我的群組"
             editGroupView.leftHintLabel.text = editGroupView.titleForLeave
             editGroupView.rightHintLabel.text = editGroupView.titleForCopylink
@@ -155,5 +163,23 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
         }
         // 點擊的 View 變成 F1
         cell.groupView.backgroundColor = UIColor(hex: CIC.shared.F1)
+    }
+}
+
+extension EditGroupViewController: EditGroupViewDelegate {
+    func didPressQRCodeBtn(_ view: EditGroupView, button: UIButton) {
+        print("didPressQRCodeBtn")
+    }
+    
+    func didPressGetLinkBtn(_ view: EditGroupView, button: UIButton) {
+        inputAlertForCreateGroup(from: self)
+    }
+    
+    func didPressLeaveBtn(_ view: EditGroupView, button: UIButton) {
+        print("didPressLeaveBtn")
+    }
+    
+    func didPressCopyLinkBtn(_ view: EditGroupView, button: UIButton) {
+        print("didPressCopyLinkBtn")
     }
 }

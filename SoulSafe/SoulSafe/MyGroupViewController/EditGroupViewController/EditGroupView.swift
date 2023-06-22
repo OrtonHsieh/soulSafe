@@ -7,6 +7,13 @@
 
 import UIKit
 
+protocol EditGroupViewDelegate: AnyObject {
+    func didPressQRCodeBtn(_ view: EditGroupView, button: UIButton)
+    func didPressGetLinkBtn(_ view: EditGroupView, button: UIButton)
+    func didPressLeaveBtn(_ view: EditGroupView, button: UIButton)
+    func didPressCopyLinkBtn(_ view: EditGroupView, button: UIButton)
+}
+
 class EditGroupView: UIView {
     lazy var createGroupLabel = UILabel()
     lazy var leftHintLabel = UILabel()
@@ -18,6 +25,8 @@ class EditGroupView: UIView {
     lazy var leaveBtn = UIButton()
     lazy var shareLinkBtn = UIButton()
     lazy var copyLinkBtn = UIButton()
+    
+    weak var delegate: EditGroupViewDelegate?
 
     lazy var titleForLeave = "離開我的群組"
     lazy var titleForCopylink = "複製群組連結"
@@ -157,6 +166,7 @@ class EditGroupView: UIView {
 
     @objc func didPressGetLinkBtn() {
         Vibration.shared.lightV()
+        delegate?.didPressGetLinkBtn(self, button: copyLinkBtn)
     }
 
     @objc func didPressLeaveBtn() {

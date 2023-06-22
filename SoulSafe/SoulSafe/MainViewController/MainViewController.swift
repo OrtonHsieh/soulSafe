@@ -21,11 +21,13 @@ class MainViewController: UIViewController {
     var cameraView: CameraView?
     weak var deletage: MainViewControllerDelegate?
     let db = Firestore.firestore()
+    var groupTitle: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: CIC.shared.M1)
         createCamera()
+        getGroupData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -159,7 +161,8 @@ extension MainViewController: CameraViewDelegate {
                 
                 postPath.setData([
                     "postImgURL": "\(url)",
-                    "postID": "\(postPath.documentID)"
+                    "postID": "\(postPath.documentID)",
+                    "timeStamp": Timestamp(date: Date())
                 ]) { err in
                     if let err = err {
                         print("Error writing document: \(err)")
@@ -178,7 +181,9 @@ extension MainViewController: CameraViewDelegate {
     
     func didPressGroupBtn(_ view: CameraView) {
         let groupVC = GroupViewController()
+        groupVC.delegate = self
         groupVC.modalPresentationStyle = .formSheet
+        groupVC.groupTitle = groupTitle
         Vibration.shared.lightV()
         
         present(groupVC, animated: true)
@@ -190,7 +195,45 @@ extension MainViewController: CameraViewDelegate {
             sheetPC.preferredCornerRadius = 20
         }
     }
+    
+    func getGroupData() {
+        let groupsPath = self.db.collection(
+            "testingUploadImg"
+        ).document(
+            "userIDOrton"
+        ).collection(
+            "groups"
+        )
+        
+        groupsPath.order(by: "timeStamp").getDocuments { querySnapshot, err in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                var index = 0
+                guard let querySnapshot = querySnapshot else { return }
+                for document in querySnapshot.documents {
+                    print("\(document.documentID) => \(document.data())")
+                    let data = document.data()
+                    guard let groupTitle = data["groupTitle"] as? String else { return }
+                    
+                    if index <= self.groupTitle.count - 1 {
+                        self.groupTitle[index] = groupTitle
+                    } else {
+                        self.groupTitle.append(groupTitle)
+                    }
+                    index += 1
+                }
+                print(self.groupTitle)
+            }
+        }
+    }
 }
 
 extension MainViewController: UISheetPresentationControllerDelegate {
+}
+
+extension MainViewController: GroupViewControllerDelegate {
+    func didReceiveNewGroup(_ VC: GroupViewController, groupsTitle: [String]) {
+        groupTitle = groupsTitle
+    }
 }

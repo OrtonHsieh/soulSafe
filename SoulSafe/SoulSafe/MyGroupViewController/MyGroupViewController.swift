@@ -6,17 +6,26 @@
 //
 
 import UIKit
+import FirebaseStorage
+import FirebaseCore
+import FirebaseFirestore
+
+protocol GroupViewControllerDelegate: AnyObject {
+    func didReceiveNewGroup(_ VC: GroupViewController, groupsTitle: [String])
+}
 
 class GroupViewController: UIViewController {
-    lazy var groupTableView = UITableView()
+    private lazy var groupTableView = UITableView()
     lazy var editGroupBtn: UIButton = {
         let editGroupBtn = UIButton()
         editGroupBtn.setTitle("管理群組", for: .normal)
         editGroupBtn.backgroundColor = UIColor(hex: CIC.shared.M1)
         return editGroupBtn
     }()
-    
-    let mockData = ["2real", "RealChillSquad"]
+
+    var groupTitle: [String] = []
+    weak var delegate: GroupViewControllerDelegate?
+    let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +80,9 @@ class GroupViewController: UIViewController {
     @objc func didPressGroupBtn() {
         Vibration.shared.lightV()
         let groupVC = EditGroupViewController()
+        groupVC.delegate = self
         groupVC.modalPresentationStyle = .formSheet
+        groupVC.groupTitle = groupTitle
         Vibration.shared.lightV()
         
         present(groupVC, animated: true)
@@ -102,8 +113,9 @@ extension GroupViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.backgroundColor = UIColor(hex: CIC.shared.M1)
         
-        if mockData.count - 1 >= indexPath.row {
-            cell.groupLabel.text = mockData[indexPath.row]
+        if groupTitle.count - 1 >= indexPath.row {
+            cell.groupView.isHidden = false
+            cell.groupLabel.text = groupTitle[indexPath.row]
         } else {
             cell.groupView.isHidden = true
         }
@@ -112,4 +124,12 @@ extension GroupViewController: UITableViewDataSource {
 }
 
 extension GroupViewController: UISheetPresentationControllerDelegate {
+}
+
+extension GroupViewController: EditGroupViewControllerDelegate {
+    func didCreateNewGroup(_ VC: EditGroupViewController, groupsTitle: [String]) {
+        groupTitle = groupsTitle
+        groupTableView.reloadData()
+        delegate?.didReceiveNewGroup(self, groupsTitle: groupTitle)
+    }
 }
