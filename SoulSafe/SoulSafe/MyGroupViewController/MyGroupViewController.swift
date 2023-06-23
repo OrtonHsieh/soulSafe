@@ -11,7 +11,8 @@ import FirebaseCore
 import FirebaseFirestore
 
 protocol GroupViewControllerDelegate: AnyObject {
-    func didReceiveNewGroup(_ VC: GroupViewController, groupsTitle: [String])
+    func didReceiveNewGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
+    func didRemoveGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
 }
 
 class GroupViewController: UIViewController {
@@ -24,6 +25,7 @@ class GroupViewController: UIViewController {
     }()
 
     var groupTitle: [String] = []
+    var groupIDs: [String] = []
     weak var delegate: GroupViewControllerDelegate?
     let db = Firestore.firestore()
     
@@ -83,6 +85,7 @@ class GroupViewController: UIViewController {
         groupVC.delegate = self
         groupVC.modalPresentationStyle = .formSheet
         groupVC.groupTitle = groupTitle
+        groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
         present(groupVC, animated: true)
@@ -115,9 +118,11 @@ extension GroupViewController: UITableViewDataSource {
         
         if groupTitle.count - 1 >= indexPath.row {
             cell.groupView.isHidden = false
+            cell.groupLabel.isHidden = false
             cell.groupLabel.text = groupTitle[indexPath.row]
         } else {
             cell.groupView.isHidden = true
+            cell.groupLabel.isHidden = true
         }
         return cell
     }
@@ -127,9 +132,17 @@ extension GroupViewController: UISheetPresentationControllerDelegate {
 }
 
 extension GroupViewController: EditGroupViewControllerDelegate {
-    func didCreateNewGroup(_ VC: EditGroupViewController, groupsTitle: [String]) {
-        groupTitle = groupsTitle
+    func didCreateNewGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
+        groupTitle = newGroupsTitle
+        groupIDs = newGroupIDs
         groupTableView.reloadData()
-        delegate?.didReceiveNewGroup(self, groupsTitle: groupTitle)
+        delegate?.didReceiveNewGroup(self, newGroupIDs: groupIDs, newGroupsTitle: groupTitle)
+    }
+    
+    func didRemoveGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
+        groupTitle = newGroupsTitle
+        groupIDs = newGroupIDs
+        groupTableView.reloadData()
+        delegate?.didRemoveGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
     }
 }

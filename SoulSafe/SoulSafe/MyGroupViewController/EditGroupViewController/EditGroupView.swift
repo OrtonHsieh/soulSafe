@@ -171,6 +171,7 @@ class EditGroupView: UIView {
 
     @objc func didPressLeaveBtn() {
         Vibration.shared.lightV()
+        delegate?.didPressLeaveBtn(self, button: leaveBtn)
     }
 
     @objc func didPressCopyLinkBtn() {

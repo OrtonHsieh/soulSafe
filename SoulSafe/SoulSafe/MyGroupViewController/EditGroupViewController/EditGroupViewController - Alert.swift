@@ -11,7 +11,8 @@ import FirebaseCore
 import FirebaseFirestore
 
 protocol EditGroupViewControllerDelegate: AnyObject {
-    func didCreateNewGroup(_ VC: EditGroupViewController, groupsTitle: [String])
+    func didCreateNewGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
+    func didRemoveGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
 }
 
 extension EditGroupViewController {
@@ -37,10 +38,11 @@ extension EditGroupViewController {
                         "groupTitle": "\(inputText)",
                         "timeStamp": Timestamp(date: Date())
                     ])
-                    self.groupID = groupPath.documentID
+                    self.currentGroupID = groupPath.documentID
+                    self.groupIDs.append(self.currentGroupID)
                     self.groupTitle.append(inputText)
                     self.editGroupTBView.reloadData()
-                    self.delegate?.didCreateNewGroup(self, groupsTitle: self.groupTitle)
+                    self.delegate?.didCreateNewGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
                 }
             }
         }
@@ -48,5 +50,34 @@ extension EditGroupViewController {
 
         // 顯示 Alert
         viewController.present(alertController, animated: true, completion: nil)
+    }
+    
+    func leaveAlert(from viewController: UIViewController) {
+        let alertController = UIAlertController(title: "退出群組", message: "是否忍痛退出ＱＱ？", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel)
+        alertController.addAction(cancelAction)
+        print("我是\(currentGroupID)")
+        let confirmAction = UIAlertAction(title: "確認", style: .default) { action in
+            let groupPath =  self.db.collection("testingUploadImg").document("userIDOrton").collection("groups").document("\(self.currentGroupID)")
+            groupPath.delete() { err in
+                if let err = err {
+                    print("Error removing document: \(err)")
+                } else {
+                    for (index, id) in self.groupIDs.enumerated() {
+                        if id == self.currentGroupID {
+                            self.groupIDs.remove(at: index)
+                            self.groupTitle.remove(at: index)
+                            self.editGroupTBView.reloadData()
+                            self.delegate?.didRemoveGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
+                        }
+                    }
+                    print("Document successfully removed!")
+                }
+            }
+        }
+        alertController.addAction(confirmAction)
+        
+        viewController.present(alertController, animated: true)
     }
 }

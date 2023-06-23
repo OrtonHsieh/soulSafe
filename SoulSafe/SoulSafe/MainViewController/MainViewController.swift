@@ -22,6 +22,7 @@ class MainViewController: UIViewController {
     weak var deletage: MainViewControllerDelegate?
     let db = Firestore.firestore()
     var groupTitle: [String] = []
+    var groupIDs: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -184,6 +185,7 @@ extension MainViewController: CameraViewDelegate {
         groupVC.delegate = self
         groupVC.modalPresentationStyle = .formSheet
         groupVC.groupTitle = groupTitle
+        groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
         present(groupVC, animated: true)
@@ -215,15 +217,19 @@ extension MainViewController: CameraViewDelegate {
                     print("\(document.documentID) => \(document.data())")
                     let data = document.data()
                     guard let groupTitle = data["groupTitle"] as? String else { return }
+                    guard let groupID = data["groupID"] as? String else { return }
                     
                     if index <= self.groupTitle.count - 1 {
                         self.groupTitle[index] = groupTitle
+                        self.groupIDs[index] = groupID
                     } else {
                         self.groupTitle.append(groupTitle)
+                        self.groupIDs.append(groupID)
                     }
                     index += 1
                 }
                 print(self.groupTitle)
+                print(self.groupIDs)
             }
         }
     }
@@ -233,7 +239,15 @@ extension MainViewController: UISheetPresentationControllerDelegate {
 }
 
 extension MainViewController: GroupViewControllerDelegate {
-    func didReceiveNewGroup(_ VC: GroupViewController, groupsTitle: [String]) {
-        groupTitle = groupsTitle
+    func didReceiveNewGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
+        groupTitle = newGroupsTitle
+        groupIDs = newGroupIDs
+        getGroupData()
+    }
+    
+    func didRemoveGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
+        groupIDs = newGroupIDs
+        groupTitle = newGroupsTitle
+        getGroupData()
     }
 }

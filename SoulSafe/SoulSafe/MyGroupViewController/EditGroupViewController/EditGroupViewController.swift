@@ -14,8 +14,9 @@ class EditGroupViewController: UIViewController {
     lazy var editGroupTBView = UITableView()
     lazy var editGroupView = EditGroupView()
     let db = Firestore.firestore()
-    lazy var groupID = String()
-    var groupTitle: [String] = []
+    lazy var currentGroupID = String()
+    lazy var groupTitle: [String] = []
+    lazy var groupIDs: [String] = []
     weak var delegate: EditGroupViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -89,6 +90,10 @@ extension EditGroupViewController: UITableViewDelegate {
         ])
         return headerView
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        currentGroupID = groupIDs[indexPath.row]
+    }
 }
 
 extension EditGroupViewController: UITableViewDataSource {
@@ -155,6 +160,9 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
         editGroupView.QRCodeBtn.isHidden = true
         editGroupView.copyLinkBtn.isHidden = true
         
+        guard let indexPath = editGroupTBView.indexPath(for: cell) else { return }
+        currentGroupID = groupIDs[indexPath.row]
+        
         // 將其他 View 變成 M3
         for visibleCell in editGroupTBView.visibleCells {
             if let cell = visibleCell as? EditGroupTBCell {
@@ -177,6 +185,7 @@ extension EditGroupViewController: EditGroupViewDelegate {
     
     func didPressLeaveBtn(_ view: EditGroupView, button: UIButton) {
         print("didPressLeaveBtn")
+        leaveAlert(from: self)
     }
     
     func didPressCopyLinkBtn(_ view: EditGroupView, button: UIButton) {

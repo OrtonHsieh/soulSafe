@@ -31,7 +31,9 @@ class MemoriesViewController: UIViewController {
         galleryCollection.backgroundColor = UIColor(hex: CIC.shared.M1)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
+        galleryCollection.bounces = false
         galleryCollection.collectionViewLayout = layout
+        galleryCollection.decelerationRate = UIScrollView.DecelerationRate.fast
         
         [galleryCollection, memoriesView].forEach { view.addSubview($0) }
     }
@@ -126,6 +128,12 @@ extension MemoriesViewController: UISheetPresentationControllerDelegate {
 }
 
 extension MemoriesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.alpha = 0
+        UIView.animate(withDuration: 0.4) {
+            cell.alpha = 1
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -153,12 +161,6 @@ extension MemoriesViewController: UICollectionViewDataSource {
         cell.memoryImgView.clipsToBounds = true
         // 設置圓角
         cell.memoryImgView.layer.cornerRadius = 30
-        // 設置光暈
-        cell.layer.masksToBounds = false
-        cell.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
-        cell.layer.shadowOpacity = 1.0
-        cell.layer.shadowRadius = 80
-        cell.layer.shadowOffset = CGSize(width: 0, height: 150)
         // 帶入圖片資料
         let url = URL(string: imageURLs[indexPath.row])
         cell.memoryImgView.kf.setImage(with: url)
