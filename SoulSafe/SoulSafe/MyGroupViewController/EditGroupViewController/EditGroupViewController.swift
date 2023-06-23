@@ -14,6 +14,13 @@ class EditGroupViewController: UIViewController {
     lazy var editGroupTBView = UITableView()
     lazy var editGroupView = EditGroupView()
     let db = Firestore.firestore()
+    var dataClosure: ((String) -> Void)? {
+        didSet {
+            // 由 Sence Delegate 將 groupID 傳到這邊
+            // 將 groupID 放入 currentGroupID
+            // 
+        }
+    }
     lazy var currentGroupID = String()
     lazy var groupTitle: [String] = []
     lazy var groupIDs: [String] = []

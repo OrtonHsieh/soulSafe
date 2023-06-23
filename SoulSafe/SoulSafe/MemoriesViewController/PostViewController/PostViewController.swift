@@ -84,7 +84,8 @@ class PostViewController: UIViewController {
                 print("Error getting documents: \(err)")
             } else {
                 var index = 0
-                for document in querySnapshot!.documents {
+                guard let querySnapshot = querySnapshot else { return }
+                for document in querySnapshot.documents {
                     print("\(document.documentID) => \(document.data())")
                     let data = document.data()
                     guard let comment = data["comment"] as? String else { return }

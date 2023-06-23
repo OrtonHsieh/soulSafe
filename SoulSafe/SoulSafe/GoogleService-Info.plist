@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ortonhsiehpapaj.SoulSafe</string>
+	<string>com.ortonhsieh.SoulSafe</string>
 	<key>PROJECT_ID</key>
 	<string>soulsafe-4c36e</string>
 	<key>STORAGE_BUCKET</key>

@@ -31,7 +31,7 @@ class EditGroupView: UIView {
     lazy var titleForLeave = "離開我的群組"
     lazy var titleForCopylink = "複製群組連結"
     lazy var titleForQRCode = "QRCode 掃碼"
-    lazy var titleForCreateLink = "建立群組連結"
+    lazy var titleForCreateLink = "建立群組"
 
     lazy var basicView = [createGroupLabel, containerView, leftHintLabel, rightHintLabel]
     lazy var containerViewComponent = [leftActionView, rightActionView]
@@ -84,7 +84,7 @@ class EditGroupView: UIView {
         QRCodeBtn.setImage(UIImage(named: "icon-QRcode"), for: .normal)
         QRCodeBtn.addTarget(self, action: #selector(didPressQRCodeBtn), for: .touchUpInside)
         
-        copyLinkBtn.setImage(UIImage(named: "icon-link"), for: .normal)
+        copyLinkBtn.setImage(UIImage(named: "icon-createGroup"), for: .normal)
         copyLinkBtn.addTarget(self, action: #selector(didPressGetLinkBtn), for: .touchUpInside)
         
         leaveBtn.setImage(UIImage(named: "icon-leave"), for: .normal)
@@ -148,15 +148,15 @@ class EditGroupView: UIView {
             leaveBtn.centerXAnchor.constraint(equalTo: leftActionView.centerXAnchor),
             leaveBtn.centerYAnchor.constraint(equalTo: leftActionView.centerYAnchor),
             
-            copyLinkBtn.widthAnchor.constraint(equalToConstant: 35),
-            copyLinkBtn.heightAnchor.constraint(equalToConstant: 35),
+            copyLinkBtn.widthAnchor.constraint(equalToConstant: 40),
+            copyLinkBtn.heightAnchor.constraint(equalToConstant: 40),
             copyLinkBtn.centerXAnchor.constraint(equalTo: rightActionView.centerXAnchor),
-            copyLinkBtn.centerYAnchor.constraint(equalTo: rightActionView.centerYAnchor, constant: -1.5),
+            copyLinkBtn.centerYAnchor.constraint(equalTo: rightActionView.centerYAnchor),
             
-            shareLinkBtn.widthAnchor.constraint(equalToConstant: 35),
-            shareLinkBtn.heightAnchor.constraint(equalToConstant: 35),
+            shareLinkBtn.widthAnchor.constraint(equalToConstant: 40),
+            shareLinkBtn.heightAnchor.constraint(equalToConstant: 40),
             shareLinkBtn.centerXAnchor.constraint(equalTo: rightActionView.centerXAnchor),
-            shareLinkBtn.centerYAnchor.constraint(equalTo: rightActionView.centerYAnchor, constant: -1.5)
+            shareLinkBtn.centerYAnchor.constraint(equalTo: rightActionView.centerYAnchor)
         ])
     }
 

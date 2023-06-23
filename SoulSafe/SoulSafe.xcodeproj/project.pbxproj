@@ -75,6 +75,7 @@
 		91D5A0842A39CC3600B093AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91D5A0862A39CC3600B093AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditGroupViewController - Alert.swift"; sourceTree = "<group>"; };
+		91DBA5D32A458D8B00D8D790 /* SoulSafe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SoulSafe.entitlements; sourceTree = "<group>"; };
 		FD7B7C8562038BE58B555248 /* Pods-SoulSafe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.release.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,6 +209,7 @@
 		91D5A0772A39CC3500B093AE /* SoulSafe */ = {
 			isa = PBXGroup;
 			children = (
+				91DBA5D32A458D8B00D8D790 /* SoulSafe.entitlements */,
 				91D5A0782A39CC3500B093AE /* AppDelegate.swift */,
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
 				917CF55C2A407F5E00F02D48 /* Struct */,
@@ -541,6 +543,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SoulSafe/SoulSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7953TRA3N2;
@@ -558,7 +561,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsiehRelease.SoulSafe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsieh.SoulSafe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -572,6 +575,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SoulSafe/SoulSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7953TRA3N2;
@@ -589,7 +593,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsiehRelease.SoulSafe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ortonhsieh.SoulSafe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

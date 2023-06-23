@@ -57,11 +57,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 從 URLContext 中獲取 URL
         let url = urlContext.url
         
-        // 在此處執行處理 URL 的邏輯，例如解析 URL、檢查 URL 的內容等
-        // ...
-        
-        // 處理完成後，確定是否要呈現視圖控制器或執行其他相應操作
-        // ...
+        // 拆解 URL
+        if let components = URLComponents(url: url, resolvingAgainstBaseURL: true) {
+            if let scheme = components.scheme {
+                print("Scheme: \(scheme)")
+            }
+            if let groupID = components.host {
+                print("Host: \(groupID)")
+            }
+            // 把資料傳回給 group view controller
+        }
     }
 }
 
