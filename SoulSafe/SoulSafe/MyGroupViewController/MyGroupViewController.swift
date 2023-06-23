@@ -85,6 +85,11 @@ class GroupViewController: UIViewController {
         groupVC.delegate = self
         groupVC.modalPresentationStyle = .formSheet
         groupVC.groupTitle = groupTitle
+        
+        if groupIDs.count >= 1 {
+            groupVC.currentGroupID = groupIDs[0]
+        }
+        
         groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         

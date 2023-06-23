@@ -207,7 +207,7 @@ extension MainViewController: CameraViewDelegate {
             "groups"
         )
         
-        groupsPath.order(by: "timeStamp").getDocuments { querySnapshot, err in
+        groupsPath.order(by: "timeStamp", descending: true).getDocuments { querySnapshot, err in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {

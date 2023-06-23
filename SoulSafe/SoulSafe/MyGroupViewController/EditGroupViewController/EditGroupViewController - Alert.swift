@@ -29,7 +29,7 @@ extension EditGroupViewController {
         alertController.addAction(cancelAction)
 
         // 確定按鈕
-        let submitAction = UIAlertAction(title: "确定", style: .default) { _ in
+        let submitAction = UIAlertAction(title: "確認", style: .default) { _ in
             if let textField = alertController.textFields?.first {
                 if let inputText = textField.text {
                     let groupPath =  self.db.collection("testingUploadImg").document("userIDOrton").collection("groups").document()
@@ -39,8 +39,17 @@ extension EditGroupViewController {
                         "timeStamp": Timestamp(date: Date())
                     ])
                     self.currentGroupID = groupPath.documentID
-                    self.groupIDs.append(self.currentGroupID)
-                    self.groupTitle.append(inputText)
+//                    self.groupIDs.append(self.currentGroupID)
+//                    self.groupTitle.append(inputText)
+                    
+                    if self.groupIDs.count >= 1 {
+                        self.groupIDs.insert(self.currentGroupID, at: 0)
+                        self.groupTitle.insert(inputText, at: 0)
+                    } else {
+                        self.groupIDs.append(self.currentGroupID)
+                        self.groupTitle.append(inputText)
+                    }
+                    
                     self.editGroupTBView.reloadData()
                     self.delegate?.didCreateNewGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
                 }
@@ -58,7 +67,7 @@ extension EditGroupViewController {
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
         alertController.addAction(cancelAction)
         print("我是\(currentGroupID)")
-        let confirmAction = UIAlertAction(title: "確認", style: .default) { action in
+        let confirmAction = UIAlertAction(title: "確認", style: .default) { _ in
             let groupPath =  self.db.collection("testingUploadImg").document("userIDOrton").collection("groups").document("\(self.currentGroupID)")
             groupPath.delete() { err in
                 if let err = err {
@@ -72,6 +81,11 @@ extension EditGroupViewController {
                             self.delegate?.didRemoveGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
                         }
                     }
+                    if self.groupIDs.count >= 1 {
+                        guard let firstGroupID = self.groupIDs.first else { return }
+                        self.currentGroupID = firstGroupID
+                    }
+
                     print("Document successfully removed!")
                 }
             }
