@@ -13,7 +13,9 @@ import FirebaseFirestore
 class EditGroupViewController: UIViewController {
     lazy var editGroupTBView = UITableView()
     lazy var editGroupView = EditGroupView()
+    // swiftlint:disable all
     let db = Firestore.firestore()
+    // swiftlint:enable all
     var dataClosure: ((String) -> Void)? {
         didSet {
             // 由 Sence Delegate 將 groupID 傳到這邊

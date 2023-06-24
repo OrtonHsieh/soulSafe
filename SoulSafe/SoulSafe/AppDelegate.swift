@@ -5,7 +5,7 @@
 //  Created by 謝承翰 on 2023/6/14.
 //
 
-//// swiftlint:disable all
+// swiftlint:disable all
 import UIKit
 import IQKeyboardManagerSwift
 import FirebaseCore
@@ -36,4 +36,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-//// swiftlint:enable all
+// swiftlint:enable all

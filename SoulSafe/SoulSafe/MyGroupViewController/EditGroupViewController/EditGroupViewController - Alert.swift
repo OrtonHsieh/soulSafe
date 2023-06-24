@@ -33,7 +33,7 @@ extension EditGroupViewController {
             if let textField = alertController.textFields?.first {
                 if let inputText = textField.text {
                     // 將資料建立在 user 集合該創立者下的 group 集合
-                    let groupPath =  self.db.collection("testingUploadImg").document("userIDOrton").collection("groups").document()
+                    let groupPath =  self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document()
                     groupPath.setData([
                         "groupID": "\(groupPath.documentID)",
                         "groupTitle": "\(inputText)",
@@ -46,9 +46,9 @@ extension EditGroupViewController {
                         "groupTitle": "\(inputText)",
                         "timeStamp": Timestamp(date: Date())
                     ])
-                    initGroupPath.collection("members").document("userIDOrton").setData([
-                        "userID" : "userIDOrton",
-                        "joinedTime" : Timestamp(date: Date())
+                    initGroupPath.collection("members").document("\(UserSetup.userID)").setData([
+                        "userID": "\(UserSetup.userID)",
+                        "joinedTime": Timestamp(date: Date())
                     ])
                     
                     self.currentGroupID = groupPath.documentID
@@ -79,7 +79,7 @@ extension EditGroupViewController {
         alertController.addAction(cancelAction)
         print("我是\(currentGroupID)")
         let confirmAction = UIAlertAction(title: "確認", style: .default) { _ in
-            let groupPath =  self.db.collection("testingUploadImg").document("userIDOrton").collection("groups").document("\(self.currentGroupID)")
+            let groupPath =  self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(self.currentGroupID)")
             groupPath.delete() { err in
                 if let err = err {
                     print("Error removing document: \(err)")
@@ -95,7 +95,7 @@ extension EditGroupViewController {
                         }
                     }
                     
-                    let initGroupPath = self.db.collection("groups").document("\(self.currentGroupID)").collection("members").document("userIDOrton")
+                    let initGroupPath = self.db.collection("groups").document("\(self.currentGroupID)").collection("members").document("\(UserSetup.userID)")
                     initGroupPath.delete() { err in
                         if let err = err {
                             print("Error removing document: \(err)")

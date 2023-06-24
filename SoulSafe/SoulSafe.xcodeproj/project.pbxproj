@@ -38,6 +38,7 @@
 		91D5A0822A39CC3600B093AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91D5A0812A39CC3600B093AE /* Assets.xcassets */; };
 		91D5A0852A39CC3600B093AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D5A0832A39CC3600B093AE /* LaunchScreen.storyboard */; };
 		91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */; };
+		91DBA5D52A46EB2700D8D790 /* Extension - User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5D42A46EB2700D8D790 /* Extension - User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		91D5A0862A39CC3600B093AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditGroupViewController - Alert.swift"; sourceTree = "<group>"; };
 		91DBA5D32A458D8B00D8D790 /* SoulSafe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SoulSafe.entitlements; sourceTree = "<group>"; };
+		91DBA5D42A46EB2700D8D790 /* Extension - User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - User.swift"; sourceTree = "<group>"; };
 		FD7B7C8562038BE58B555248 /* Pods-SoulSafe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.release.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +115,7 @@
 				9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */,
 				9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */,
 				9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */,
+				91DBA5D42A46EB2700D8D790 /* Extension - User.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -383,6 +386,7 @@
 				917CF5592A3F1BA100F02D48 /* EditGroupTableViewCell.swift in Sources */,
 				9127BBCE2A3C100A008DB929 /* PicButton.swift in Sources */,
 				9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */,
+				91DBA5D52A46EB2700D8D790 /* Extension - User.swift in Sources */,
 				9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */,
 				91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */,
 				9127BBD92A3C8131008DB929 /* MemoriesView.swift in Sources */,

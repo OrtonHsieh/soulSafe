@@ -70,8 +70,8 @@ class MemoriesViewController: UIViewController {
     }
     
     func getNewGalleryPics() {
-        let docRef = db.collection("testingUploadImg").document("userIDOrton").collection("posts")
-        docRef.addSnapshotListener { querySnapshot, error in
+        let docRef = db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+        docRef.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("Error fetching collection: \(error)")
                 return

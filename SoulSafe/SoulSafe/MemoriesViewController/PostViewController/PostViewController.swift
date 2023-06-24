@@ -74,7 +74,7 @@ class PostViewController: UIViewController {
     }
     
     func getPostComment() {
-        let docRef = db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+        let docRef = db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
         let commentRef = docRef.document("\(currentPostID)").collection("comments").order(
             by: "timeStamp", descending: true
         )
@@ -177,7 +177,7 @@ extension PostViewController: UITableViewDataSource {
             cell.backgroundColor = UIColor(hex: CIC.shared.M1)
             cell.selectionStyle = .none
             cell.commentLabel.text = comments[indexPath.row]
-            cell.avatarView.image = UIImage(named: "avatar-1")
+            cell.avatarView.image = UserSetup.userImage
             return cell
         }
     }
@@ -188,11 +188,11 @@ extension PostViewController: TextAreaViewDelegate {
         Vibration.shared.lightV()
         
         if textAreaView.inputTextView.text.isEmpty == false {
-            let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts")
+            let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
             let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
             
             postCommentPath.setData([
-                "userID": "userIDOrton",
+                "userID": "\(UserSetup.userID)",
                 "commentID": "\(postCommentPath.documentID)",
                 "timeStamp": Timestamp(date: Date()),
                 "comment": comment

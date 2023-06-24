@@ -20,7 +20,9 @@ class MainViewController: UIViewController {
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
     weak var deletage: MainViewControllerDelegate?
+    // swiftlint:disable all
     let db = Firestore.firestore()
+    // swiftlint:enable all
     var groupTitle: [String] = []
     var groupIDs: [String] = []
     
@@ -158,7 +160,7 @@ extension MainViewController: CameraViewDelegate {
             case .success(let url):
                 print(url)
                 // 上傳資料
-                let postPath = self.db.collection("testingUploadImg").document("userIDOrton").collection("posts").document()
+                let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts").document()
                 
                 postPath.setData([
                     "postImgURL": "\(url)",
@@ -202,7 +204,7 @@ extension MainViewController: CameraViewDelegate {
         let groupsPath = self.db.collection(
             "testingUploadImg"
         ).document(
-            "userIDOrton"
+            "\(UserSetup.userID)"
         ).collection(
             "groups"
         )

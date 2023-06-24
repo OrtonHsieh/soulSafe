@@ -20,8 +20,43 @@ class BSViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
         setupScrollView()
-        setupScrollViewConponents()
-        mainVC.deletage = self
+        chooseUser()
+    }
+    
+    func chooseUser() {
+        let alertController = UIAlertController(title: "選擇使用者", message: nil, preferredStyle: .actionSheet)
+
+        let option1Action = UIAlertAction(title: "何婉綾", style: .default) { (action) in
+            UserSetup.userID = User.howan["userID"] as! String
+            UserSetup.userName = User.howan["userName"] as! String
+            UserSetup.userImage = User.howan["userImage"] as! UIImage
+            self.setupScrollViewConponents()
+            self.mainVC.deletage = self
+        }
+
+        let option2Action = UIAlertAction(title: "潘厚紳", style: .default) { (action) in
+            UserSetup.userID = User.pann["userID"] as! String
+            UserSetup.userName = User.pann["userName"] as! String
+            UserSetup.userImage = User.pann["userImage"] as! UIImage
+            self.setupScrollViewConponents()
+            self.mainVC.deletage = self
+        }
+
+        let option3Action = UIAlertAction(title: "謝承翰", style: .default) { (action) in
+            UserSetup.userID = User.orton["userID"] as! String
+            UserSetup.userName = User.orton["userName"] as! String
+            UserSetup.userImage = User.orton["userImage"] as! UIImage
+            self.setupScrollViewConponents()
+            self.mainVC.deletage = self
+        }
+
+        alertController.addAction(option1Action)
+        alertController.addAction(option2Action)
+        alertController.addAction(option3Action)
+
+        // 在這裡顯示 UIAlert
+        // 例如：
+         present(alertController, animated: true, completion: nil)
     }
     
     func setupScrollView() {

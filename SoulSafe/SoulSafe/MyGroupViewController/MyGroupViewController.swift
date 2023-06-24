@@ -11,8 +11,10 @@ import FirebaseCore
 import FirebaseFirestore
 
 protocol GroupViewControllerDelegate: AnyObject {
+    // swiftlint:disable all
     func didReceiveNewGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
     func didRemoveGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
+    // swiftlint:disable all
 }
 
 class GroupViewController: UIViewController {
@@ -137,6 +139,7 @@ extension GroupViewController: UISheetPresentationControllerDelegate {
 }
 
 extension GroupViewController: EditGroupViewControllerDelegate {
+    // swiftlint:disable all
     func didCreateNewGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
         groupTitle = newGroupsTitle
         groupIDs = newGroupIDs
@@ -150,4 +153,5 @@ extension GroupViewController: EditGroupViewControllerDelegate {
         groupTableView.reloadData()
         delegate?.didRemoveGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
     }
+    // swiftlint:disable all
 }
