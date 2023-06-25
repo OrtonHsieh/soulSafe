@@ -19,16 +19,19 @@ class MainViewController: UIViewController {
     var captureSession: AVCaptureSession?
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
-    weak var deletage: MainViewControllerDelegate?
+    weak var delegate: MainViewControllerDelegate?
+    var joinGroupManager: JoinGroupManager?
     // swiftlint:disable all
     let db = Firestore.firestore()
     // swiftlint:enable all
-    var groupTitle: [String] = []
+    var groupTitles: [String] = []
     var groupIDs: [String] = []
+    let groupVC = GroupViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: CIC.shared.M1)
+//        groupVC.delegate = self
         createCamera()
         getGroupData()
     }
@@ -174,7 +177,7 @@ extension MainViewController: CameraViewDelegate {
                     }
                 }
                 // 把資料傳給 BaseVC
-                self.deletage?.didSentImg(self, postID: postPath.documentID)
+                self.delegate?.didSentImg(self, postID: postPath.documentID)
                 
             case .failure(let error):
                 print(error)
@@ -183,10 +186,8 @@ extension MainViewController: CameraViewDelegate {
     }
     
     func didPressGroupBtn(_ view: CameraView) {
-        let groupVC = GroupViewController()
-        groupVC.delegate = self
         groupVC.modalPresentationStyle = .formSheet
-        groupVC.groupTitle = groupTitle
+        groupVC.groupTitles = groupTitles
         groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
@@ -200,6 +201,46 @@ extension MainViewController: CameraViewDelegate {
         }
     }
     
+//    func listenToGroupData() {
+//        let groupsPath = db.collection("groups").whereField("members", arrayContains: "\(UserSetup.userID)")
+//
+////        groupsPath
+//        // 等等回來繼續用這邊，要先在建立群組時於 doc 加入 userID
+//
+//        groupsPath.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, error in
+//            if let error = error {
+//                print("Error fetching collection: \(error)")
+//                return
+//            }
+//
+//            guard let documents = querySnapshot?.documents else {
+//                print("No documents in collection")
+//                return
+//            }
+//
+//            var index = 0
+//
+//            for document in documents {
+//                let data = document.data()
+//                guard let groupID = data["groupID"] as? String else { return }
+//                guard let groupTitle = data["groupTitle"] as? String else { return }
+//
+//                if index <= self.groupIDs.count - 1 {
+//                    self.groupIDs[index] = groupID
+//                    self.groupTitles[index] = groupTitle
+//                } else {
+//                    self.groupIDs.append(groupID)
+//                    self.groupTitles.append(groupTitle)
+//                }
+//                index += 1
+//            }
+//            self.groupVC.groupTitles = self.groupTitles
+//            self.groupVC.groupIDs = self.groupIDs
+//            self.groupVC.groupTableView.reloadData()
+//            self.groupVC.updateEditGroupVC()
+//        }
+//    }
+    
     func getGroupData() {
         let groupsPath = self.db.collection(
             "testingUploadImg"
@@ -209,11 +250,13 @@ extension MainViewController: CameraViewDelegate {
             "groups"
         )
         
-        groupsPath.order(by: "timeStamp", descending: true).getDocuments { querySnapshot, err in
+        groupsPath.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, err in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
-                var index = 0
+//                var index = 0
+                self.groupIDs.removeAll()
+                self.groupTitles.removeAll()
                 guard let querySnapshot = querySnapshot else { return }
                 for document in querySnapshot.documents {
                     print("\(document.documentID) => \(document.data())")
@@ -221,17 +264,23 @@ extension MainViewController: CameraViewDelegate {
                     guard let groupTitle = data["groupTitle"] as? String else { return }
                     guard let groupID = data["groupID"] as? String else { return }
                     
-                    if index <= self.groupTitle.count - 1 {
-                        self.groupTitle[index] = groupTitle
-                        self.groupIDs[index] = groupID
-                    } else {
-                        self.groupTitle.append(groupTitle)
-                        self.groupIDs.append(groupID)
-                    }
-                    index += 1
+//                    if index <= self.groupTitles.count - 1 {
+//                        self.groupTitles[index] = groupTitle
+//                        self.groupIDs[index] = groupID
+//                    } else {
+//                        self.groupTitles.append(groupTitle)
+//                        self.groupIDs.append(groupID)
+//                    }
+//                    index += 1
+                    self.groupIDs.append(groupID)
+                    self.groupTitles.append(groupTitle)
                 }
-                print(self.groupTitle)
+                print(self.groupTitles)
                 print(self.groupIDs)
+                self.groupVC.groupTitles = self.groupTitles
+                self.groupVC.groupIDs = self.groupIDs
+                self.groupVC.groupTableView.reloadData()
+                self.groupVC.updateEditGroupVC()
             }
         }
     }
@@ -240,16 +289,16 @@ extension MainViewController: CameraViewDelegate {
 extension MainViewController: UISheetPresentationControllerDelegate {
 }
 
-extension MainViewController: GroupViewControllerDelegate {
-    func didReceiveNewGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
-        groupTitle = newGroupsTitle
-        groupIDs = newGroupIDs
-        getGroupData()
-    }
-    
-    func didRemoveGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
-        groupIDs = newGroupIDs
-        groupTitle = newGroupsTitle
-        getGroupData()
-    }
-}
+//extension MainViewController: GroupViewControllerDelegate {
+//    func didReceiveNewGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
+//        groupTitles = newGroupsTitle
+//        groupIDs = newGroupIDs
+////        getGroupData()
+//    }
+//
+//    func didRemoveGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
+//        groupIDs = newGroupIDs
+//        groupTitles = newGroupsTitle
+////        getGroupData()
+//    }
+//}

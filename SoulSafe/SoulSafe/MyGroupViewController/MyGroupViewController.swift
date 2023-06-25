@@ -18,7 +18,7 @@ protocol GroupViewControllerDelegate: AnyObject {
 }
 
 class GroupViewController: UIViewController {
-    private lazy var groupTableView = UITableView()
+    lazy var groupTableView = UITableView()
     lazy var editGroupBtn: UIButton = {
         let editGroupBtn = UIButton()
         editGroupBtn.setTitle("管理群組", for: .normal)
@@ -26,10 +26,11 @@ class GroupViewController: UIViewController {
         return editGroupBtn
     }()
 
-    var groupTitle: [String] = []
+    var groupTitles: [String] = []
     var groupIDs: [String] = []
     weak var delegate: GroupViewControllerDelegate?
     let db = Firestore.firestore()
+    let editGroupVC = EditGroupViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,23 +82,27 @@ class GroupViewController: UIViewController {
         ])
     }
     
+    func updateEditGroupVC() {
+        editGroupVC.groupIDs = self.groupIDs
+        editGroupVC.groupTitles = self.groupTitles
+        editGroupVC.editGroupTBView.reloadData()
+    }
+    
     @objc func didPressGroupBtn() {
         Vibration.shared.lightV()
-        let groupVC = EditGroupViewController()
-        groupVC.delegate = self
-        groupVC.modalPresentationStyle = .formSheet
-        groupVC.groupTitle = groupTitle
+        editGroupVC.modalPresentationStyle = .formSheet
+        editGroupVC.groupTitles = groupTitles
         
         if groupIDs.count >= 1 {
-            groupVC.currentGroupID = groupIDs[0]
+            editGroupVC.currentGroupID = groupIDs[0]
         }
         
-        groupVC.groupIDs = groupIDs
+        editGroupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
-        present(groupVC, animated: true)
+        present(editGroupVC, animated: true)
         
-        if let sheetPC = groupVC.sheetPresentationController {
+        if let sheetPC = editGroupVC.sheetPresentationController {
             sheetPC.detents = [.large()]
             sheetPC.prefersGrabberVisible = true
             sheetPC.delegate = self
@@ -123,10 +128,10 @@ extension GroupViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.backgroundColor = UIColor(hex: CIC.shared.M1)
         
-        if groupTitle.count - 1 >= indexPath.row {
+        if groupTitles.count - 1 >= indexPath.row {
             cell.groupView.isHidden = false
             cell.groupLabel.isHidden = false
-            cell.groupLabel.text = groupTitle[indexPath.row]
+            cell.groupLabel.text = groupTitles[indexPath.row]
         } else {
             cell.groupView.isHidden = true
             cell.groupLabel.isHidden = true
@@ -136,22 +141,4 @@ extension GroupViewController: UITableViewDataSource {
 }
 
 extension GroupViewController: UISheetPresentationControllerDelegate {
-}
-
-extension GroupViewController: EditGroupViewControllerDelegate {
-    // swiftlint:disable all
-    func didCreateNewGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
-        groupTitle = newGroupsTitle
-        groupIDs = newGroupIDs
-        groupTableView.reloadData()
-        delegate?.didReceiveNewGroup(self, newGroupIDs: groupIDs, newGroupsTitle: groupTitle)
-    }
-    
-    func didRemoveGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
-        groupTitle = newGroupsTitle
-        groupIDs = newGroupIDs
-        groupTableView.reloadData()
-        delegate?.didRemoveGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
-    }
-    // swiftlint:disable all
 }

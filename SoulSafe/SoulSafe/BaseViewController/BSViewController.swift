@@ -31,7 +31,7 @@ class BSViewController: UIViewController {
             UserSetup.userName = User.howan["userName"] as! String
             UserSetup.userImage = User.howan["userImage"] as! UIImage
             self.setupScrollViewConponents()
-            self.mainVC.deletage = self
+            self.mainVC.delegate = self
         }
 
         let option2Action = UIAlertAction(title: "潘厚紳", style: .default) { (action) in
@@ -39,7 +39,7 @@ class BSViewController: UIViewController {
             UserSetup.userName = User.pann["userName"] as! String
             UserSetup.userImage = User.pann["userImage"] as! UIImage
             self.setupScrollViewConponents()
-            self.mainVC.deletage = self
+            self.mainVC.delegate = self
         }
 
         let option3Action = UIAlertAction(title: "謝承翰", style: .default) { (action) in
@@ -47,7 +47,7 @@ class BSViewController: UIViewController {
             UserSetup.userName = User.orton["userName"] as! String
             UserSetup.userImage = User.orton["userImage"] as! UIImage
             self.setupScrollViewConponents()
-            self.mainVC.deletage = self
+            self.mainVC.delegate = self
         }
 
         alertController.addAction(option1Action)

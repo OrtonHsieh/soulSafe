@@ -16,17 +16,16 @@ class EditGroupViewController: UIViewController {
     // swiftlint:disable all
     let db = Firestore.firestore()
     // swiftlint:enable all
-    var dataClosure: ((String) -> Void)? {
-        didSet {
-            // 由 Sence Delegate 將 groupID 傳到這邊
-            // 將 groupID 放入 currentGroupID
-            // 
-        }
-    }
+//    var dataClosure: ((String) -> Void)? {
+//        didSet {
+//            // 由 Sence Delegate 將 groupID 傳到這邊
+//            // 將 groupID 放入 currentGroupID
+//            // 
+//        }
+//    }
     lazy var currentGroupID = String()
-    lazy var groupTitle: [String] = []
+    lazy var groupTitles: [String] = []
     lazy var groupIDs: [String] = []
-    weak var delegate: EditGroupViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,9 +118,9 @@ extension EditGroupViewController: UITableViewDataSource {
         
         cell.delegate = self
         cell.backgroundColor = UIColor(hex: CIC.shared.M1)
-        if groupTitle.count - 1 >= indexPath.row {
+        if groupTitles.count - 1 >= indexPath.row {
             cell.groupView.isHidden = false
-            cell.groupLabel.text = groupTitle[indexPath.row]
+            cell.groupLabel.text = groupTitles[indexPath.row]
             editGroupView.createGroupLabel.text = "分享我的群組"
             editGroupView.leftHintLabel.text = editGroupView.titleForLeave
             editGroupView.rightHintLabel.text = editGroupView.titleForCopylink

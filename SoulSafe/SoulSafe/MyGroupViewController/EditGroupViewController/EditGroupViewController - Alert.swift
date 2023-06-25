@@ -10,11 +10,6 @@ import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
 
-protocol EditGroupViewControllerDelegate: AnyObject {
-    func didCreateNewGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
-    func didRemoveGroup(_ VC: EditGroupViewController, newGroupIDs: [String], newGroupsTitle: [String])
-}
-
 extension EditGroupViewController {
     func inputAlertForCreateGroup(from viewController: UIViewController) {
         let alertController = UIAlertController(title: "創立群組", message: "請輸入群組名稱", preferredStyle: .alert)
@@ -44,25 +39,15 @@ extension EditGroupViewController {
                     initGroupPath.setData([
                         "groupID": "\(groupPath.documentID)",
                         "groupTitle": "\(inputText)",
+                        "members": [
+                            "\(UserSetup.userID)"
+                        ],
                         "timeStamp": Timestamp(date: Date())
                     ])
                     initGroupPath.collection("members").document("\(UserSetup.userID)").setData([
                         "userID": "\(UserSetup.userID)",
                         "joinedTime": Timestamp(date: Date())
                     ])
-                    
-                    self.currentGroupID = groupPath.documentID
-                    
-                    if self.groupIDs.count >= 1 {
-                        self.groupIDs.insert(self.currentGroupID, at: 0)
-                        self.groupTitle.insert(inputText, at: 0)
-                    } else {
-                        self.groupIDs.append(self.currentGroupID)
-                        self.groupTitle.append(inputText)
-                    }
-                    
-                    self.editGroupTBView.reloadData()
-                    self.delegate?.didCreateNewGroup(self, newGroupIDs: self.groupIDs, newGroupsTitle: self.groupTitle)
                 }
             }
         }
@@ -84,23 +69,14 @@ extension EditGroupViewController {
                 if let err = err {
                     print("Error removing document: \(err)")
                 } else {
-                    for (index, id) in self.groupIDs.enumerated() {
-                        if id == self.currentGroupID {
-                            self.groupIDs.remove(at: index)
-                            self.groupTitle.remove(at: index)
-                            self.editGroupTBView.reloadData()
-                            self.delegate?.didRemoveGroup(self,
-                                                          newGroupIDs: self.groupIDs,
-                                                          newGroupsTitle: self.groupTitle)
-                        }
-                    }
+                    print("成功於 fireStore 將群組由個人的群組路徑移除")
                     
                     let initGroupPath = self.db.collection("groups").document("\(self.currentGroupID)").collection("members").document("\(UserSetup.userID)")
                     initGroupPath.delete() { err in
                         if let err = err {
                             print("Error removing document: \(err)")
                         } else {
-                            print("成功退群")
+                            print("成功於 fireStore 將群組由群組的路徑移除個人資料")
                         }
                     }
                     

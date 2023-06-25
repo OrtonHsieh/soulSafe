@@ -9,7 +9,6 @@ import UIKit
 import FirebaseFirestore
 
 class JoinGroupManager {
-    weak var delegate: JoinGroupManagerDelegate?
     let db = Firestore.firestore()
     let viewController: UIViewController?
     
@@ -63,19 +62,26 @@ class JoinGroupManager {
         }
     }
     
-    func showConfirmAlert(_ groupID: String, _ groupTitle: String) {
+    // 確認入群的詢問畫面
+    private func showConfirmAlert(_ groupID: String, _ groupTitle: String) {
         let alertController = UIAlertController(title: "確認加入群組", message: "加入\(groupTitle)", preferredStyle: .alert)
 
         let rejectButton = UIAlertAction(title: "取消", style: .cancel)
 
         let confirmButton = UIAlertAction(title: "確認", style: .default) { (action) in
-            self.delegate?.groupInfo(self, groupTitle: groupTitle, groupID: groupID)
-            
             let didJoinGroupPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(UserSetup.userID)")
+            
+            let addGroupToUser = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
             
             didJoinGroupPath.setData([
                 "userID": "\(UserSetup.userID)",
                 "joinedTime": Timestamp(date: Date())
+            ])
+            
+            addGroupToUser.setData([
+                "groupID": "\(groupID)",
+                "groupTitle": "\(groupTitle)",
+                "timeStamp": Timestamp(date: Date())
             ])
             
             self.joinedSuccessfullyMsg(groupTitle)
@@ -91,7 +97,8 @@ class JoinGroupManager {
         viewController.present(alertController, animated: true, completion: nil)
     }
     
-    func showRemindAlert() {
+    // 判斷已經加入過群組會顯示的訊息
+    private func showRemindAlert() {
         let alertController = UIAlertController(title: "注意", message: "您已加入群組，快去聊天吧！", preferredStyle: .alert)
 
         let confirmButton = UIAlertAction(title: "確認", style: .default)
@@ -103,6 +110,7 @@ class JoinGroupManager {
         viewController.present(alertController, animated: true, completion: nil)
     }
     
+    // 確認入群後會顯示確認訊息
     func joinedSuccessfullyMsg(_ groupTitle: String) {
         let alertController = UIAlertController(title: "成功加入", message: "您已加入\(groupTitle)，快去聊天吧！", preferredStyle: .alert)
 
