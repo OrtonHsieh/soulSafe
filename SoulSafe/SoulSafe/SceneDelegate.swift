@@ -64,8 +64,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             if let groupID = components.host {
                 print("Host: \(groupID)")
+                if let rootViewController = window?.rootViewController {
+                    let joinGroupManager = JoinGroupManager(viewController: rootViewController)
+                    joinGroupManager.getJoinGroupInfo(groupID)
+                }
             }
-            // 把資料傳回給 group view controller
+            // present 丟給某個 VC
+            // VC 去拿該群組的資料
+            // 顯示群組名稱、確認加入、取消按鈕
+            // 點擊後打 API 並 Delegate 通知需要的 VC 刷新 data
+            // Dismiss VC
         }
     }
 }
