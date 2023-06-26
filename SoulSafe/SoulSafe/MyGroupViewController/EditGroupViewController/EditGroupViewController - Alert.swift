@@ -48,6 +48,12 @@ extension EditGroupViewController {
                         "userID": "\(UserSetup.userID)",
                         "joinedTime": Timestamp(date: Date())
                     ])
+                    
+                    self.currentGroupID = groupPath.documentID
+                    self.groupLink = "soulsafe.app.link.page://\(self.currentGroupID)"
+                    
+                    let activityViewController = UIActivityViewController(activityItems: [self.groupLink], applicationActivities: nil)
+                    self.present(activityViewController, animated: true, completion: nil)
                 }
             }
         }
@@ -92,5 +98,17 @@ extension EditGroupViewController {
         alertController.addAction(confirmAction)
         
         viewController.present(alertController, animated: true)
+    }
+    
+    // 確認入群後會顯示確認訊息
+    func copiedLinkMsg(from viewController: UIViewController) {
+        let alertController = UIAlertController(title: "已複製連結", message: "快去分享給朋友吧！", preferredStyle: .alert)
+
+        let confirmButton = UIAlertAction(title: "確認", style: .default)
+        alertController.addAction(confirmButton)
+
+        // 在這裡顯示 UIAlert
+        // 例如：
+        viewController.present(alertController, animated: true, completion: nil)
     }
 }

@@ -95,6 +95,7 @@ class GroupViewController: UIViewController {
         
         if groupIDs.count >= 1 {
             editGroupVC.currentGroupID = groupIDs[0]
+            editGroupVC.groupLink = "soulsafe.app.link.page://\(editGroupVC.currentGroupID)"
         }
         
         editGroupVC.groupIDs = groupIDs

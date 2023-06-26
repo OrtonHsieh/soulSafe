@@ -91,7 +91,9 @@ class EditGroupView: UIView {
         leaveBtn.addTarget(self, action: #selector(didPressLeaveBtn), for: .touchUpInside)
         leaveBtn.isHidden = true
         
-        shareLinkBtn.setImage(UIImage(named: "icon-copyLink"), for: .normal)
+        let symbolSize: CGFloat = 32
+        shareLinkBtn.setImage(UIImage(systemName: "square.and.arrow.up")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: symbolSize)), for: .normal)
+        shareLinkBtn.tintColor = .white
         shareLinkBtn.addTarget(self, action: #selector(didPressCopyLinkBtn), for: .touchUpInside)
         shareLinkBtn.isHidden = true
     }
@@ -176,5 +178,6 @@ class EditGroupView: UIView {
 
     @objc func didPressCopyLinkBtn() {
         Vibration.shared.lightV()
+        delegate?.didPressCopyLinkBtn(self, button: shareLinkBtn)
     }
 }

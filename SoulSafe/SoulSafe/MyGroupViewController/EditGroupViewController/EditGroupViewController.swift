@@ -15,6 +15,7 @@ class EditGroupViewController: UIViewController {
     lazy var editGroupView = EditGroupView()
     // swiftlint:disable all
     let db = Firestore.firestore()
+    lazy var groupLink = String()
     // swiftlint:enable all
 //    var dataClosure: ((String) -> Void)? {
 //        didSet {
@@ -46,6 +47,7 @@ class EditGroupViewController: UIViewController {
         editGroupTBView.register(EditGroupTBCell.self, forCellReuseIdentifier: "EditGroupTBCell")
         editGroupTBView.backgroundColor = UIColor(hex: CIC.shared.M1)
         editGroupTBView.separatorStyle = .none
+        editGroupTBView.allowsSelection = true
         editGroupTBView.layer.masksToBounds = false
         editGroupTBView.isScrollEnabled = false
         view.addSubview(editGroupTBView)
@@ -99,9 +101,15 @@ extension EditGroupViewController: UITableViewDelegate {
         return headerView
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currentGroupID = groupIDs[indexPath.row]
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        currentGroupID = groupIDs[indexPath.row]
+//        groupLink = "soulsafe.app.link.page://\(currentGroupID)"
+//    }
+   // 沒反應所以不使用
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        currentGroupID = groupIDs[indexPath.row]
+//        groupLink = "soulsafe.app.link.page://\(currentGroupID)"
+//    }
 }
 
 extension EditGroupViewController: UITableViewDataSource {
@@ -170,6 +178,7 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
         
         guard let indexPath = editGroupTBView.indexPath(for: cell) else { return }
         currentGroupID = groupIDs[indexPath.row]
+        groupLink = "soulsafe.app.link.page://\(currentGroupID)"
         
         // 將其他 View 變成 M3
         for visibleCell in editGroupTBView.visibleCells {
@@ -198,5 +207,7 @@ extension EditGroupViewController: EditGroupViewDelegate {
     
     func didPressCopyLinkBtn(_ view: EditGroupView, button: UIButton) {
         print("didPressCopyLinkBtn")
+        let activityViewController = UIActivityViewController(activityItems: [self.groupLink], applicationActivities: nil)
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
