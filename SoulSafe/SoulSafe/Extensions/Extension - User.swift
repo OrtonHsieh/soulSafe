@@ -14,7 +14,7 @@ struct User {
         let howan = [
             "userID": "userIDHowan",
             "userName": "何婉綾",
-            "userImage": UIImage(named: "avatar-4")!
+            "userImage": "avatar-4"
         ]
         return howan
     }()
@@ -23,7 +23,7 @@ struct User {
         let pann = [
             "userID": "userIDPann",
             "userName": "潘厚紳",
-            "userImage": UIImage(named: "avatar-5")!
+            "userImage": "avatar-5"
         ]
         return pann
     }()
@@ -32,7 +32,7 @@ struct User {
         let orton = [
             "userID": "userIDOrton",
             "userName": "謝承翰",
-            "userImage": UIImage(named: "avatar-1")!
+            "userImage": "avatar-1"
         ]
         return orton
     }()
@@ -45,5 +45,5 @@ class UserSetup {
     
     static var userID = String()
     
-    static var userImage = UIImage()
+    static var userImage = String()
 }

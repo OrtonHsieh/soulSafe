@@ -17,6 +17,8 @@ class ChatRoomViewController: UIViewController {
     
     var chats: [String] = []
     var userIDs: [String] = []
+    // 這邊現在是存 local 的圖片字串，等個人頁做好後要改成上傳圖片
+    var userAvatars: [String] = []
     
     var groupID = String()
     var listener: ListenerRegistration?
@@ -112,17 +114,21 @@ class ChatRoomViewController: UIViewController {
             
             self.chats.removeAll()
             self.userIDs.removeAll()
+            self.userAvatars.removeAll()
             
             for document in documents {
                 let data = document.data()
                 guard let message = data["message"] as? String else { return }
                 guard let userID = data["userID"] as? String else { return }
+                guard let userAvatar = data["userAvatar"] as? String else { return }
                 
                 self.chats.append(message)
                 self.userIDs.append(userID)
+                self.userAvatars.append(userAvatar)
             }
             print(self.chats)
             print(self.userIDs)
+            print(self.userAvatars)
             self.scrollToNewCell()
         }
     }
@@ -187,6 +193,7 @@ extension ChatRoomViewController: UITableViewDataSource {
             }
             cell.msgLabel.text = chats[indexPath.row]
             cell.msgView.layer.cornerRadius = 8
+            cell.avatarView.image = UIImage(named: "\(userAvatars[indexPath.row])")
             cell.backgroundColor = UIColor(hex: CIC.shared.M1)
             cell.selectionStyle = .none
             return cell
@@ -210,6 +217,7 @@ extension ChatRoomViewController: ChatRoomViewDelegate {
             postPath.setData([
                 "userID": "\(UserSetup.userID)",
                 "messageID": "\(postPath.documentID)",
+                "userAvatar": "\(UserSetup.userImage)",
                 "timeStamp": Timestamp(date: Date()),
                 "message": msg
             ]) { err in

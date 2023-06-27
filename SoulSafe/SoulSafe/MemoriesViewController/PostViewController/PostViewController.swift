@@ -177,7 +177,7 @@ extension PostViewController: UITableViewDataSource {
             cell.backgroundColor = UIColor(hex: CIC.shared.M1)
             cell.selectionStyle = .none
             cell.commentLabel.text = comments[indexPath.row]
-            cell.avatarView.image = UserSetup.userImage
+            cell.avatarView.image = UIImage(named: "\(UserSetup.userImage)")
             return cell
         }
     }
