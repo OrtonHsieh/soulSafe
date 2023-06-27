@@ -65,6 +65,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             if let groupID = components.host {
                 print("Host: \(groupID)")
+                // 這邊讓 JoinGroupManager 推出去前設立新的 Window，別用 Scene Delegate 的 window
                 if let rootViewController = window?.rootViewController {
                     let joinGroupManager = JoinGroupManager(viewController: rootViewController)
                     joinGroupManager.getJoinGroupInfo(groupID)
