@@ -191,14 +191,17 @@ extension MainViewController: CameraViewDelegate {
         groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
-        present(groupVC, animated: true)
+        let navigationController = UINavigationController(rootViewController: groupVC)
+        navigationController.modalPresentationStyle = .formSheet
         
-        if let sheetPC = groupVC.sheetPresentationController {
+        if let sheetPC = navigationController.presentationController as? UISheetPresentationController {
             sheetPC.detents = [.medium()]
             sheetPC.prefersGrabberVisible = true
             sheetPC.delegate = self
             sheetPC.preferredCornerRadius = 20
         }
+        
+        view.window?.rootViewController?.present(navigationController, animated: true)
     }
     
 //    func listenToGroupData() {

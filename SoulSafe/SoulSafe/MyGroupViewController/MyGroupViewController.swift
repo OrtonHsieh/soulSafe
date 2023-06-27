@@ -29,6 +29,7 @@ class GroupViewController: UIViewController {
     var groupTitles: [String] = []
     var groupIDs: [String] = []
     weak var delegate: GroupViewControllerDelegate?
+    lazy var chatRoom = ChatRoomViewController()
     let db = Firestore.firestore()
     let editGroupVC = EditGroupViewController()
     
@@ -65,7 +66,7 @@ class GroupViewController: UIViewController {
     func setupTableViewConstraints() {
         groupTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            groupTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            groupTableView.topAnchor.constraint(equalTo: view.topAnchor),
             groupTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             groupTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             groupTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -113,6 +114,20 @@ class GroupViewController: UIViewController {
 }
 
 extension GroupViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        chatRoom.modalPresentationStyle = .fullScreen
+        chatRoom.groupID = groupIDs[indexPath.row]
+        chatRoom.groupTitle = groupTitles[indexPath.row]
+        Vibration.shared.lightV()
+        chatRoom.viewDidLoad()
+        present(chatRoom, animated: true)
+        
+//        if let sheetPC = chatRoom.sheetPresentationController {
+//            sheetPC.prefersGrabberVisible = true
+//            sheetPC.delegate = self
+//            sheetPC.preferredCornerRadius = 10
+//        }
+    }
 }
 
 extension GroupViewController: UITableViewDataSource {
