@@ -13,6 +13,17 @@ class MemoriesViewController: UIViewController {
     let galleryCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let memoriesView = MemoriesView()
     var imageURLs: [String] = []
+    var groupIDs: [String] = [] {
+        didSet {
+            // 這邊要用這些 GroupID 去重新監聽所有的 Group 相片集
+            getGroupsPosts()
+        }
+    }
+    var groupTitles: [String] = []
+    var groupPostDict: [String: [Any]] = [:]
+    var listener: ListenerRegistration?
+    var selectedGroup = String()
+    // 這邊要在於 ActionSheet 點擊時將該 GroupID 存入用來作為 reloadData 的依據
     var postIDs: [String] = []
     var dates: [String] = []
     let db = Firestore.firestore()
@@ -23,6 +34,15 @@ class MemoriesViewController: UIViewController {
         setupView()
         setupConstraints()
         getNewGalleryPics()
+        getGroupsPosts()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        galleryCollection.layer.cornerRadius = 28
+    }
+    
+    deinit {
+        listener?.remove()
     }
     
     func setupView() {
@@ -35,6 +55,10 @@ class MemoriesViewController: UIViewController {
         galleryCollection.bounces = false
         galleryCollection.collectionViewLayout = layout
         galleryCollection.decelerationRate = UIScrollView.DecelerationRate.fast
+        galleryCollection.layer.borderWidth = 1
+        galleryCollection.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
+        
+        memoriesView.delegate = self
         
         [galleryCollection, memoriesView].forEach { view.addSubview($0) }
     }
@@ -44,9 +68,11 @@ class MemoriesViewController: UIViewController {
         let constant: CGFloat = 60
         NSLayoutConstraint.activate([
             memoriesView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constant),
-            memoriesView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constant / 3),
+            memoriesView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            memoriesView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            memoriesView.heightAnchor.constraint(equalToConstant: constant),
             
-            galleryCollection.topAnchor.constraint(equalTo: view.topAnchor, constant: constant * 1.8),
+            galleryCollection.topAnchor.constraint(equalTo: memoriesView.bottomAnchor),
             galleryCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             galleryCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             galleryCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -107,6 +133,44 @@ class MemoriesViewController: UIViewController {
             self.galleryCollection.reloadData()
         }
     }
+    
+    func getGroupsPosts() {
+        groupPostDict.removeAll()
+        
+        for groupID in groupIDs {
+            let groupPostPath = db.collection("groups").document("\(groupID)").collection("posts").order(by: "timeStamp", descending: true)
+            
+            listener = groupPostPath.addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    print("Error fetching collection: \(error)")
+                    return
+                }
+
+                guard let documents = querySnapshot?.documents else {
+                    print("No documents in collection")
+                    return
+                }
+                
+                var postIDs: [String] = []
+                var postImgURLs: [String] = []
+                var timeStamps: [Timestamp] = []
+                
+                for document in documents {
+                    let data = document.data()
+                    guard let postID = data["postID"] as? String else { return }
+                    guard let postImgURL = data["postImgURL"] as? String else { return }
+                    guard let timeStamp = data["timeStamp"] as? Timestamp else { return }
+                    
+                    postIDs.append(postID)
+                    postImgURLs.append(postImgURL)
+                    timeStamps.append(timeStamp)
+                }
+                
+                self.groupPostDict["\(groupID)"] = [postIDs, postImgURLs, timeStamps]
+                // 確定拿到資料，要 reloadData
+            }
+        }
+    }
 }
 
 extension MemoriesViewController: UICollectionViewDelegateFlowLayout {
@@ -145,7 +209,24 @@ extension MemoriesViewController: UICollectionViewDelegate {
 // MARK: - UICollectionViewDataSource
 extension MemoriesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imageURLs.count
+        if !selectedGroup.isEmpty {
+            
+            if let groupPost = groupPostDict["\(selectedGroup)"] as? [[Any]] {
+                if let postID = groupPost[0] as? [String] {
+                    return postID.count
+                } else {
+                    print("Failed to caculate postID count")
+                }
+            } else {
+                print("Failed to get groupPost's value count")
+            }
+            
+            
+        } else {
+            return imageURLs.count
+        }
+        
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -167,9 +248,32 @@ extension MemoriesViewController: UICollectionViewDataSource {
         cell.memoryImgView.clipsToBounds = true
         // 設置圓角
         cell.memoryImgView.layer.cornerRadius = 30
-        // 帶入圖片資料GroupSelectionTableViewCell
-        let url = URL(string: imageURLs[indexPath.row])
-        cell.memoryImgView.kf.setImage(with: url)
+        
+        if !selectedGroup.isEmpty {
+            if let groupPost = groupPostDict["\(selectedGroup)"] as? [[Any]] {
+                if let postIDs = groupPost[0] as? [String],
+                   let postURLs = groupPost[1] as? [String],
+                   let timeStamps = groupPost[2] as? [Timestamp] {
+                        let url = URL(string: postURLs[indexPath.row])
+                        cell.memoryImgView.kf.setImage(with: url)
+                } else {
+                    print("Failed to cast from groupPost property")
+                }
+            } else {
+                print("Failed to extract a group from groupDict")
+            }
+        } else {
+            // 帶入圖片資料GroupSelectionTableViewCell
+            let url = URL(string: imageURLs[indexPath.row])
+            cell.memoryImgView.kf.setImage(with: url)
+        }
         return cell
+    }
+}
+
+extension MemoriesViewController: MemoriesViewDelegate {
+    func didPressGroupSelector(_ view: MemoriesView) {
+        print("選擇查看的群組")
+        showGroupList(groupTitles)
     }
 }

@@ -14,6 +14,16 @@ class BSViewController: UIViewController {
     let mainVC = MainViewController()
     let memoriesVC = MemoriesViewController()
     let settingVC = SettingViewController()
+    var groupTitles: [String] = [] {
+        didSet {
+            memoriesVC.groupTitles = groupTitles
+        }
+    }
+    var groupIDs: [String] = [] {
+        didSet {
+            memoriesVC.groupIDs = groupIDs
+        }
+    }
     let db = Firestore.firestore()
     
     override func viewDidLoad() {
@@ -31,7 +41,7 @@ class BSViewController: UIViewController {
             UserSetup.userName = User.howan["userName"] as! String
             UserSetup.userImage = User.howan["userImage"] as! String
             self.setupScrollViewConponents()
-//            self.mainVC.delegate = self
+            self.mainVC.delegate = self
         }
 
         let option2Action = UIAlertAction(title: "潘厚紳", style: .default) { (action) in
@@ -39,7 +49,7 @@ class BSViewController: UIViewController {
             UserSetup.userName = User.pann["userName"] as! String
             UserSetup.userImage = User.pann["userImage"] as! String
             self.setupScrollViewConponents()
-//            self.mainVC.delegate = self
+            self.mainVC.delegate = self
         }
 
         let option3Action = UIAlertAction(title: "謝承翰", style: .default) { (action) in
@@ -47,7 +57,7 @@ class BSViewController: UIViewController {
             UserSetup.userName = User.orton["userName"] as! String
             UserSetup.userImage = User.orton["userImage"] as! String
             self.setupScrollViewConponents()
-//            self.mainVC.delegate = self
+            self.mainVC.delegate = self
         }
 
         alertController.addAction(option1Action)
@@ -106,16 +116,11 @@ extension BSViewController: UIScrollViewDelegate {
     }
 }
 
-//extension BSViewController: MainViewControllerDelegate {
-//    func didStartScrollingGroupSelectionView(_ viewController: MainViewController) {
-//        scrollView.isScrollEnabled = false
-//    }
-//    
-//    func didEndScrollingGroupSelectionView(_ viewController: MainViewController) {
-//        scrollView.isScrollEnabled = true
-//    }
-////
-////    func didSentImg(_ VC: MainViewController, postID: String) {
-//////        memoriesVC.getNewGalleryPics()
-////    }
-//}
+extension BSViewController: MainViewControllerDelegate {
+    func didUpdateGroupID(_ viewController: MainViewController, updatedGroupIDs: [String]) {
+        groupIDs = updatedGroupIDs
+    }
+    func didUpdateGroupTitle(_ viewController: MainViewController, updatedGroupTitles: [String]) {
+        groupTitles = updatedGroupTitles
+    }
+}

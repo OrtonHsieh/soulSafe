@@ -52,7 +52,6 @@ class GroupSelectionStackView: UIStackView {
     }
     
     @objc func didSelectGroup(_ button: UIButton) {
-        print("\(button.titleLabel?.text!)")
         delegate?.groupSelectionStackView(self, didSelectButton: button)
     }
 }

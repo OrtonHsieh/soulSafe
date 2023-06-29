@@ -8,5 +8,5 @@
 import UIKit
 
 protocol GroupSelectionStackViewDelegate: AnyObject {
-  func groupSelectionStackView(_ view: GroupSelectionStackView, didSelectButton button: UIButton)
+    func groupSelectionStackView(_ view: GroupSelectionStackView, didSelectButton button: UIButton)
 }

@@ -12,6 +12,7 @@
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
 		911120602A4D39630003F923 /* GroupSelectionView - Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205F2A4D39630003F923 /* GroupSelectionView - Delegate.swift */; };
+		911120622A4DB00F0003F923 /* MemoriesViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120612A4DB00F0003F923 /* MemoriesViewController - Alert.swift */; };
 		9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC32A3ABCD5008DB929 /* BSViewController.swift */; };
 		9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */; };
 		9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */; };
@@ -71,6 +72,7 @@
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
 		9111205F2A4D39630003F923 /* GroupSelectionView - Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - Delegate.swift"; sourceTree = "<group>"; };
+		911120612A4DB00F0003F923 /* MemoriesViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController - Alert.swift"; sourceTree = "<group>"; };
 		9127BBC32A3ABCD5008DB929 /* BSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSViewController.swift; sourceTree = "<group>"; };
 		9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
 		9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */,
+				911120612A4DB00F0003F923 /* MemoriesViewController - Alert.swift */,
 				9127BBD82A3C8131008DB929 /* MemoriesView.swift */,
 				9127BBDA2A3C8A0C008DB929 /* MemoriesCollectionViewCell.swift */,
 				9127BBE02A3D8C09008DB929 /* PostViewController */,
@@ -443,6 +446,7 @@
 				9127BBDB2A3C8A0C008DB929 /* MemoriesCollectionViewCell.swift in Sources */,
 				9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */,
 				91DBA5FB2A49947D00D8D790 /* ChatRoomView.swift in Sources */,
+				911120622A4DB00F0003F923 /* MemoriesViewController - Alert.swift in Sources */,
 				917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */,
 				917CF5522A3EFB8E00F02D48 /* MyGroupTableViewCell.swift in Sources */,
 				9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */,

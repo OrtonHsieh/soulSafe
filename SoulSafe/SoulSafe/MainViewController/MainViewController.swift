@@ -11,23 +11,30 @@ import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
 
-//protocol MainViewControllerDelegate: AnyObject {
-////    func didSentImg(_ mainVC: MainViewController, postID: String)
-//    func didStartScrollingGroupSelectionView(_ viewController: MainViewController)
-//    func didEndScrollingGroupSelectionView(_ viewController: MainViewController)
-//}
+protocol MainViewControllerDelegate: AnyObject {
+    func didUpdateGroupID(_ viewController: MainViewController, updatedGroupIDs: [String])
+    func didUpdateGroupTitle(_ viewController: MainViewController, updatedGroupTitles: [String])
+}
 
 class MainViewController: UIViewController {
     var captureSession: AVCaptureSession?
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
-//    weak var delegate: MainViewControllerDelegate?
+    weak var delegate: MainViewControllerDelegate?
     var joinGroupManager: JoinGroupManager?
     // swiftlint:disable all
     let db = Firestore.firestore()
     // swiftlint:enable all
-    var groupTitles: [String] = []
-    var groupIDs: [String] = []
+    var groupTitles: [String] = [] {
+        didSet {
+            delegate?.didUpdateGroupTitle(self, updatedGroupTitles: groupTitles)
+        }
+    }
+    var groupIDs: [String] = [] {
+        didSet {
+            delegate?.didUpdateGroupID(self, updatedGroupIDs: groupIDs)
+        }
+    }
     let groupVC = GroupViewController()
     let groupStackView = GroupSelectionStackView()
     var selectedGroupDict: [String: [Any]] = [:] {
@@ -284,7 +291,6 @@ extension MainViewController: CameraViewDelegate {
                 self.groupTitles.removeAll()
                 guard let querySnapshot = querySnapshot else { return }
                 for document in querySnapshot.documents {
-                    print("\(document.documentID) => \(document.data())")
                     let data = document.data()
                     guard let groupTitle = data["groupTitle"] as? String else { return }
                     guard let groupID = data["groupID"] as? String else { return }
@@ -292,8 +298,6 @@ extension MainViewController: CameraViewDelegate {
                     self.groupIDs.append(groupID)
                     self.groupTitles.append(groupTitle)
                 }
-                print(self.groupTitles)
-                print(self.groupIDs)
                 self.groupVC.groupTitles = self.groupTitles
                 self.groupVC.groupIDs = self.groupIDs
                 self.groupVC.groupTableView.reloadData()
