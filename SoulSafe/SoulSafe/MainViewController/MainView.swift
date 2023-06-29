@@ -69,8 +69,9 @@ class CameraView: UIView {
         photoImageView.isHidden = true
         
         sendButton = Blur.shared.setButtonShadow(sendButton)
-        sendButton.setImage(UIImage(named: "icon-send"), for: .normal)
+        sendButton.setImage(UIImage(named: "icon-send-disabled"), for: .normal)
         sendButton.addTarget(self, action: #selector(sendBtmPressed), for: .touchUpInside)
+        sendButton.isEnabled = false
         sendButton.isHidden = true
         
         groupContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)

@@ -11,15 +11,17 @@ import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
 
-protocol MainViewControllerDelegate: AnyObject {
-    func didSentImg(_ mainVC: MainViewController, postID: String)
-}
+//protocol MainViewControllerDelegate: AnyObject {
+////    func didSentImg(_ mainVC: MainViewController, postID: String)
+//    func didStartScrollingGroupSelectionView(_ viewController: MainViewController)
+//    func didEndScrollingGroupSelectionView(_ viewController: MainViewController)
+//}
 
 class MainViewController: UIViewController {
     var captureSession: AVCaptureSession?
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
-    weak var delegate: MainViewControllerDelegate?
+//    weak var delegate: MainViewControllerDelegate?
     var joinGroupManager: JoinGroupManager?
     // swiftlint:disable all
     let db = Firestore.firestore()
@@ -27,6 +29,18 @@ class MainViewController: UIViewController {
     var groupTitles: [String] = []
     var groupIDs: [String] = []
     let groupVC = GroupViewController()
+    let groupStackView = GroupSelectionStackView()
+    var selectedGroupDict: [String: [Any]] = [:] {
+        didSet {
+            if !selectedGroupDict.isEmpty {
+                cameraView?.sendButton.setImage(UIImage(named: "icon-send"), for: .normal)
+                cameraView?.sendButton.isEnabled = true
+            } else {
+                cameraView?.sendButton.setImage(UIImage(named: "icon-send-disabled"), for: .normal)
+                cameraView?.sendButton.isEnabled = false
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +53,26 @@ class MainViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         cameraView?.buttonCorner.layer.cornerRadius = 50
         cameraView?.groupContainerView.layer.cornerRadius = 18
+    }
+    
+    func setupGroupStackView() {
+        groupStackView.delegate = self
+        groupStackView.dataSource = self
+        view.addSubview(groupStackView)
+        groupStackView.translatesAutoresizingMaskIntoConstraints = false
+        groupStackView.isHidden = true
+        
+        let numberOfButtons = CGFloat(groupIDs.count)
+        let viewFrameWidth = CGFloat(view.frame.width)
+        // 這邊是為了讓 button 的寬度在不同群組數都能維持一致，因此 StackView 需要依據 button 數量變化寬度所產生的算式
+        let widthValue = CGFloat((((viewFrameWidth - 20) / 3 + 10) * numberOfButtons) - 10)
+        
+        NSLayoutConstraint.activate([
+            groupStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            groupStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
+            groupStackView.heightAnchor.constraint(equalToConstant: 60),
+            groupStackView.widthAnchor.constraint(equalToConstant: widthValue)
+        ])
     }
     
     func createCamera() {
@@ -121,12 +155,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             cameraView?.photoImageView.layer.shouldRasterize = true
             cameraView?.photoImageView.layer.rasterizationScale = UIScreen.main.scale
             
-            cameraView?.photoImageView.isHidden = false
-            cameraView?.cameraView.isHidden = true
-            cameraView?.closeButton.isHidden = false
-            cameraView?.picButton.isHidden = true
-            cameraView?.buttonCorner.isHidden = true
-            cameraView?.sendButton.isHidden = false
+            conponentsArrangementWhenCameraOff()
         }
     }
 }
@@ -139,24 +168,37 @@ extension MainViewController: CameraViewDelegate {
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
     
-    func didPressCloseBtn(_ view: CameraView) {
-        Vibration.shared.mediumV()
+    func conponentsArrangementWhenCameraOn() {
         cameraView?.photoImageView.isHidden = true
         cameraView?.cameraView.isHidden = false
         cameraView?.closeButton.isHidden = true
         cameraView?.buttonCorner.isHidden = false
         cameraView?.picButton.isHidden = false
         cameraView?.sendButton.isHidden = true
+        cameraView?.groupContainerView.isHidden = false
+        groupStackView.isHidden = true
+    }
+    
+    func conponentsArrangementWhenCameraOff() {
+        cameraView?.photoImageView.isHidden = false
+        cameraView?.cameraView.isHidden = true
+        cameraView?.closeButton.isHidden = false
+        cameraView?.buttonCorner.isHidden = true
+        cameraView?.picButton.isHidden = true
+        cameraView?.sendButton.isHidden = false
+        cameraView?.groupContainerView.isHidden = true
+        groupStackView.isHidden = false
+    }
+    
+    func didPressCloseBtn(_ view: CameraView) {
+        Vibration.shared.mediumV()
+        conponentsArrangementWhenCameraOn()
+        cleanGroupSelection()
     }
     
     func didPressSendBtn(_ view: CameraView, image: UIImage) {
         Vibration.shared.lightV()
-        cameraView?.photoImageView.isHidden = true
-        cameraView?.cameraView.isHidden = false
-        cameraView?.closeButton.isHidden = true
-        cameraView?.buttonCorner.isHidden = false
-        cameraView?.picButton.isHidden = false
-        cameraView?.sendButton.isHidden = true
+        conponentsArrangementWhenCameraOn()
         
         uploadPhoto(image: image) { result in
             switch result {
@@ -164,6 +206,7 @@ extension MainViewController: CameraViewDelegate {
                 print(url)
                 // 上傳資料
                 let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts").document()
+                let groupArray = self.selectedGroupDict.flatMap{ $0.value.compactMap{ $0 as? String }}
                 
                 postPath.setData([
                     "postImgURL": "\(url)",
@@ -176,13 +219,39 @@ extension MainViewController: CameraViewDelegate {
                         print("Document successfully written!")
                     }
                 }
-                // 把資料傳給 BaseVC
-                self.delegate?.didSentImg(self, postID: postPath.documentID)
+                
+                for groupID in 0..<groupArray.count {
+                    let groupPostPath = self.db.collection("groups").document("\(groupArray[groupID])").collection("posts").document("\(postPath.documentID)")
+                    groupPostPath.setData([
+                        "postID": "\(postPath.documentID)",
+                        "postImgURL": "\(url)",
+                        "timeStamp": Timestamp(date: Date())
+                    ]) { err in
+                        if let err = err {
+                            print("Error writing document: \(err)")
+                        } else {
+                            print("Document successfully written!")
+                        }
+                    }
+                } 
+                // 這邊等 UI 切好也要一起傳到 group 裡的 post
+                self.cleanGroupSelection()
                 
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    func cleanGroupSelection() {
+        for (_, group) in selectedGroupDict {
+            for button in group {
+                if let button = button as? UIButton {
+                    button.layer.borderWidth = 0
+                }
+            }
+        }
+        selectedGroupDict.removeAll()
     }
     
     func didPressGroupBtn(_ view: CameraView) {
@@ -204,60 +273,13 @@ extension MainViewController: CameraViewDelegate {
         view.window?.rootViewController?.present(navigationController, animated: true)
     }
     
-//    func listenToGroupData() {
-//        let groupsPath = db.collection("groups").whereField("members", arrayContains: "\(UserSetup.userID)")
-//
-////        groupsPath
-//        // 等等回來繼續用這邊，要先在建立群組時於 doc 加入 userID
-//
-//        groupsPath.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, error in
-//            if let error = error {
-//                print("Error fetching collection: \(error)")
-//                return
-//            }
-//
-//            guard let documents = querySnapshot?.documents else {
-//                print("No documents in collection")
-//                return
-//            }
-//
-//            var index = 0
-//
-//            for document in documents {
-//                let data = document.data()
-//                guard let groupID = data["groupID"] as? String else { return }
-//                guard let groupTitle = data["groupTitle"] as? String else { return }
-//
-//                if index <= self.groupIDs.count - 1 {
-//                    self.groupIDs[index] = groupID
-//                    self.groupTitles[index] = groupTitle
-//                } else {
-//                    self.groupIDs.append(groupID)
-//                    self.groupTitles.append(groupTitle)
-//                }
-//                index += 1
-//            }
-//            self.groupVC.groupTitles = self.groupTitles
-//            self.groupVC.groupIDs = self.groupIDs
-//            self.groupVC.groupTableView.reloadData()
-//            self.groupVC.updateEditGroupVC()
-//        }
-//    }
-    
     func getGroupData() {
-        let groupsPath = self.db.collection(
-            "testingUploadImg"
-        ).document(
-            "\(UserSetup.userID)"
-        ).collection(
-            "groups"
-        )
+        let groupsPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups")
         
         groupsPath.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, err in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
-//                var index = 0
                 self.groupIDs.removeAll()
                 self.groupTitles.removeAll()
                 guard let querySnapshot = querySnapshot else { return }
@@ -267,14 +289,6 @@ extension MainViewController: CameraViewDelegate {
                     guard let groupTitle = data["groupTitle"] as? String else { return }
                     guard let groupID = data["groupID"] as? String else { return }
                     
-//                    if index <= self.groupTitles.count - 1 {
-//                        self.groupTitles[index] = groupTitle
-//                        self.groupIDs[index] = groupID
-//                    } else {
-//                        self.groupTitles.append(groupTitle)
-//                        self.groupIDs.append(groupID)
-//                    }
-//                    index += 1
                     self.groupIDs.append(groupID)
                     self.groupTitles.append(groupTitle)
                 }
@@ -284,6 +298,8 @@ extension MainViewController: CameraViewDelegate {
                 self.groupVC.groupIDs = self.groupIDs
                 self.groupVC.groupTableView.reloadData()
                 self.groupVC.updateEditGroupVC()
+                
+                self.setupGroupStackView()
             }
         }
     }
@@ -292,16 +308,28 @@ extension MainViewController: CameraViewDelegate {
 extension MainViewController: UISheetPresentationControllerDelegate {
 }
 
-//extension MainViewController: GroupViewControllerDelegate {
-//    func didReceiveNewGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
-//        groupTitles = newGroupsTitle
-//        groupIDs = newGroupIDs
-////        getGroupData()
-//    }
-//
-//    func didRemoveGroup(_ VC: GroupViewController, newGroupIDs: [String], newGroupsTitle: [String]) {
-//        groupIDs = newGroupIDs
-//        groupTitles = newGroupsTitle
-////        getGroupData()
-//    }
-//}
+extension MainViewController: GroupSelectionStackViewDelegate {
+    func groupSelectionStackView(_ view: GroupSelectionStackView, didSelectButton button: UIButton) {
+        Vibration.shared.lightV()
+        if button.layer.borderWidth == 0 {
+            // 如果原本寬度為 0 代表未被選擇，讓寬度變 1 表示選擇
+            button.layer.borderWidth = 1
+            // 將選擇的按鈕 groupID 加入 Dict 方便上傳時取用 ID 上傳
+            selectedGroupDict["\(groupIDs[button.tag])"] = [groupIDs[button.tag], button]
+        } else {
+            // 如果原本寬度為 1 代表已被選擇，讓寬度變 0 表示取消選擇
+            button.layer.borderWidth = 0
+            selectedGroupDict.removeValue(forKey: "\(groupIDs[button.tag])")
+        }
+    }
+}
+
+extension MainViewController: GroupSelectionStackViewDataSource {
+    func numberOfButtons(in view: GroupSelectionStackView) -> Int {
+        groupIDs.count
+    }
+    
+    func titleForButtons(at index: Int, in view: GroupSelectionStackView) -> String {
+        groupTitles[index]
+    }
+}

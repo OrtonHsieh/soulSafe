@@ -78,6 +78,10 @@ class JoinGroupManager {
                 "joinedTime": Timestamp(date: Date())
             ])
             
+            self.db.collection("groups").document("\(groupID)").updateData([
+                "members" : FieldValue.arrayUnion(["\(UserSetup.userID)"])
+            ])
+            
             addGroupToUser.setData([
                 "groupID": "\(groupID)",
                 "groupTitle": "\(groupTitle)",

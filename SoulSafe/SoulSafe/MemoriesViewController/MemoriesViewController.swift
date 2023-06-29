@@ -14,6 +14,7 @@ class MemoriesViewController: UIViewController {
     let memoriesView = MemoriesView()
     var imageURLs: [String] = []
     var postIDs: [String] = []
+    var dates: [String] = []
     let db = Firestore.firestore()
     
     override func viewDidLoad() {
@@ -88,13 +89,18 @@ class MemoriesViewController: UIViewController {
                 let data = document.data()
                 guard let imageURL = data["postImgURL"] as? String else { return }
                 guard let postID = data["postID"] as? String else { return }
+                guard let date = data["timeStamp"] as? Timestamp else { return }
                     
+                let dateInFormate = CusDateFormatter.shared.formatDate(timeStamp: date)
+                
                 if index <= self.imageURLs.count - 1 {
                     self.imageURLs[index] = imageURL
                     self.postIDs[index] = postID
+                    self.dates[index] = dateInFormate
                 } else {
                     self.imageURLs.append(imageURL)
                     self.postIDs.append(postID)
+                    self.dates.append(dateInFormate)
                 }
                 index += 1
             }
@@ -161,7 +167,7 @@ extension MemoriesViewController: UICollectionViewDataSource {
         cell.memoryImgView.clipsToBounds = true
         // 設置圓角
         cell.memoryImgView.layer.cornerRadius = 30
-        // 帶入圖片資料
+        // 帶入圖片資料GroupSelectionTableViewCell
         let url = URL(string: imageURLs[indexPath.row])
         cell.memoryImgView.kf.setImage(with: url)
         return cell
