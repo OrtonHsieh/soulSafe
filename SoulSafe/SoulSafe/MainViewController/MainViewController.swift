@@ -213,12 +213,30 @@ extension MainViewController: CameraViewDelegate {
                 print(url)
                 // 上傳資料
                 let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts").document()
+                // 原本 selectedGroupDict 裡面有 UIButton 以及 GroupID 跟 UIButton，這邊先用 compactMap 將 String 以外的型別過濾掉，再用 FlatMap 將所有 Key 的 String 值整合在一個 Array 裏
                 let groupArray = self.selectedGroupDict.flatMap{ $0.value.compactMap{ $0 as? String }}
-                
+                let groupIDArray = groupArray.enumerated().compactMap {(index, element) -> String? in
+                    if index % 2 == 0 {
+                        return element
+                    } else {
+                        return nil
+                    }
+                }
+                print(groupIDArray)
+                let groupTitleArray = groupArray.enumerated().compactMap {(index, element) -> String? in
+                    if index % 2 != 0 {
+                        return element
+                    } else {
+                        return nil
+                    }
+                }
+                print(groupTitleArray)
                 postPath.setData([
                     "postImgURL": "\(url)",
                     "postID": "\(postPath.documentID)",
-                    "timeStamp": Timestamp(date: Date())
+                    "timeStamp": Timestamp(date: Date()),
+                    "shareGroupList": groupIDArray,
+                    "groupTitleArray": groupTitleArray
                 ]) { err in
                     if let err = err {
                         print("Error writing document: \(err)")
@@ -227,12 +245,14 @@ extension MainViewController: CameraViewDelegate {
                     }
                 }
                 
-                for groupID in 0..<groupArray.count {
-                    let groupPostPath = self.db.collection("groups").document("\(groupArray[groupID])").collection("posts").document("\(postPath.documentID)")
+                for groupID in 0..<groupIDArray.count {
+                    let groupPostPath = self.db.collection("groups").document("\(groupIDArray[groupID])").collection("posts").document("\(postPath.documentID)")
                     groupPostPath.setData([
                         "postID": "\(postPath.documentID)",
                         "postImgURL": "\(url)",
-                        "timeStamp": Timestamp(date: Date())
+                        "timeStamp": Timestamp(date: Date()),
+                        "shareGroupList": groupIDArray,
+                        "groupTitleArray": groupTitleArray
                     ]) { err in
                         if let err = err {
                             print("Error writing document: \(err)")
@@ -319,7 +339,7 @@ extension MainViewController: GroupSelectionStackViewDelegate {
             // 如果原本寬度為 0 代表未被選擇，讓寬度變 1 表示選擇
             button.layer.borderWidth = 1
             // 將選擇的按鈕 groupID 加入 Dict 方便上傳時取用 ID 上傳
-            selectedGroupDict["\(groupIDs[button.tag])"] = [groupIDs[button.tag], button]
+            selectedGroupDict["\(groupIDs[button.tag])"] = [groupIDs[button.tag], button, groupTitles[button.tag]]
         } else {
             // 如果原本寬度為 1 代表已被選擇，讓寬度變 0 表示取消選擇
             button.layer.borderWidth = 0

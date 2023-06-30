@@ -19,6 +19,15 @@ class PostViewController: UIViewController {
     var comments: [String] = []
     var timeStamps: [Timestamp] = []
     
+    var selectedGroup = String()
+    var selectedGroupForPost = String()
+    var selectedGroupTitleForPost = String()
+    
+    // 以下為用來放置對應 postID 所分享的群組
+    var groupIDArray: [String] = []
+    var groupTitleArray: [String] = []
+    var ifGroupViewTextIsMyPost = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -74,8 +83,16 @@ class PostViewController: UIViewController {
     }
     
     func getPostComment() {
-        let docRef = db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
-        let commentRef = docRef.document("\(currentPostID)").collection("comments").order(
+        var postPathInGroups: CollectionReference?
+        
+        if !selectedGroup.isEmpty {
+            postPathInGroups = db.collection("groups").document("\(selectedGroup)").collection("posts")
+        } else {
+            postPathInGroups = db.collection("groups").document("\(groupIDArray[0])").collection("posts")
+        }
+        
+        guard let postPathInGroups = postPathInGroups else { return }
+        let commentRef = postPathInGroups.document("\(currentPostID)").collection("comments").order(
             by: "timeStamp", descending: true
         )
         commentRef.getDocuments {
@@ -86,7 +103,6 @@ class PostViewController: UIViewController {
                 var index = 0
                 guard let querySnapshot = querySnapshot else { return }
                 for document in querySnapshot.documents {
-                    print("\(document.documentID) => \(document.data())")
                     let data = document.data()
                     guard let comment = data["comment"] as? String else { return }
                     guard let timeStamp = data["timeStamp"] as? Timestamp else { return }
@@ -101,7 +117,7 @@ class PostViewController: UIViewController {
                     index += 1
                 }
             }
-            self.postTableView.reloadData()
+            self.postTableView.reloadSections(.init(integer: 1), with: .none)
         }
     }
 }
@@ -163,6 +179,23 @@ extension PostViewController: UITableViewDataSource {
                     for: indexPath) as? PostTBCellList else {
                     fatalError("Could not create cell")
                 }
+                cell.delegate = self
+                // selectedGroupForPost 是放置留言串的 groupID
+                if selectedGroupForPost.isEmpty {
+                    let title = groupTitleArray[0]
+                    cell.groupLabel.text = title
+                    selectedGroupForPost = groupIDArray[0]
+                } else if ifGroupViewTextIsMyPost == true {
+                    cell.groupLabel.text = selectedGroupTitleForPost
+                } else {
+                    var index = Int()
+                    for (i, groupTitle) in groupTitleArray.enumerated() {
+                        while groupTitle == selectedGroup {
+                            index = i
+                        }
+                    }
+                    cell.groupLabel.text = groupTitleArray[index]
+                }
                 cell.backgroundColor = UIColor(hex: CIC.shared.M1)
                 cell.selectionStyle = .none
                 return cell
@@ -188,25 +221,50 @@ extension PostViewController: TextAreaViewDelegate {
         Vibration.shared.lightV()
         
         if textAreaView.inputTextView.text.isEmpty == false {
-            let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
-            let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
             
-            postCommentPath.setData([
-                "userID": "\(UserSetup.userID)",
-                "commentID": "\(postCommentPath.documentID)",
-                "timeStamp": Timestamp(date: Date()),
-                "comment": comment
-            ]) { err in
-                if let err = err {
-                    print("Error writing document: \(err)")
-                } else {
-                    print("Document successfully written!")
+//            if !selectedGroup.isEmpty {
+                let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+                let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
+                let postPathForGroup = self.db.collection("groups").document("\(selectedGroupForPost)").collection("posts")
+                let postCommentPathForGroup = postPath.document("\(currentPostID)").collection("comments").document()
+                
+                postCommentPath.setData([
+                    "userID": "\(UserSetup.userID)",
+                    "commentID": "\(postCommentPath.documentID)",
+                    "timeStamp": Timestamp(date: Date()),
+                    "comment": comment
+                ])
+                
+                postCommentPathForGroup.setData([
+                    "userID": "\(UserSetup.userID)",
+                    "commentID": "\(postCommentPath.documentID)",
+                    "timeStamp": Timestamp(date: Date()),
+                    "comment": comment
+                ]) { err in
+                    if let err = err {
+                        print("Error writing document: \(err)")
+                    } else {
+                        print("Document successfully written!")
+                    }
                 }
-            }
-            
+//            } else {
+//                let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+//                let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
+//
+//                postCommentPath.setData([
+//                    "userID": "\(UserSetup.userID)",
+//                    "commentID": "\(postCommentPath.documentID)",
+//                    "timeStamp": Timestamp(date: Date()),
+//                    "comment": comment
+//                ])
             textAreaView.inputTextView.text = ""
-            
             viewDidLoad()
         }
+    }
+}
+
+extension PostViewController: PostTBCellListDelegate {
+    func didPressGroupSelector(_ tableViewCell: PostTBCellList) {
+        showGroupList(groupTitleArray)
     }
 }

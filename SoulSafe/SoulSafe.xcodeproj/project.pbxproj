@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2BA622A3FDB341C77624419C /* Pods_SoulSafe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */; };
+		9110928D2A4EB66B002C5928 /* PostViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
@@ -68,6 +69,7 @@
 /* Begin PBXFileReference section */
 		0494520C1224165E0ED5398A /* Pods-SoulSafe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.debug.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.debug.xcconfig"; sourceTree = "<group>"; };
 		35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSafe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostViewController - Alert.swift"; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				9127BBDE2A3D8C05008DB929 /* PostViewController.swift */,
+				9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */,
 				9127BBE12A3D8C3B008DB929 /* PostTableViewCell - Comments.swift */,
 				917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */,
 				917CF54A2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift */,
@@ -470,6 +473,7 @@
 				9127BBD02A3C381B008DB929 /* Extension - Vibration.swift in Sources */,
 				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
+				9110928D2A4EB66B002C5928 /* PostViewController - Alert.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
 				91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,

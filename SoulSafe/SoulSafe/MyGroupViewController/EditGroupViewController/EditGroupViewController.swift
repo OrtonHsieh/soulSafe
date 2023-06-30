@@ -17,13 +17,6 @@ class EditGroupViewController: UIViewController {
     let db = Firestore.firestore()
     lazy var groupLink = String()
     // swiftlint:enable all
-//    var dataClosure: ((String) -> Void)? {
-//        didSet {
-//            // 由 Sence Delegate 將 groupID 傳到這邊
-//            // 將 groupID 放入 currentGroupID
-//            // 
-//        }
-//    }
     lazy var currentGroupID = String()
     lazy var groupTitles: [String] = []
     lazy var groupIDs: [String] = []
@@ -100,16 +93,6 @@ extension EditGroupViewController: UITableViewDelegate {
         ])
         return headerView
     }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        currentGroupID = groupIDs[indexPath.row]
-//        groupLink = "soulsafe.app.link.page://\(currentGroupID)"
-//    }
-   // 沒反應所以不使用
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        currentGroupID = groupIDs[indexPath.row]
-//        groupLink = "soulsafe.app.link.page://\(currentGroupID)"
-//    }
 }
 
 extension EditGroupViewController: UITableViewDataSource {

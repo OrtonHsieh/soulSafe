@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol PostTBCellListDelegate: AnyObject {
+    func didPressGroupSelector(_ tableViewCell: PostTBCellList)
+}
+
 class PostTBCellList: UITableViewCell {
+    weak var delegate: PostTBCellListDelegate?
+    lazy var groupLabel = UILabel()
+    
     lazy var groupView: UIView = {
         let groupView = UIView()
         groupView.frame = CGRect(x: 16, y: 12, width: 120, height: 36)
@@ -15,8 +22,9 @@ class PostTBCellList: UITableViewCell {
         groupView.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
         groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
         groupView.layer.cornerRadius = 15
-        let groupLabel = UILabel()
         groupLabel.text = "選擇留言串"
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didPressGroupSelector))
+        groupView.addGestureRecognizer(tap)
         groupLabel.frame = CGRect(x: 11, y: 6, width: groupView.frame.width - 22, height: groupView.frame.height - 12)
         groupLabel.font = .systemFont(ofSize: 16, weight: .medium)
         groupView.addSubview(groupLabel)
@@ -25,10 +33,15 @@ class PostTBCellList: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(groupView)
+        contentView.addSubview(groupView)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func didPressGroupSelector() {
+        Vibration.shared.lightV()
+        delegate?.didPressGroupSelector(self)
     }
 }

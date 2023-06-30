@@ -17,6 +17,8 @@ extension MemoriesViewController {
         let myPostAction = UIAlertAction(title: "我的貼文", style: .default) { action in
             self.selectedGroup = ""
             self.galleryCollection.reloadData()
+            self.memoriesView.groupSelectorLabel.text = "我的貼文"
+            self.ifGroupViewTextIsMyPost = true
         }
         alertController.addAction(myPostAction)
         
@@ -25,6 +27,7 @@ extension MemoriesViewController {
                 self.selectedGroup = self.groupIDs[index]
                 self.galleryCollection.reloadData()
                 self.memoriesView.groupSelectorLabel.text = groupTitle
+                self.ifGroupViewTextIsMyPost = false
             }
             alertController.addAction(action)
         }
