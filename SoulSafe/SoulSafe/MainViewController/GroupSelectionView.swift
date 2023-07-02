@@ -33,6 +33,7 @@ class GroupSelectionStackView: UIStackView {
     }
     
     func setupButtons() {
+        clearButtons()
         guard let dataSource = dataSource else { print("失敗"); return }
         let numberOfButtons = dataSource.numberOfButtons(in: self)
         
@@ -53,5 +54,11 @@ class GroupSelectionStackView: UIStackView {
     
     @objc func didSelectGroup(_ button: UIButton) {
         delegate?.groupSelectionStackView(self, didSelectButton: button)
+    }
+    
+    func clearButtons() {
+        for subview in arrangedSubviews {
+            subview.removeFromSuperview()
+        }
     }
 }
