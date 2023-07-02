@@ -17,9 +17,9 @@ extension PostViewController {
         
         for (index, groupTitle) in groupTitles.enumerated() {
             let action = UIAlertAction(title: "\(groupTitle)", style: .default) { action in
-                self.selectedGroupForPost = self.groupIDArray[index]
+                self.selectedGroupInPostVC = self.groupIDArray[index]
                 self.selectedGroupTitleForPost = self.groupTitleArray[index]
-                self.postTableView.reloadData()
+                self.getPostComment()
             }
             alertController.addAction(action)
         }

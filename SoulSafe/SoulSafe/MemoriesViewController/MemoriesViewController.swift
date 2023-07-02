@@ -12,7 +12,6 @@ import FirebaseFirestore
 class MemoriesViewController: UIViewController {
     let galleryCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let memoriesView = MemoriesView()
-    let postVC = PostViewController()
     var imageURLs: [String] = []
     // 這個 groupIDs 是指說該使用者目前所加入的群組
     var groupIDs: [String] = [] {
@@ -26,16 +25,17 @@ class MemoriesViewController: UIViewController {
     var listener: ListenerRegistration?
     // 這邊要在於 ActionSheet 點擊時將該 GroupID 存入用來作為 reloadData 的依據
     var selectedGroup = String()
+    var selectedGroupTitle = String()
     var postIDs: [String] = []
     var dates: [String] = []
     // 這邊 groupArray 記錄該貼文發給了哪些群組
     var groupIDArrays: [[String]] = []
     var groupTitleArrays: [[String]] = []
-    var ifGroupViewTextIsMyPost = true {
-        didSet {
-            postVC.ifGroupViewTextIsMyPost = ifGroupViewTextIsMyPost
-        }
-    }
+    var ifGroupViewTextIsMyPost = true //{
+//        didSet {
+////            postVC.ifGroupViewTextIsMyPost = ifGroupViewTextIsMyPost
+//        }
+//    }
     let db = Firestore.firestore()
     
     override func viewDidLoad() {
@@ -90,11 +90,15 @@ class MemoriesViewController: UIViewController {
     }
     
     func presentPostViewController(_ imageURL: String, postID: String, groupIDArray: [String], groupTitleArray: [String]) {
+        let postVC = PostViewController()
         postVC.modalPresentationStyle = .formSheet
         let url = URL(string: imageURL)
         postVC.imageView.kf.setImage(with: url)
         postVC.currentPostID = postID
+        // 這邊目前 Post 點進去時會是上一張照片
         postVC.selectedGroup = selectedGroup
+        postVC.selectedGroupTitle = selectedGroupTitle
+        postVC.selectedGroupInPostVC = selectedGroup
         postVC.groupIDArray = groupIDArray
         postVC.groupTitleArray = groupTitleArray
         Vibration.shared.lightV()

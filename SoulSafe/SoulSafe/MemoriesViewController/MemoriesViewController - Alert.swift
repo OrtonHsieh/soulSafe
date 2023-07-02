@@ -25,6 +25,7 @@ extension MemoriesViewController {
         for (index, groupTitle) in groupTitles.enumerated() {
             let action = UIAlertAction(title: "\(groupTitle)", style: .default) { action in
                 self.selectedGroup = self.groupIDs[index]
+                self.selectedGroupTitle = self.groupTitles[index]
                 self.galleryCollection.reloadData()
                 self.memoriesView.groupSelectorLabel.text = groupTitle
                 self.ifGroupViewTextIsMyPost = false
