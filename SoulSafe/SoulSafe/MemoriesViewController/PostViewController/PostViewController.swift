@@ -18,6 +18,7 @@ class PostViewController: UIViewController {
     
     var commentsFromGroupsCollectionPath: [String] = []
     var timeStamps: [Timestamp] = []
+    var userAvatarFromGroupsCollectionPath: [String] = []
     
     var selectedGroup = String()
     var selectedGroupTitle = String()
@@ -106,18 +107,23 @@ class PostViewController: UIViewController {
                 print("Error getting documents: \(err)")
             } else {
                 self.commentsFromGroupsCollectionPath.removeAll() // 確認中
+                self.userAvatarFromGroupsCollectionPath.removeAll()
+                self.timeStamps.removeAll()
                 var index = 0
                 guard let querySnapshot = querySnapshot else { return }
                 for document in querySnapshot.documents {
                     let data = document.data()
                     guard let comment = data["comment"] as? String else { return }
                     guard let timeStamp = data["timeStamp"] as? Timestamp else { return }
+                    guard let userAvatar = data["userAvatar"] as? String else { return }
                     
                     if index <= self.commentsFromGroupsCollectionPath.count - 1 {
                         self.commentsFromGroupsCollectionPath[index] = comment
+                        self.userAvatarFromGroupsCollectionPath[index] = userAvatar
                         self.timeStamps[index] = timeStamp
                     } else {
                         self.commentsFromGroupsCollectionPath.append(comment)
+                        self.userAvatarFromGroupsCollectionPath.append(userAvatar)
                         self.timeStamps.append(timeStamp)
                     }
                     index += 1
@@ -225,7 +231,9 @@ extension PostViewController: UITableViewDataSource {
             
             cell.commentLabel.text = commentsFromGroupsCollectionPath[indexPath.row]
             
-            cell.avatarView.image = UIImage(named: "\(UserSetup.userImage)")
+            let userAvatar = userAvatarFromGroupsCollectionPath[indexPath.row]
+            
+            cell.avatarView.image = UIImage(named: "\(userAvatar)")
             return cell
         }
     }
@@ -248,7 +256,8 @@ extension PostViewController: TextAreaViewDelegate {
                 "userID": "\(UserSetup.userID)",
                 "commentID": "\(postCommentPath.documentID)",
                 "timeStamp": Timestamp(date: Date()),
-                "comment": comment
+                "comment": comment,
+                "userAvatar": "\(UserSetup.userImage)"
             ])
             
             // 將留言上傳到 Groups 分類
@@ -256,7 +265,8 @@ extension PostViewController: TextAreaViewDelegate {
                 "userID": "\(UserSetup.userID)",
                 "commentID": "\(postCommentPath.documentID)",
                 "timeStamp": Timestamp(date: Date()),
-                "comment": comment
+                "comment": comment,
+                "userAvatar": "\(UserSetup.userImage)"
             ]) { err in
                 if let err = err {
                     print("Error writing document: \(err)")
