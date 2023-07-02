@@ -160,7 +160,11 @@ extension PostViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 2
+            if !selectedGroup.isEmpty {
+                return 1
+            } else {
+                return 2
+            }
         } else if section == 1 {
             return commentsFromGroupsCollectionPath.count
         }
