@@ -10,19 +10,25 @@ import MapKit
 import CoreLocation
 
 class MapViewController: UIViewController {
+    private lazy var mapCollectionView = UICollectionView()
+    lazy var groupTitles: [String] = []
+    lazy var groupIDs: [String] = []
     lazy var mapView = MapView()
-    lazy var locationManager = CLLocationManager()
-    lazy var regionInMeter: Double = 5000
-    var userAnnotationView: MKAnnotationView?
+    private lazy var locationManager = CLLocationManager()
+    private lazy var regionInMeter: Double = 5000
+//    private lazy var userAnnotationView = MKAnnotationView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
         setupLocationManager()
+        setupCollectionView()
+        setupLayout()
+        registerCell()
     }
     
-    func setupView() {
+    private func setupView() {
         view.addSubview(mapView)
         mapView.map.delegate = self
         mapView.map.overrideUserInterfaceStyle = .dark
@@ -30,7 +36,7 @@ class MapViewController: UIViewController {
         mapView.delegate = self
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -41,12 +47,12 @@ class MapViewController: UIViewController {
         ])
     }
     
-    func setupLocationManager() {
+    private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
-    func centerViewOnUserLocation() {
+    private func centerViewOnUserLocation() {
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeter, longitudinalMeters: regionInMeter)
             mapView.map.setRegion(region, animated: true)
@@ -67,7 +73,7 @@ class MapViewController: UIViewController {
         mapView.map.addAnnotation(annotation)
     }
     
-    func checkLocationAuthorization() {
+    private func checkLocationAuthorization() {
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse:
             centerViewOnUserLocation()
@@ -83,11 +89,51 @@ class MapViewController: UIViewController {
             break
         case .authorizedAlways:
             // Do stuff here
-//            locationManager.startUpdatingLocation()
+            centerViewOnUserLocation()
+            locationManager.startUpdatingLocation()
             break
         @unknown default:
             break
         }
+    }
+    
+    private func setupCollectionView() {
+        let collectionViewFrame = CGRect(x: 0, y: view.bounds.height - 200, width: view.bounds.width, height: 200) // Adjust the frame to fit the screen width
+        let layout = createLayout()
+        layout.configuration.scrollDirection = .horizontal // Set the scroll direction to horizontal
+        mapCollectionView = UICollectionView(frame: collectionViewFrame, collectionViewLayout: layout)
+        mapCollectionView.dataSource = self // Set the data source delegate
+        mapCollectionView.backgroundColor = .clear
+        mapCollectionView.alwaysBounceVertical = false
+        mapCollectionView.showsHorizontalScrollIndicator = false
+        view.addSubview(mapCollectionView)
+    }
+    
+    private func setupLayout() {
+        mapCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            mapCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            mapCollectionView.heightAnchor.constraint(equalToConstant: 68)
+        ])
+    }
+    
+    private func registerCell() {
+        mapCollectionView.register(MapCollectionViewCell.self, forCellWithReuseIdentifier: "MapCollectionViewCell")
+    }
+    
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        // 如果是三個 item 則 1/3 如果是兩個則 1/2 如果是一個則 1
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10) // Add content insets
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.8), heightDimension: .absolute(68))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
 }
 
@@ -154,6 +200,25 @@ extension MapViewController: CLLocationManagerDelegate {
         // Could be precise or not after iOS 14+
         checkLocationAuthorization()
     }
+}
+
+extension MapViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCollectionViewCell", for: indexPath) as! MapCollectionViewCell
+        // Configure the custom cell's properties or UI elements as needed
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
+        cell.layer.cornerRadius = 14
+        return cell
+    }
+}
+
+extension MapViewController: UICollectionViewDelegate {
+    // Add delegate methods as needed
 }
 
 extension UIImage {
