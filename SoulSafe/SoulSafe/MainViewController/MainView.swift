@@ -13,6 +13,7 @@ protocol CameraViewDelegate: AnyObject {
     func didPressCloseBtn(_ view: CameraView)
     func didPressSendBtn(_ view: CameraView, image: UIImage)
     func didPressGroupBtn(_ view: CameraView)
+    func didPressMapBtn(_ view: CameraView)
 }
 
 class CameraView: UIView {
@@ -24,6 +25,11 @@ class CameraView: UIView {
     let flashButton = UIButton()
     let reverseButton = UIButton()
     let closeButton = UIButton()
+    
+    let mapContainerView = UIView()
+    let mapImgView = UIImageView(image: UIImage(named: "icon-map"))
+    let mapLabel = UILabel()
+    
     let groupContainerView = UIView()
     let groupImgView = UIImageView(image: UIImage(named: "icon-community"))
     let groupLabel = UILabel()
@@ -46,12 +52,16 @@ class CameraView: UIView {
     func setupView() {
         [
             cameraView, buttonCorner, flashButton, reverseButton,
-            closeButton, photoImageView, sendButton, groupContainerView
+            closeButton, photoImageView, sendButton, groupContainerView,
+            mapContainerView
         ].forEach {
             addSubview($0)
         }
         [groupImgView, groupLabel].forEach {
             groupContainerView.addSubview($0)
+        }
+        [mapImgView, mapLabel].forEach {
+            mapContainerView.addSubview($0)
         }
         buttonCorner.addSubview(picButton)
         buttonCorner.backgroundColor = UIColor(hex: CIC.shared.F2)
@@ -75,15 +85,22 @@ class CameraView: UIView {
         sendButton.isHidden = true
         
         groupContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(containerViewTapped))
-        groupContainerView.addGestureRecognizer(tapGesture)
+        let tapGestureForGroup = UITapGestureRecognizer(target: self, action: #selector(groupContainerViewTapped))
+        groupContainerView.addGestureRecognizer(tapGestureForGroup)
         groupLabel.text = "群組"
         groupLabel.textColor = UIColor(hex: CIC.shared.F2)
+        
+        mapContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)
+        let tapGestureForMap = UITapGestureRecognizer(target: self, action: #selector(mapContainerViewTapped))
+        mapContainerView.addGestureRecognizer(tapGestureForMap)
+        mapLabel.text = "地圖"
+        mapLabel.textColor = UIColor(hex: CIC.shared.F2)
     }
     
     func setupConstrants() {
         let list = [
-            cameraView, buttonCorner, flashButton, reverseButton, picButton, closeButton, photoImageView, sendButton, groupContainerView, groupImgView, groupLabel
+            cameraView, buttonCorner, flashButton, reverseButton, picButton, closeButton, photoImageView, sendButton,
+            groupContainerView, groupImgView, groupLabel, mapContainerView, mapImgView, mapLabel
         ]
         list.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         let cameraWidth: CGFloat = frame.width
@@ -132,7 +149,20 @@ class CameraView: UIView {
             groupImgView.heightAnchor.constraint(equalToConstant: 30),
             
             groupLabel.trailingAnchor.constraint(equalTo: groupContainerView.trailingAnchor, constant: -15),
-            groupLabel.centerYAnchor.constraint(equalTo: groupContainerView.centerYAnchor)
+            groupLabel.centerYAnchor.constraint(equalTo: groupContainerView.centerYAnchor),
+            
+            mapContainerView.bottomAnchor.constraint(equalTo: cameraView.topAnchor, constant: -25),
+            mapContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            mapContainerView.widthAnchor.constraint(equalToConstant: 111),
+            mapContainerView.heightAnchor.constraint(equalToConstant: 36),
+            
+            mapImgView.leadingAnchor.constraint(equalTo: mapContainerView.leadingAnchor, constant: 15),
+            mapImgView.centerYAnchor.constraint(equalTo: mapContainerView.centerYAnchor),
+            mapImgView.widthAnchor.constraint(equalToConstant: 30),
+            mapImgView.heightAnchor.constraint(equalToConstant: 30),
+            
+            mapLabel.trailingAnchor.constraint(equalTo: mapContainerView.trailingAnchor, constant: -15),
+            mapLabel.centerYAnchor.constraint(equalTo: mapContainerView.centerYAnchor),
         ])
     }
     
@@ -182,7 +212,11 @@ class CameraView: UIView {
         delegate?.didPressSendBtn(self, image: picImage)
     }
     
-    @objc func containerViewTapped() {
+    @objc func groupContainerViewTapped() {
         delegate?.didPressGroupBtn(self)
+    }
+    
+    @objc func mapContainerViewTapped() {
+        delegate?.didPressMapBtn(self)
     }
 }

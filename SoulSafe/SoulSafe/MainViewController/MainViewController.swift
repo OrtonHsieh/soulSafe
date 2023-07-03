@@ -60,6 +60,7 @@ class MainViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         cameraView?.buttonCorner.layer.cornerRadius = 50
         cameraView?.groupContainerView.layer.cornerRadius = 18
+        cameraView?.mapContainerView.layer.cornerRadius = 18
     }
     
     func setupGroupStackView() {
@@ -168,6 +169,14 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
 }
 
 extension MainViewController: CameraViewDelegate {
+    func didPressMapBtn(_ view: CameraView) {
+        // 推出 MapView
+        let mapView = MapViewController()
+        mapView.modalPresentationStyle = .fullScreen
+        Vibration.shared.lightV()
+        present(mapView, animated: true)
+    }
+    
     func didTakePic(_ view: CameraView) {
         guard let photoOutput = self.photoOutput else { return }
         
