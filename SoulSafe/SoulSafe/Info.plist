@@ -2,19 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>Bundle ID</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>soulsafe.app.link.page</string>
-			</array>
-		</dict>
-	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app uses your location to share to your friends even on the background mode, don&apos;t worry, you can close it any time in setting.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app uses your location to share to your friends, don&apos;t worry, you can close it any time in setting.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIApplicationSceneManifest</key>
