@@ -25,14 +25,17 @@ class MainViewController: UIViewController {
     // swiftlint:disable all
     let db = Firestore.firestore()
     // swiftlint:enable all
+    let mapViewController = MapViewController()
     var groupTitles: [String] = [] {
         didSet {
             delegate?.didUpdateGroupTitle(self, updatedGroupTitles: groupTitles)
+            mapViewController.groupTitles = groupTitles
         }
     }
     var groupIDs: [String] = [] {
         didSet {
             delegate?.didUpdateGroupID(self, updatedGroupIDs: groupIDs)
+            mapViewController.groupIDs = groupIDs
         }
     }
     let groupVC = GroupViewController()
@@ -171,10 +174,12 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
 extension MainViewController: CameraViewDelegate {
     func didPressMapBtn(_ view: CameraView) {
         // 推出 MapView
-        let mapView = MapViewController()
-        mapView.modalPresentationStyle = .fullScreen
+        mapViewController.modalPresentationStyle = .fullScreen
+        mapViewController.groupTitles = groupTitles
+        mapViewController.groupIDs = groupIDs
+        mapViewController.isInitialized = true
         Vibration.shared.lightV()
-        present(mapView, animated: true)
+        present(mapViewController, animated: true)
     }
     
     func didTakePic(_ view: CameraView) {

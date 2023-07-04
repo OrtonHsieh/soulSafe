@@ -10,13 +10,21 @@ import MapKit
 import CoreLocation
 
 class MapViewController: UIViewController {
-    private lazy var mapCollectionView = UICollectionView()
-    lazy var groupTitles: [String] = []
+    lazy var mapCollectionView = UICollectionView()
+    lazy var groupTitles: [String] = [] {
+        didSet {
+            if isInitialized {
+                mapCollectionView.reloadData()
+            } else {
+                return
+            }
+        }
+    }
     lazy var groupIDs: [String] = []
+    lazy var isInitialized = false
     lazy var mapView = MapView()
     private lazy var locationManager = CLLocationManager()
     private lazy var regionInMeter: Double = 5000
-//    private lazy var userAnnotationView = MKAnnotationView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +62,10 @@ class MapViewController: UIViewController {
     
     private func centerViewOnUserLocation() {
         if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeter, longitudinalMeters: regionInMeter)
+            let region = MKCoordinateRegion.init(
+                center: location,
+                latitudinalMeters: regionInMeter,
+                longitudinalMeters: regionInMeter)
             mapView.map.setRegion(region, animated: true)
         }
     }
@@ -91,14 +102,17 @@ class MapViewController: UIViewController {
             // Do stuff here
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
-            break
         @unknown default:
             break
         }
     }
     
     private func setupCollectionView() {
-        let collectionViewFrame = CGRect(x: 0, y: view.bounds.height - 200, width: view.bounds.width, height: 200) // Adjust the frame to fit the screen width
+        let collectionViewFrame = CGRect(
+            x: 0,
+            y: view.bounds.height - 200,
+            width: view.bounds.width,
+            height: 200) // Adjust the frame to fit the screen width
         let layout = createLayout()
         layout.configuration.scrollDirection = .horizontal // Set the scroll direction to horizontal
         mapCollectionView = UICollectionView(frame: collectionViewFrame, collectionViewLayout: layout)
@@ -125,7 +139,9 @@ class MapViewController: UIViewController {
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
         // 如果是三個 item 則 1/3 如果是兩個則 1/2 如果是一個則 1
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.33),
+            heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10) // Add content insets
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.8), heightDimension: .absolute(68))
@@ -187,7 +203,9 @@ extension MapViewController: CLLocationManagerDelegate {
         // 也就是說自己會看到最精準的自己，但別人會因為上傳至 FireStore 的時間不同而有所差異
         // 這邊如果執行的話會一直跑回預設的位置有點 bothering
         guard let location = locations.last else { return }
-        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let center = CLLocationCoordinate2D(
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude)
         addAndUpdateCustomPin(center)
     }
     
@@ -204,15 +222,20 @@ extension MapViewController: CLLocationManagerDelegate {
 
 extension MapViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        groupIDs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCollectionViewCell", for: indexPath) as! MapCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "MapCollectionViewCell",
+            for: indexPath) as? MapCollectionViewCell else {
+            fatalError("map cell cannot be created.")
+        }
         // Configure the custom cell's properties or UI elements as needed
         cell.layer.borderWidth = 1
         cell.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
         cell.layer.cornerRadius = 14
+        cell.groupTitleLabel.text = groupTitles[indexPath.row]
         return cell
     }
 }

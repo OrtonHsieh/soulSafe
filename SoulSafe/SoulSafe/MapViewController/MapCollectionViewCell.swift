@@ -10,7 +10,7 @@ import UIKit
 class MapCollectionViewCell: UICollectionViewCell {
     // Add any custom UI elements or properties specific to your cell
     private lazy var groupIconInMapCollectionView = UIImageView()
-    private lazy var groupTitleLabel = UILabel()
+    lazy var groupTitleLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
