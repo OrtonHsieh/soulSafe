@@ -31,11 +31,7 @@ class MemoriesViewController: UIViewController {
     // 這邊 groupArray 記錄該貼文發給了哪些群組
     var groupIDArrays: [[String]] = []
     var groupTitleArrays: [[String]] = []
-    var ifGroupViewTextIsMyPost = true //{
-//        didSet {
-////            postVC.ifGroupViewTextIsMyPost = ifGroupViewTextIsMyPost
-//        }
-//    }
+    var ifGroupViewTextIsMyPost = true
     let db = Firestore.firestore()
     
     override func viewDidLoad() {

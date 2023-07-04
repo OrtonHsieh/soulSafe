@@ -123,4 +123,7 @@ extension BSViewController: MainViewControllerDelegate {
     func didUpdateGroupTitle(_ viewController: MainViewController, updatedGroupTitles: [String]) {
         groupTitles = updatedGroupTitles
     }
+    func didPressSendBtn(_ viewController: MainViewController) {
+        memoriesVC.getNewGalleryPics()
+    }
 }

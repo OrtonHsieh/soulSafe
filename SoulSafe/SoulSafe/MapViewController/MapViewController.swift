@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import FirebaseFirestore
 
 class MapViewController: UIViewController {
     lazy var mapCollectionView = UICollectionView()
@@ -31,10 +32,21 @@ class MapViewController: UIViewController {
     private lazy var regionInMeter: Double = 5000
     private var existingAnnotation: UserAnnotation?
     
+    // 將整包資料抓回來
+    var groupLocations: [String: Location] = [:]
+    // 將整包資料抓回來分成單一實體
+    var singleGroupLocation: Location?
+    // 將位置資料抓回來所存放的地方
+    var userLocationInCLLocation: [CLLocation] = []
+    
     // 此二 property 是用來存取目前使用者在 map 所選擇的 groupID 以及 groupTitle 以利點擊頭像開啟群組對話時有依據
     // 此二一開始會被放入 groupIDs 與 groupTitles arrays 第一個值
     lazy var selectedGroupIDInMapView = String()
     lazy var selectedGroupTitleInMapView = String()
+    
+    lazy var db = Firestore.firestore()
+    // 這邊每當 didUpdateLocations 觸發五次時就 post 一次位置至 FireStore
+    lazy var updateCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +69,7 @@ class MapViewController: UIViewController {
         mapView.map.delegate = self
         mapView.map.overrideUserInterfaceStyle = .dark
         mapView.map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: "custom")
+        mapView.map.register(FriendsAnnotationView.self, forAnnotationViewWithReuseIdentifier: "FriendsAnnotationView")
         mapView.delegate = self
     }
     
@@ -96,7 +109,7 @@ class MapViewController: UIViewController {
             annotation.title = "Pokemon Here"
             annotation.subtitle = "Go and catch them all"
             annotation.coordinate = coordinate
-
+            
             mapView.map.addAnnotation(annotation)
             existingAnnotation = annotation
         }
@@ -179,7 +192,7 @@ class MapViewController: UIViewController {
             widthForItem = 1 / 3
             widthForGroup = 1.8
         }
-
+        
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(widthForItem),
             heightDimension: .fractionalHeight(1.0))
@@ -203,43 +216,111 @@ class MapViewController: UIViewController {
             annotation.subtitle = "Go and catch them all"
         }
     }
+    
+    func getAnnotationLocations() {
+        // 這邊去抓資料
+        for groupID in groupIDs {
+            let pathToGroupLocationCollection = db.collection("groups").document(groupID).collection("locations")
+            pathToGroupLocationCollection.getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    
+                    for document in snapshot.documents {
+                        let locationData = document.data()
+
+                        self.singleGroupLocation = Location(
+                            id: locationData["id"] as? String ?? "",
+                            userID: locationData["userID"] as? String ?? "",
+                            userName: locationData["userName"] as? String ?? "",
+                            userLocation: locationData["userLocation"] as? [String] ?? [],
+                            userAvatar: locationData["userAvatar"] as? String ?? "")
+                    }
+                    self.groupLocations["\(groupID)"] = self.singleGroupLocation
+                    
+                    print(self.singleGroupLocation!)
+                    guard let userLocationInString = self.singleGroupLocation?.userLocation else { return }
+                    
+                    for locationString in userLocationInString {
+                        if let latitude = Double(locationString.components(separatedBy: ",")[0]),
+                           let longitude = Double(locationString.components(separatedBy: ",")[1]) {
+                            let location = CLLocation(latitude: latitude, longitude: longitude)
+                            self.userLocationInCLLocation.append(location)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func updateAnnotationLocations() {
+        // 這邊將抓回來的資料更新在畫面上
+        for annotation in mapView.map.annotations {
+            if let friendsAnnotation = annotation as? FriendsAnnotation {
+                // 這邊要放抓回來資料的 locations
+                if let index = userLocationInCLLocation.firstIndex(where: {
+                    $0.coordinate.latitude == friendsAnnotation.coordinate.latitude && $0.coordinate.longitude == friendsAnnotation.coordinate.longitude
+                }) {
+                    let location = userLocationInCLLocation[index]
+                    friendsAnnotation.coordinate = location.coordinate
+                }
+            }
+        }
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation {
-            return nil
-        }
-        
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "custom")
-        
-        if annotationView == nil {
-            // Create View
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "custom")
+        if annotation is FriendsAnnotation {
+            // 這邊實作其他人的 annotationView
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "FriendsAnnotationView")
+            
+            if annotationView == nil {
+                annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "FriendsAnnotationView")
+                guard let singleGroupLocation = singleGroupLocation else { fatalError("error") }
+                annotationView?.image = UIImage(named: "\(singleGroupLocation.userAvatar)")
+                annotationView?.canShowCallout = true
+            } else {
+                annotationView?.annotation = annotation
+            }
+            
+            return annotationView
         } else {
-            // Assign annotation
-            annotationView?.annotation = annotation
+            if annotation is MKUserLocation {
+                return nil
+            }
+            
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "custom")
+            
+            if annotationView == nil {
+                // Create View
+                annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "custom")
+            } else {
+                // Assign annotation
+                annotationView?.annotation = annotation
+            }
+            
+            // Set image
+            switch annotation.title {
+            case "Pokemon Here":
+                let image: UIImage = {
+                    if let originalImage = UIImage(named: "\(UserSetup.userImage)") {
+                        let scaledImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
+                        return scaledImage
+                    } else {
+                        // Provide a default image here
+                        return UIImage(named: "DefaultImage") ?? UIImage()
+                    }
+                }()
+                annotationView?.image = image
+                annotationView?.canShowCallout = true
+            default:
+                break
+            }
+            
+            return annotationView
         }
-        
-        // Set image
-        switch annotation.title {
-        case "Pokemon Here":
-            let image: UIImage = {
-                if let originalImage = UIImage(named: "\(UserSetup.userImage)") {
-                    let scaledImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                    return scaledImage
-                } else {
-                    // Provide a default image here
-                    return UIImage(named: "DefaultImage") ?? UIImage()
-                }
-            }()
-            annotationView?.image = image
-            annotationView?.canShowCallout = true
-        default:
-            break
-        }
-        
-        return annotationView
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -257,7 +338,6 @@ extension MapViewController: MKMapViewDelegate {
             Vibration.shared.lightV()
             
             // Set any necessary properties or data on the chatRoom view controller
-            
             // Present the view controller from the current view controller
             present(chatRoom, animated: true, completion: nil)
             
@@ -283,6 +363,26 @@ extension MapViewController: CLLocationManagerDelegate {
             latitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude)
         addAndUpdateCustomPin(center)
+        // 將使用者名稱、ID、位置、頭貼上傳
+        for groupID in self.groupIDs {
+            let latitude = String(location.coordinate.latitude)
+            let longitude = String(location.coordinate.longitude)
+            let userLocation: [String] = [latitude, longitude]
+            let pathToGroupMemberLocation = self.db.collection("groups").document(groupID).collection("locations").document(UserSetup.userID)
+            let location = Location(
+                id: pathToGroupMemberLocation.documentID,
+                userID: UserSetup.userID,
+                userName: UserSetup.userName,
+                userLocation: userLocation,
+                userAvatar: UserSetup.userImage).toDict
+            pathToGroupMemberLocation.setData(location, merge: true) { error in
+                if let error = error {
+                    print(error)
+                } else {
+                    print("successfully overwriten location")
+                }
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

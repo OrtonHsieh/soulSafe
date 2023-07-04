@@ -4,6 +4,19 @@
 <dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app uses your location to share to your friends even on the background mode, don&apos;t worry, you can close it any time in setting.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>soulsafe.app.link.page</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses your location to share to your friends, don&apos;t worry, you can close it any time in setting.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>

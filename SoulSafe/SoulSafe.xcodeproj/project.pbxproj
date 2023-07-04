@@ -13,6 +13,9 @@
 		911092922A526EB9002C5928 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092912A526EB9002C5928 /* MapView.swift */; };
 		911092942A52F343002C5928 /* MapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092932A52F343002C5928 /* MapCollectionViewCell.swift */; };
 		911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092952A53B6B3002C5928 /* UserAnnotation.swift */; };
+		911092982A53F23D002C5928 /* FriendsAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092972A53F23D002C5928 /* FriendsAnnotation.swift */; };
+		9110929A2A53F429002C5928 /* FriendsAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092992A53F429002C5928 /* FriendsAnnotationView.swift */; };
+		9110929C2A53FEF2002C5928 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110929B2A53FEF2002C5928 /* LocationModel.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
@@ -78,6 +81,9 @@
 		911092912A526EB9002C5928 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		911092932A52F343002C5928 /* MapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionViewCell.swift; sourceTree = "<group>"; };
 		911092952A53B6B3002C5928 /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
+		911092972A53F23D002C5928 /* FriendsAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsAnnotation.swift; sourceTree = "<group>"; };
+		911092992A53F429002C5928 /* FriendsAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsAnnotationView.swift; sourceTree = "<group>"; };
+		9110929B2A53FEF2002C5928 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
@@ -150,9 +156,12 @@
 			isa = PBXGroup;
 			children = (
 				9110928E2A526EA7002C5928 /* MapViewController.swift */,
+				9110929B2A53FEF2002C5928 /* LocationModel.swift */,
 				911092912A526EB9002C5928 /* MapView.swift */,
 				911092932A52F343002C5928 /* MapCollectionViewCell.swift */,
 				911092952A53B6B3002C5928 /* UserAnnotation.swift */,
+				911092972A53F23D002C5928 /* FriendsAnnotation.swift */,
+				911092992A53F429002C5928 /* FriendsAnnotationView.swift */,
 			);
 			path = MapViewController;
 			sourceTree = "<group>";
@@ -467,6 +476,7 @@
 				917CF5552A3F1B8E00F02D48 /* EditGroupViewController.swift in Sources */,
 				911120602A4D39630003F923 /* GroupSelectionView - Delegate.swift in Sources */,
 				9127BBDB2A3C8A0C008DB929 /* MemoriesCollectionViewCell.swift in Sources */,
+				9110929A2A53F429002C5928 /* FriendsAnnotationView.swift in Sources */,
 				9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */,
 				91DBA5FB2A49947D00D8D790 /* ChatRoomView.swift in Sources */,
 				911120622A4DB00F0003F923 /* MemoriesViewController - Alert.swift in Sources */,
@@ -481,10 +491,12 @@
 				9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */,
 				911092922A526EB9002C5928 /* MapView.swift in Sources */,
 				9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */,
+				911092982A53F23D002C5928 /* FriendsAnnotation.swift in Sources */,
 				91DBA5DC2A48104700D8D790 /* JoinGroupManager.swift in Sources */,
 				911092942A52F343002C5928 /* MapCollectionViewCell.swift in Sources */,
 				91DBA5F62A49944900D8D790 /* ChatRoomViewController.swift in Sources */,
 				91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */,
+				9110929C2A53FEF2002C5928 /* LocationModel.swift in Sources */,
 				9127BBD92A3C8131008DB929 /* MemoriesView.swift in Sources */,
 				9110928F2A526EA7002C5928 /* MapViewController.swift in Sources */,
 				9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */,

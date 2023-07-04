@@ -14,6 +14,7 @@ import FirebaseFirestore
 protocol MainViewControllerDelegate: AnyObject {
     func didUpdateGroupID(_ viewController: MainViewController, updatedGroupIDs: [String])
     func didUpdateGroupTitle(_ viewController: MainViewController, updatedGroupTitles: [String])
+    func didPressSendBtn(_ viewController: MainViewController)
 }
 
 class MainViewController: UIViewController {
@@ -277,6 +278,7 @@ extension MainViewController: CameraViewDelegate {
                 } 
                 // 這邊等 UI 切好也要一起傳到 group 裡的 post
                 self.cleanGroupSelection()
+                self.delegate?.didPressSendBtn(self)
                 
             case .failure(let error):
                 print(error)
