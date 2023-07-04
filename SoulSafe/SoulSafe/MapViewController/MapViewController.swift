@@ -13,18 +13,28 @@ class MapViewController: UIViewController {
     lazy var mapCollectionView = UICollectionView()
     lazy var groupTitles: [String] = [] {
         didSet {
+            // 這邊是要因應使用者可能會隨時新增或退出群組
+            // 目前問題是如果使用者觸發更新群組數量，不會重算 Group 的寬度
             if isInitialized {
+                updateCollectionViewLayout()
                 mapCollectionView.reloadData()
             } else {
                 return
             }
         }
     }
+    // groupIDs 與 groupTitles 的數量要始終一起變動
     lazy var groupIDs: [String] = []
     lazy var isInitialized = false
     lazy var mapView = MapView()
     private lazy var locationManager = CLLocationManager()
     private lazy var regionInMeter: Double = 5000
+    private var existingAnnotation: UserAnnotation?
+    
+    // 此二 property 是用來存取目前使用者在 map 所選擇的 groupID 以及 groupTitle 以利點擊頭像開啟群組對話時有依據
+    // 此二一開始會被放入 groupIDs 與 groupTitles arrays 第一個值
+    lazy var selectedGroupIDInMapView = String()
+    lazy var selectedGroupTitleInMapView = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +44,12 @@ class MapViewController: UIViewController {
         setupCollectionView()
         setupLayout()
         registerCell()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(annotationCoordinateUpdated(_:)),
+            name: NSNotification.Name("AnnotationCoordinateUpdated"),
+            object: nil
+        )
     }
     
     private func setupView() {
@@ -71,17 +87,19 @@ class MapViewController: UIViewController {
     }
     
     private func addAndUpdateCustomPin(_ coordinate: CLLocationCoordinate2D) {
-        if let existingAnnotation = mapView.map.annotations.first(where: { $0.title == "Pokemon Here" }) {
-            // Update the existing annotation
-            mapView.map.removeAnnotation(existingAnnotation)
+        if let existingAnnotation = existingAnnotation {
+            // Update the coordinates of the existing annotation
+            existingAnnotation.coordinate = coordinate
+        } else {
+            // Create a new annotation
+            let annotation = UserAnnotation()
+            annotation.title = "Pokemon Here"
+            annotation.subtitle = "Go and catch them all"
+            annotation.coordinate = coordinate
+
+            mapView.map.addAnnotation(annotation)
+            existingAnnotation = annotation
         }
-        
-        let annotation = MKPointAnnotation()
-        annotation.title = "Pokemon Here"
-        annotation.subtitle = "Go and catch them all"
-        annotation.coordinate = coordinate
-        
-        mapView.map.addAnnotation(annotation)
     }
     
     private func checkLocationAuthorization() {
@@ -112,11 +130,13 @@ class MapViewController: UIViewController {
             x: 0,
             y: view.bounds.height - 200,
             width: view.bounds.width,
-            height: 200) // Adjust the frame to fit the screen width
+            height: 200
+        ) // Adjust the frame to fit the screen width
         let layout = createLayout()
         layout.configuration.scrollDirection = .horizontal // Set the scroll direction to horizontal
         mapCollectionView = UICollectionView(frame: collectionViewFrame, collectionViewLayout: layout)
         mapCollectionView.dataSource = self // Set the data source delegate
+        mapCollectionView.delegate = self
         mapCollectionView.backgroundColor = .clear
         mapCollectionView.alwaysBounceVertical = false
         mapCollectionView.showsHorizontalScrollIndicator = false
@@ -133,23 +153,55 @@ class MapViewController: UIViewController {
         ])
     }
     
+    private func updateCollectionViewLayout() {
+        // Invalidate the layout to trigger a redraw
+        mapCollectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     private func registerCell() {
         mapCollectionView.register(MapCollectionViewCell.self, forCellWithReuseIdentifier: "MapCollectionViewCell")
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
         // 如果是三個 item 則 1/3 如果是兩個則 1/2 如果是一個則 1
+        var widthForItem = Double()
+        var widthForGroup = Double()
+        if groupTitles.isEmpty {
+            widthForItem = 0
+            widthForGroup = 0
+        } else if groupTitles.count == 1 {
+            widthForItem = 1
+            widthForGroup = 0.6
+        } else if groupTitles.count == 2 {
+            widthForItem = 1 / 2
+            widthForGroup = 1.2
+        } else {
+            widthForItem = 1 / 3
+            widthForGroup = 1.8
+        }
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.33),
+            widthDimension: .fractionalWidth(widthForItem),
             heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10) // Add content insets
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.8), heightDimension: .absolute(68))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(widthForGroup),
+            heightDimension: .absolute(68)
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+    
+    @objc private func annotationCoordinateUpdated(_ notification: Notification) {
+        if let annotation = notification.object as? UserAnnotation {
+            // Update the title and subtitle of the existing annotation
+            annotation.title = "Pokemon Here"
+            annotation.subtitle = "Go and catch them all"
+        }
     }
 }
 
@@ -182,11 +234,35 @@ extension MapViewController: MKMapViewDelegate {
                 }
             }()
             annotationView?.image = image
+            annotationView?.canShowCallout = true
         default:
             break
         }
         
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // Check if the annotation is of the desired type, if necessary
+        if let annotation = view.annotation {
+            if selectedGroupIDInMapView.isEmpty {
+                selectedGroupIDInMapView = groupIDs[0]
+                selectedGroupTitleInMapView = groupTitles[0]
+            }
+            // Instantiate the view controller you want to display
+            let chatRoom = ChatRoomViewController()
+            chatRoom.modalPresentationStyle = .fullScreen
+            chatRoom.groupID = selectedGroupIDInMapView
+            chatRoom.groupTitle = selectedGroupTitleInMapView
+            Vibration.shared.lightV()
+            
+            // Set any necessary properties or data on the chatRoom view controller
+            
+            // Present the view controller from the current view controller
+            present(chatRoom, animated: true, completion: nil)
+            
+            mapView.deselectAnnotation(annotation, animated: false)
+        }
     }
 }
 
@@ -241,7 +317,14 @@ extension MapViewController: UICollectionViewDataSource {
 }
 
 extension MapViewController: UICollectionViewDelegate {
-    // Add delegate methods as needed
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Vibration.shared.hardV()
+        selectedGroupIDInMapView = groupIDs[indexPath.row]
+        selectedGroupTitleInMapView = groupTitles[indexPath.row]
+        // 這邊到時候要重新顯示在該群組的人於地圖上
+        print(selectedGroupIDInMapView)
+        print(selectedGroupTitleInMapView)
+    }
 }
 
 extension UIImage {

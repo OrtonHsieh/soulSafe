@@ -12,6 +12,7 @@
 		9110928F2A526EA7002C5928 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110928E2A526EA7002C5928 /* MapViewController.swift */; };
 		911092922A526EB9002C5928 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092912A526EB9002C5928 /* MapView.swift */; };
 		911092942A52F343002C5928 /* MapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092932A52F343002C5928 /* MapCollectionViewCell.swift */; };
+		911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092952A53B6B3002C5928 /* UserAnnotation.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
@@ -76,6 +77,7 @@
 		9110928E2A526EA7002C5928 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		911092912A526EB9002C5928 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		911092932A52F343002C5928 /* MapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionViewCell.swift; sourceTree = "<group>"; };
+		911092952A53B6B3002C5928 /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				9110928E2A526EA7002C5928 /* MapViewController.swift */,
 				911092912A526EB9002C5928 /* MapView.swift */,
 				911092932A52F343002C5928 /* MapCollectionViewCell.swift */,
+				911092952A53B6B3002C5928 /* UserAnnotation.swift */,
 			);
 			path = MapViewController;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
 				9110928D2A4EB66B002C5928 /* PostViewController - Alert.swift in Sources */,
+				911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
 				91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,
