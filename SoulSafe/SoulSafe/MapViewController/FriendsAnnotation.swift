@@ -8,13 +8,20 @@
 import UIKit
 import MapKit
 
-class FriendsAnnotation: MKPointAnnotation {
+class FriendsAnnotation: NSObject, MKAnnotation {
     // 這邊要用來判斷是自己的 Annotation 還是朋友的
-    func setupAnnotation(_ annotationTitle: String, _ latitude: CLLocationDegrees, _ longitude: CLLocationDegrees) {
-        title = annotationTitle
-        coordinate = CLLocationCoordinate2D(
-            latitude: latitude,
-            longitude: longitude
-        )
+    var userID: String
+    var userName: String
+    var userAvatar: String
+    
+    var coordinate: CLLocationCoordinate2D
+    var title: String?
+    var subtitle: String?
+    
+    init(userID: String, userName: String, userAvatar: String, coordinate: CLLocationCoordinate2D) {
+        self.userID = userID
+        self.userName = userName
+        self.userAvatar = userAvatar
+        self.coordinate = coordinate
     }
 }
