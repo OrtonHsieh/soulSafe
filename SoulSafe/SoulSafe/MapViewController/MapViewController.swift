@@ -31,6 +31,8 @@ class MapViewController: UIViewController {
     private lazy var locationManager = CLLocationManager()
     private lazy var regionInMeter: Double = 5000
     private var existingAnnotation: UserAnnotation?
+    // 這邊計算 Post 自己位置的次數，控制打幾次時更新一次其他人的位置，先設定三次
+    private var numberOfPostCounts = 0
     
     // 將整包資料抓回來
     var groupLocations: [String: [Location]] = [:]
@@ -50,6 +52,11 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 先 Default 將選擇的 Group 設定為第一個，並且顯示該群裡的人
+        selectedGroupIDInMapView = groupIDs[0]
+        selectedGroupTitleInMapView = groupTitles[0]
+        
         setupView()
         setupConstraints()
         setupLocationManager()
@@ -103,7 +110,9 @@ class MapViewController: UIViewController {
     private func addAndUpdateCustomPin(_ coordinate: CLLocationCoordinate2D) {
         if let existingAnnotation = existingAnnotation {
             // Update the coordinates of the existing annotation
-            existingAnnotation.coordinate = coordinate
+            UIViewPropertyAnimator(duration: 2, curve: .easeInOut) {
+                existingAnnotation.coordinate = coordinate
+            }.startAnimation()
         } else {
             // Create a new annotation
             let annotation = UserAnnotation()
@@ -220,36 +229,44 @@ class MapViewController: UIViewController {
     
     func getAnnotationLocations() {
         // 這邊去抓資料
-        mapView.map.removeAnnotations(mapView.map.annotations)
-        for groupID in groupIDs {
-            let pathToGroupLocationCollection = db.collection("groups").document(groupID).collection("locations")
+        var annotations: [MKAnnotation] = []
+        for annotation in mapView.map.annotations {
+            if annotation is FriendsAnnotation {
+                annotations.append(annotation)
+            }
+        }
+        
+        UIView.transition(with: mapView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            self.mapView.map.removeAnnotations(annotations)
+        }, completion: nil)
+        
+            let pathToGroupLocationCollection = db.collection("groups").document(selectedGroupIDInMapView).collection("locations")
             pathToGroupLocationCollection.getDocuments { snapshot, error in
                 if let error = error {
                     print("Error getting documents: \(error)")
                 } else {
                     guard let snapshot = snapshot else { return }
-                    print("groupID \(groupID)")
+                    print("groupID \(self.selectedGroupIDInMapView)")
                     var memberLocationFromSingleGroup: [Location] = []
                     for document in snapshot.documents {
                         let locationData = document.data()
                         let oneUserFromSingleGroupLocation = Location(
                             id: locationData["id"] as? String ?? "",
+                            groupID: locationData["groupID"] as? String ?? "",
                             userID: locationData["userID"] as? String ?? "",
                             userName: locationData["userName"] as? String ?? "",
                             userLocation: locationData["userLocation"] as? [String] ?? [],
                             userAvatar: locationData["userAvatar"] as? String ?? "")
                         memberLocationFromSingleGroup.append(oneUserFromSingleGroupLocation)
-//                        print("oneUserFromSingleGroupLocation: \(groupID) 以及 \(oneUserFromSingleGroupLocation)")
-//                        print("memberLocationFromSingleGroup: \(groupID) 以及 \(memberLocationFromSingleGroup)")
                         // 將每個 groupID 裡面的成員位置存入 Dict，可以用 groupID 來取用該群組內成員的位置
-                        self.groupLocations["\(groupID)"] = memberLocationFromSingleGroup
+                        self.groupLocations["\(self.selectedGroupIDInMapView)"] = memberLocationFromSingleGroup
                     }
                     print("groupLocations: \(self.groupLocations)")
                     
-                    guard let maxIndex = self.groupLocations["\(groupID)"]?.count else { return }
+                    guard let maxIndex = self.groupLocations["\(self.selectedGroupIDInMapView)"]?.count else { return }
                     
                     for index in 0..<maxIndex {
-                        guard let singleGroupLocation = self.groupLocations["\(groupID)"] else { return }
+                        guard let singleGroupLocation = self.groupLocations["\(self.selectedGroupIDInMapView)"] else { return }
                         self.singleGroupLocation = singleGroupLocation
                         let userLocationInString = singleGroupLocation[index].userLocation
 
@@ -260,6 +277,7 @@ class MapViewController: UIViewController {
 
                         let annotation = FriendsAnnotation(
                             userID: singleGroupLocation[index].userID,
+                            groupID: singleGroupLocation[index].groupID,
                             userName: singleGroupLocation[index].userName,
                             userAvatar: singleGroupLocation[index].userAvatar,
                             coordinate: coordinate)
@@ -267,28 +285,8 @@ class MapViewController: UIViewController {
                         self.mapView.map.addAnnotation(annotation)
                         print("self.mapView.map.annotations.count: \(self.mapView.map.annotations.count)")
                     }
-//                    self.userLocationInCLLocation.append(location)
-//                    print("singleGroupLocation: \(self.singleGroupLocation)")
-//                    print("singleGroupLocation?.userLocation: \(self.singleGroupLocation?.userLocation)")
-//                    print("userLocationInCLLocation: \(self.userLocationInCLLocation)")
                 }
             }
-        }
-    }
-    
-    func updateAnnotationLocations() {
-        // 這邊將抓回來的資料更新在畫面上
-        for annotation in mapView.map.annotations {
-            if let friendsAnnotation = annotation as? FriendsAnnotation {
-                // 這邊要放抓回來資料的 locations
-                if let index = userLocationInCLLocation.firstIndex(where: {
-                    $0.coordinate.latitude == friendsAnnotation.coordinate.latitude && $0.coordinate.longitude == friendsAnnotation.coordinate.longitude
-                }) {
-                    let location = userLocationInCLLocation[index]
-                    friendsAnnotation.coordinate = location.coordinate
-                }
-            }
-        }
     }
 }
 
@@ -300,52 +298,26 @@ extension MapViewController: MKMapViewDelegate {
             var friendAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "FriendsAnnotationView")
         
             if friendAnnotationView == nil {
-                // 這邊不會觸發
-//                firendAnnotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "FriendsAnnotationView")
-//                guard let singleGroupLocation = singleGroupLocation else { fatalError("error") }
-//                let imageName = singleGroupLocation.userAvatar
-//                if let originalImage = UIImage(named: imageName) {
-//                    let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-//                    firendAnnotationView?.image = resizedImage
-//                } else {
-//                    // Provide a default image here
-//                    firendAnnotationView?.image = UIImage(named: "DefaultImage")
-//                }
-//                firendAnnotationView?.canShowCallout = true
+                // 這邊不會觸發，以防萬一先留著
                 print("我進來了")
             } else {
-                friendAnnotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "FriendsAnnotationView")
-//                let maxIndex = singleGroupLocation.count
-//                for index in 0..<maxIndex {
-//                    let imageName = singleGroupLocation[index].userAvatar
-//                    if imageName == UserSetup.userImage {
-//                        // Do nothing
-//                    } else {
-//                        if let originalImage = UIImage(named: imageName) {
-//                            let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-//                            friendAnnotationView?.image = resizedImage
-//                        } else {
-//                            // Provide a default image here
-//                            friendAnnotationView?.image = UIImage(named: "DefaultImage")
-//                        }
-//                        friendAnnotationView?.canShowCallout = true
-//                        friendAnnotationView?.annotation = annotation
-//                    }
-//                }
                 if annotation.userAvatar == UserSetup.userImage {
                     // Do nothing
                     print("block me")
+                    friendAnnotationView?.isHidden = true
                 } else {
                     if let originalImage = UIImage(named: annotation.userAvatar) {
                         let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                        friendAnnotationView?.image = resizedImage
+                        guard let friendAnnotationView = friendAnnotationView else { fatalError("Failed to produce friendAnnotationView.") }
+                        UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
+                            friendAnnotationView.image = resizedImage
+                            friendAnnotationView.canShowCallout = true
+                        }, completion: nil)
                         print("friends")
                     } else {
                         // Provide a default image here
                         friendAnnotationView?.image = UIImage(named: "DefaultImage")
                     }
-                    friendAnnotationView?.canShowCallout = true
-//                    friendAnnotationView?.annotation = annotation
                 }
             }
             return friendAnnotationView
@@ -379,6 +351,7 @@ extension MapViewController: MKMapViewDelegate {
                 }()
                 annotationView?.image = image
                 annotationView?.canShowCallout = true
+                annotationView?.isHidden = false
             default:
                 break
             }
@@ -393,6 +366,7 @@ extension MapViewController: MKMapViewDelegate {
             if selectedGroupIDInMapView.isEmpty {
                 selectedGroupIDInMapView = groupIDs[0]
                 selectedGroupTitleInMapView = groupTitles[0]
+                // 這邊 filter 出特定的 Group
             }
             // Instantiate the view controller you want to display
             let chatRoom = ChatRoomViewController()
@@ -427,25 +401,34 @@ extension MapViewController: CLLocationManagerDelegate {
             latitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude)
         addAndUpdateCustomPin(center)
-        // 將使用者名稱、ID、位置、頭貼上傳
-        for groupID in self.groupIDs {
-            let latitude = String(location.coordinate.latitude)
-            let longitude = String(location.coordinate.longitude)
-            let userLocation: [String] = [latitude, longitude]
-            let pathToGroupMemberLocation = self.db.collection("groups").document(groupID).collection("locations").document(UserSetup.userID)
-            let location = Location(
-                id: pathToGroupMemberLocation.documentID,
-                userID: UserSetup.userID,
-                userName: UserSetup.userName,
-                userLocation: userLocation,
-                userAvatar: UserSetup.userImage).toDict
-            pathToGroupMemberLocation.setData(location, merge: true) { error in
-                if let error = error {
-                    print(error)
-                } else {
-                    print("successfully overwriten location")
+
+        numberOfPostCounts += 1
+        if numberOfPostCounts == 3 {
+            // 將使用者名稱、ID、位置、頭貼上傳
+            for groupID in self.groupIDs {
+                let latitude = String(location.coordinate.latitude)
+                let longitude = String(location.coordinate.longitude)
+                let userLocation: [String] = [latitude, longitude]
+                let pathToGroupMemberLocation = self.db.collection("groups").document(groupID).collection("locations").document(UserSetup.userID)
+                let location = Location(
+                    id: pathToGroupMemberLocation.documentID,
+                    groupID: groupID,
+                    userID: UserSetup.userID,
+                    userName: UserSetup.userName,
+                    userLocation: userLocation,
+                    userAvatar: UserSetup.userImage).toDict
+                pathToGroupMemberLocation.setData(location, merge: true) { error in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        print("successfully overwriten location")
+                    }
                 }
             }
+            getAnnotationLocations()
+            print("Friends' location updated")
+            numberOfPostCounts = 0
+            print("numberOfPostCounts has been reset.")
         }
     }
     
@@ -485,18 +468,9 @@ extension MapViewController: UICollectionViewDelegate {
         Vibration.shared.hardV()
         selectedGroupIDInMapView = groupIDs[indexPath.row]
         selectedGroupTitleInMapView = groupTitles[indexPath.row]
+        getAnnotationLocations()
         // 這邊到時候要重新顯示在該群組的人於地圖上
         print(selectedGroupIDInMapView)
         print(selectedGroupTitleInMapView)
-    }
-}
-
-extension UIImage {
-    func resizedImage(with size: CGSize) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let resizedImage = renderer.image { _ in
-            self.draw(in: CGRect(origin: .zero, size: size))
-        }
-        return resizedImage
     }
 }

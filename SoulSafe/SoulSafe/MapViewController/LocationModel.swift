@@ -9,6 +9,7 @@ import UIKit
 
 struct Location: Codable {
     var id: String
+    var groupID: String
     var userID: String
     var userName: String
     var userLocation: [String]
@@ -16,6 +17,7 @@ struct Location: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id
+        case groupID
         case userID
         case userName
         case userLocation
@@ -25,6 +27,7 @@ struct Location: Codable {
     var toDict: [String: Any] {
         return [
             "id": id as Any,
+            "groupID": groupID as Any,
             "userID": userID as Any,
             "userName": userName as Any,
             "userLocation": userLocation as Any,

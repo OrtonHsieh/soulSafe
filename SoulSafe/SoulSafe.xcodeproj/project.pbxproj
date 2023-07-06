@@ -16,6 +16,7 @@
 		911092982A53F23D002C5928 /* FriendsAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092972A53F23D002C5928 /* FriendsAnnotation.swift */; };
 		9110929A2A53F429002C5928 /* FriendsAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092992A53F429002C5928 /* FriendsAnnotationView.swift */; };
 		9110929C2A53FEF2002C5928 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110929B2A53FEF2002C5928 /* LocationModel.swift */; };
+		9110929E2A56C2AA002C5928 /* Extension - UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110929D2A56C2AA002C5928 /* Extension - UIImage.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
@@ -84,6 +85,7 @@
 		911092972A53F23D002C5928 /* FriendsAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsAnnotation.swift; sourceTree = "<group>"; };
 		911092992A53F429002C5928 /* FriendsAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsAnnotationView.swift; sourceTree = "<group>"; };
 		9110929B2A53FEF2002C5928 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
+		9110929D2A56C2AA002C5928 /* Extension - UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIImage.swift"; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */,
+				9110929D2A56C2AA002C5928 /* Extension - UIImage.swift */,
 				9127BBCF2A3C381B008DB929 /* Extension - Vibration.swift */,
 				9127BBD12A3C3F1D008DB929 /* Extension - Blur.swift */,
 				91DBA5D42A46EB2700D8D790 /* Extension - User.swift */,
@@ -489,6 +492,7 @@
 				9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */,
 				91DBA5D52A46EB2700D8D790 /* Extension - User.swift in Sources */,
 				9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */,
+				9110929E2A56C2AA002C5928 /* Extension - UIImage.swift in Sources */,
 				911092922A526EB9002C5928 /* MapView.swift in Sources */,
 				9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */,
 				911092982A53F23D002C5928 /* FriendsAnnotation.swift in Sources */,
