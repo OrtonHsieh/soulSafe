@@ -673,6 +673,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoulSafe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to share to your friends even on the background mode, don't worry, you can close it any time in setting.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to share to your friends, don't worry, you can close it any time in setting.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -706,6 +708,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoulSafe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to share to your friends even on the background mode, don't worry, you can close it any time in setting.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to share to your friends, don't worry, you can close it any time in setting.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

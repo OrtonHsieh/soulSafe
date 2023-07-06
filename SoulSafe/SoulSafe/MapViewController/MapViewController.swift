@@ -130,6 +130,8 @@ class MapViewController: UIViewController {
         case .authorizedWhenInUse:
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
+            locationManager.allowsBackgroundLocationUpdates = true
+            locationManager.showsBackgroundLocationIndicator = true
         case .denied:
             // Show alert instruction them how to turn on permissions
             // if user turn off location device wide, it call back denied
@@ -143,6 +145,8 @@ class MapViewController: UIViewController {
             // Do stuff here
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
+            locationManager.allowsBackgroundLocationUpdates = true
+            locationManager.showsBackgroundLocationIndicator = true
         @unknown default:
             break
         }
