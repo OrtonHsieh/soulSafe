@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import AuthenticationServices
 
 class BSViewController: UIViewController {
     let scrollView = UIScrollView()
@@ -31,6 +32,14 @@ class BSViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         setupScrollView()
         chooseUser()
+        self.observeAppleIDSessionChanges()
+    }
+    
+    private func observeAppleIDSessionChanges() {
+        NotificationCenter.default.addObserver(forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification, object: nil, queue: nil) { (notification: Notification) in
+            // Sign user in or out
+            print("Sign user in or out...")
+      }
     }
     
     func chooseUser() {
