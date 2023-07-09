@@ -175,12 +175,22 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
 extension MainViewController: CameraViewDelegate {
     func didPressMapBtn(_ view: CameraView) {
         // 推出 MapView
-        mapViewController.modalPresentationStyle = .fullScreen
-        mapViewController.groupTitles = groupTitles
-        mapViewController.groupIDs = groupIDs
-        mapViewController.isInitialized = true
-        Vibration.shared.lightV()
-        present(mapViewController, animated: true)
+        if !groupIDs.isEmpty {
+            mapViewController.modalPresentationStyle = .fullScreen
+            mapViewController.groupTitles = groupTitles
+            mapViewController.groupIDs = groupIDs
+            mapViewController.isInitialized = true
+            Vibration.shared.lightV()
+            present(mapViewController, animated: true)
+        } else {
+            let alertController = UIAlertController(title: "尚未加入群組", message: nil, preferredStyle: .alert)
+            
+            let confirmAlert = UIAlertAction(title: "快去跟朋友創建群組再回來看看吧！", style: .default)
+            alertController.addAction(confirmAlert)
+            // 在這裡顯示 UIAlert
+            // 例如：
+            present(alertController, animated: true, completion: nil)
+        }
     }
     
     func didTakePic(_ view: CameraView) {
@@ -227,7 +237,8 @@ extension MainViewController: CameraViewDelegate {
             case .success(let url):
                 print(url)
                 // 上傳資料
-                let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts").document()
+//                let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts").document()
+                let postPath = self.db.collection("users").document("\(UserSetup.userID)").collection("posts").document()
                 // 原本 selectedGroupDict 裡面有 UIButton 以及 GroupID 跟 UIButton，這邊先用 compactMap 將 String 以外的型別過濾掉，再用 FlatMap 將所有 Key 的 String 值整合在一個 Array 裏
                 let groupArray = self.selectedGroupDict.flatMap{ $0.value.compactMap{ $0 as? String }}
                 let groupIDArray = groupArray.enumerated().compactMap {(index, element) -> String? in
@@ -303,21 +314,34 @@ extension MainViewController: CameraViewDelegate {
         groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
+//        let navigationController = UINavigationController(rootViewController: groupVC)
+//        navigationController.modalPresentationStyle = .formSheet
+//
+//        if let sheetPC = navigationController.presentationController as? UISheetPresentationController {
+//            sheetPC.detents = [.medium()]
+//            sheetPC.prefersGrabberVisible = true
+//            sheetPC.delegate = self
+//            sheetPC.preferredCornerRadius = 20
+//        }
+//
+//        view.window?.rootViewController?.present(navigationController, animated: true)
+        
         let navigationController = UINavigationController(rootViewController: groupVC)
         navigationController.modalPresentationStyle = .formSheet
-        
+
         if let sheetPC = navigationController.presentationController as? UISheetPresentationController {
             sheetPC.detents = [.medium()]
             sheetPC.prefersGrabberVisible = true
             sheetPC.delegate = self
             sheetPC.preferredCornerRadius = 20
         }
-        
-        view.window?.rootViewController?.present(navigationController, animated: true)
+
+        present(navigationController, animated: true, completion: nil)
     }
     
     func getGroupData() {
-        let groupsPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups")
+//        let groupsPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups")
+        let groupsPath = self.db.collection("users").document("\(UserSetup.userID)").collection("groups")
         
         groupsPath.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, err in
             if let err = err {

@@ -71,7 +71,8 @@ class JoinGroupManager {
         let confirmButton = UIAlertAction(title: "確認", style: .default) { (action) in
             let didJoinGroupPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(UserSetup.userID)")
             
-            let addGroupToUser = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
+//            let addGroupToUser = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
+            let addGroupToUser = self.db.collection("users").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
             
             didJoinGroupPath.setData([
                 "userID": "\(UserSetup.userID)",

@@ -30,9 +30,11 @@ class BSViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
+        setupUserInfo()
         setupScrollView()
-        chooseUser()
-        self.observeAppleIDSessionChanges()
+        setupScrollViewConponents()
+        mainVC.delegate = self
+        observeAppleIDSessionChanges()
     }
     
     private func observeAppleIDSessionChanges() {
@@ -42,41 +44,48 @@ class BSViewController: UIViewController {
       }
     }
     
-    func chooseUser() {
-        let alertController = UIAlertController(title: "選擇使用者", message: nil, preferredStyle: .actionSheet)
-
-        let option1Action = UIAlertAction(title: "何婉綾", style: .default) { (action) in
-            UserSetup.userID = User.howan["userID"] as! String
-            UserSetup.userName = User.howan["userName"] as! String
-            UserSetup.userImage = User.howan["userImage"] as! String
-            self.setupScrollViewConponents()
-            self.mainVC.delegate = self
-        }
-
-        let option2Action = UIAlertAction(title: "潘厚紳", style: .default) { (action) in
-            UserSetup.userID = User.pann["userID"] as! String
-            UserSetup.userName = User.pann["userName"] as! String
-            UserSetup.userImage = User.pann["userImage"] as! String
-            self.setupScrollViewConponents()
-            self.mainVC.delegate = self
-        }
-
-        let option3Action = UIAlertAction(title: "謝承翰", style: .default) { (action) in
-            UserSetup.userID = User.orton["userID"] as! String
-            UserSetup.userName = User.orton["userName"] as! String
-            UserSetup.userImage = User.orton["userImage"] as! String
-            self.setupScrollViewConponents()
-            self.mainVC.delegate = self
-        }
-
-        alertController.addAction(option1Action)
-        alertController.addAction(option2Action)
-        alertController.addAction(option3Action)
-
-        // 在這裡顯示 UIAlert
-        // 例如：
-         present(alertController, animated: true, completion: nil)
+    func setupUserInfo() {
+        // 這邊要將資料從 FireBase 拿回來存
+        UserSetup.userID = UserDefaults.standard.string(forKey: "userID") ?? "尚未登入"
+        UserSetup.userName = "尚未設定名稱"
+        UserSetup.userImage = UserDefaults.standard.string(forKey: "userAvatar") ?? "defaultAvatar"
     }
+    
+//    func chooseUser() {
+//        let alertController = UIAlertController(title: "選擇使用者", message: nil, preferredStyle: .actionSheet)
+//
+//        let option1Action = UIAlertAction(title: "何婉綾", style: .default) { (action) in
+//            UserSetup.userID = User.howan["userID"] as! String
+//            UserSetup.userName = User.howan["userName"] as! String
+//            UserSetup.userImage = User.howan["userImage"] as! String
+//            self.setupScrollViewConponents()
+//            self.mainVC.delegate = self
+//        }
+//
+//        let option2Action = UIAlertAction(title: "潘厚紳", style: .default) { (action) in
+//            UserSetup.userID = User.pann["userID"] as! String
+//            UserSetup.userName = User.pann["userName"] as! String
+//            UserSetup.userImage = User.pann["userImage"] as! String
+//            self.setupScrollViewConponents()
+//            self.mainVC.delegate = self
+//        }
+//
+//        let option3Action = UIAlertAction(title: "謝承翰", style: .default) { (action) in
+//            UserSetup.userID = User.orton["userID"] as! String
+//            UserSetup.userName = User.orton["userName"] as! String
+//            UserSetup.userImage = User.orton["userImage"] as! String
+//            self.setupScrollViewConponents()
+//            self.mainVC.delegate = self
+//        }
+//
+//        alertController.addAction(option1Action)
+//        alertController.addAction(option2Action)
+//        alertController.addAction(option3Action)
+//
+//        // 在這裡顯示 UIAlert
+//        // 例如：
+//         present(alertController, animated: true, completion: nil)
+//    }
     
     func setupScrollView() {
         scrollView.frame = view.bounds

@@ -246,7 +246,8 @@ extension PostViewController: TextAreaViewDelegate {
         if textAreaView.inputTextView.text.isEmpty == false {
             
             //            if !selectedGroup.isEmpty {
-            let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+//            let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+            let postPath = self.db.collection("users").document("\(UserSetup.userID)").collection("posts")
             let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
             let postPathForGroup = self.db.collection("groups").document("\(selectedGroupInPostVC)").collection("posts")
             let postCommentPathForGroup = postPathForGroup.document("\(currentPostID)").collection("comments").document("\(postCommentPath.documentID)")

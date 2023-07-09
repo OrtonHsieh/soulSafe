@@ -6,10 +6,14 @@
 //
 import UIKit
 import AuthenticationServices
+import FirebaseFirestore
+import FirebaseAuth
 import CryptoKit
 
 class SignInViewController: UIViewController {
     let brandImgView = UIImageView()
+    let db = Firestore.firestore()
+    var currentNonce: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +28,25 @@ class SignInViewController: UIViewController {
                 switch credentialState {
                 case .authorized:
                     print("User remains logged in. Proceed to another view.")
-                    // Perform any necessary actions for authorized state
-                    let baseViewController = BSViewController()
-                    baseViewController.modalPresentationStyle = .fullScreen
-                    Vibration.shared.lightV()
-                    self.present(baseViewController, animated: true)
+                    // UploadUserID to fireStore
+                    self.db.collection("users").document("\(userID)").setData([
+                        "userID": "\(userID)"
+                    ]) { err in
+                        if let err = err {
+                            print("Error writing document: \(err)")
+                        } else {
+                            print("UploadUserID to fireStore successfully.")
+                        }
+                    }
+                    // Present BaseVC
+                    DispatchQueue.main.async {
+                        let bsViewController = BSViewController()
+                        bsViewController.modalPresentationStyle = .fullScreen
+                        Vibration.shared.lightV()
+                        
+                        // Present the BSViewController from the current view controller
+                        self.present(bsViewController, animated: true, completion: nil)
+                    }
                 case .revoked, .notFound:
                     print("User logged in before but revoked.")
                     self.setupView()
@@ -92,6 +110,9 @@ class SignInViewController: UIViewController {
         let request = provider.createRequest()
         // request full name and email from the user's Apple ID
         request.requestedScopes = [.fullName, .email]
+        let nonce = randomNonceString()
+        currentNonce = nonce
+        request.nonce = sha256(nonce)
 
         // pass the request to the initializer of the controller
         let authController = ASAuthorizationController(authorizationRequests: [request])
@@ -99,7 +120,6 @@ class SignInViewController: UIViewController {
         // similar to delegate, this will ask the view controller
         // which window to present the ASAuthorizationController
         authController.presentationContextProvider = self
-      
           // delegate functions will be called when user data is
         // successfully retrieved or error occured
         authController.delegate = self
@@ -194,6 +214,18 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             
             // save it to user defaults
             UserDefaults.standard.set(appleIDCredential.user, forKey: "userID")
+            UserDefaults.standard.set("defaultAvatar", forKey: "userAvatar")
+            
+            // UploadUserID to fireStore
+            db.collection("users").document("\(userID)").setData([
+                "userID" : "\(userID)"
+            ]) { err in
+                if let err = err {
+                    print("Error writing document: \(err)")
+                } else {
+                    print("UploadUserID to fireStore successfully.")
+                }
+            }
 
             // optional, might be nil
             let email = appleIDCredential.email
@@ -211,20 +243,48 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                 useful for server side, the app can send identityToken and authorizationCode
                 to the server for verification purpose
             */
-            var identityToken: String?
-            if let token = appleIDCredential.identityToken {
-                identityToken = String(bytes: token, encoding: .utf8)
+            guard let nonce = currentNonce else {
+                fatalError("Invalid state: a login callback was received, but no login request was sent.")
             }
-
-            var authorizationCode: String?
-            if let code = appleIDCredential.authorizationCode {
-                authorizationCode = String(bytes: code, encoding: .utf8)
+            
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token.")
+                return
             }
-            // store the data and get into main page
-            let baseViewController = BSViewController()
-            baseViewController.modalPresentationStyle = .fullScreen
-            Vibration.shared.lightV()
-            self.present(baseViewController, animated: true)
+            
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
+            
+//            var identityToken: String?
+//            if let token = appleIDCredential.identityToken {
+//                identityToken = String(bytes: token, encoding: .utf8)
+//            }
+//
+//            var authorizationCode: String?
+//            if let code = appleIDCredential.authorizationCode {
+//                authorizationCode = String(bytes: code, encoding: .utf8)
+//            }
+            
+            let credential = OAuthProvider.credential(
+                withProviderID: "apple.com",
+                idToken: idTokenString,
+                rawNonce: nonce)
+            
+            Task {
+                do {
+                    let result = try await Auth.auth().signIn(with: credential)
+                    // store the data and get into main page
+//                    let baseViewController = BSViewController()
+//                    baseViewController.modalPresentationStyle = .fullScreen
+//                    Vibration.shared.lightV()
+//                    self.present(baseViewController, animated: true)
+                }
+                catch {
+                    print("Error authenticating: \(error.localizedDescription)")
+                }
+            }
         }
     }
 }

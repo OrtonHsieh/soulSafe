@@ -54,7 +54,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let urlContext = URLContexts.first else {
             return
         }
-        
         // 從 URLContext 中獲取 URL
         let url = urlContext.url
         
@@ -66,8 +65,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if let groupID = components.host {
                 print("Host: \(groupID)")
                 // 這邊讓 JoinGroupManager 推出去前設立新的 Window，別用 Scene Delegate 的 window
-                if let rootViewController = window?.rootViewController {
-                    let joinGroupManager = JoinGroupManager(viewController: rootViewController)
+                // 改用 topViewController 找尋目前最上層的 VC 呈現。
+                if let topVC = window?.topViewController {
+                    let joinGroupManager = JoinGroupManager(viewController: topVC)
                     joinGroupManager.getJoinGroupInfo(groupID)
                 }
             }

@@ -73,7 +73,7 @@ class MemoriesViewController: UIViewController {
         [galleryCollection, memoriesView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         let constant: CGFloat = 60
         NSLayoutConstraint.activate([
-            memoriesView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constant),
+            memoriesView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             memoriesView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             memoriesView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             memoriesView.heightAnchor.constraint(equalToConstant: constant),
@@ -109,7 +109,8 @@ class MemoriesViewController: UIViewController {
     }
     
     func getNewGalleryPics() {
-        let docRef = db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+//        let docRef = db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
+        let docRef = db.collection("users").document("\(UserSetup.userID)").collection("posts")
         docRef.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("Error fetching collection: \(error)")
@@ -190,7 +191,13 @@ class MemoriesViewController: UIViewController {
                     groupTitleArrays.append(groupTitleArray)
                     
                     
-                    self.groupPostDict["\(groupID)"] = [postIDs, postImgURLs, timeStamps, shareGroupLists, groupTitleArrays]
+                    self.groupPostDict["\(groupID)"] = [
+                        postIDs,
+                        postImgURLs,
+                        timeStamps,
+                        shareGroupLists,
+                        groupTitleArrays
+                    ]
                     // 確定拿到資料，要 reloadData
                 }
             }
@@ -263,7 +270,6 @@ class MemoriesViewController: UIViewController {
     extension MemoriesViewController: UICollectionViewDataSource {
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             if !selectedGroup.isEmpty {
-                
                 if let groupPost = groupPostDict["\(selectedGroup)"] as? [[Any]] {
                     if let postID = groupPost[0] as? [String] {
                         return postID.count
@@ -273,8 +279,6 @@ class MemoriesViewController: UIViewController {
                 } else {
                     print("Failed to get groupPost's value count")
                 }
-                
-                
             } else {
                 return imageURLs.count
             }

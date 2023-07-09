@@ -52,7 +52,7 @@ class SettingView: UIView {
         }
         
         NSLayoutConstraint.activate([
-            settingViewBackBtn.topAnchor.constraint(equalTo: topAnchor, constant: 22),
+            settingViewBackBtn.topAnchor.constraint(equalTo: topAnchor),
             settingViewBackBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             settingViewBackBtn.widthAnchor.constraint(equalToConstant: 36),
             settingViewBackBtn.heightAnchor.constraint(equalToConstant: 36),

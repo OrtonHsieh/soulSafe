@@ -43,9 +43,8 @@ class SettingViewController: UIViewController {
     
     func setupConstraints() {
         settingView.translatesAutoresizingMaskIntoConstraints = false
-        let constant: CGFloat = 60
         NSLayoutConstraint.activate([
-            settingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constant),
+            settingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             settingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             settingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             settingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
