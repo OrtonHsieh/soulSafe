@@ -35,6 +35,11 @@ class BSViewController: UIViewController {
         setupScrollViewConponents()
         mainVC.delegate = self
         observeAppleIDSessionChanges()
+        observeIfUserLogout()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func observeAppleIDSessionChanges() {
@@ -42,6 +47,10 @@ class BSViewController: UIViewController {
             // Sign user in or out
             print("Sign user in or out...")
       }
+    }
+    
+    private func observeIfUserLogout() {
+        NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
     }
     
     func setupUserInfo() {
@@ -120,6 +129,21 @@ class BSViewController: UIViewController {
         // Set the initial content offset to show the second view controller
         scrollView.contentOffset = CGPoint(x: view.bounds.width, y: 0)
         scrollView.bringSubviewToFront(viewControllers[1].view)
+    }
+    
+    @objc func userDefaultsDidChange(notification: Notification) {
+        if let defaults = notification.object as? UserDefaults {
+            if defaults.object(forKey: "userID") == nil {
+                DispatchQueue.main.async {
+                    let signInViewController = SignInViewController()
+                    signInViewController.modalPresentationStyle = .fullScreen
+                    Vibration.shared.lightV()
+                    
+                    // Present the BSViewController from the current view controller
+                    self.present(signInViewController, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }
 

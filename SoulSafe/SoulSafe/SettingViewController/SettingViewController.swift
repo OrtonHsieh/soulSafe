@@ -66,6 +66,9 @@ class SettingViewController: UIViewController {
 extension SettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("\(indexPath.row)")
+        if indexPath.row == 2 {
+            userLogOut()
+        }
     }
 }
 

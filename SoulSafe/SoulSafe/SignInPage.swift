@@ -276,10 +276,14 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                 do {
                     let result = try await Auth.auth().signIn(with: credential)
                     // store the data and get into main page
-//                    let baseViewController = BSViewController()
-//                    baseViewController.modalPresentationStyle = .fullScreen
-//                    Vibration.shared.lightV()
-//                    self.present(baseViewController, animated: true)
+                    DispatchQueue.main.async {
+                        let bsViewController = BSViewController()
+                        bsViewController.modalPresentationStyle = .fullScreen
+                        Vibration.shared.lightV()
+                        
+                        // Present the BSViewController from the current view controller
+                        self.present(bsViewController, animated: true, completion: nil)
+                    }
                 }
                 catch {
                     print("Error authenticating: \(error.localizedDescription)")
