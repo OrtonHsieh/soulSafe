@@ -7,7 +7,12 @@
 
 import UIKit
 
+protocol SettingViewDelegate: AnyObject {
+    func didPressSettingViewBackBtn(_ view: SettingView)
+}
+
 class SettingView: UIView {
+    weak var delegate: SettingViewDelegate?
     lazy var avatarImgView = UIImageView()
     private lazy var userNameLabel = UILabel()
     lazy var generalLabel = UILabel()
@@ -74,6 +79,6 @@ class SettingView: UIView {
     }
     
     @objc func didPressSettingViewBackBtn() {
-        print("返回主頁")
+        delegate?.didPressSettingViewBackBtn(self)
     }
 }

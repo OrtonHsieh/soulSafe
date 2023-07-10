@@ -28,7 +28,6 @@ extension EditGroupViewController {
             if let textField = alertController.textFields?.first {
                 if let inputText = textField.text {
                     // 將資料建立在 user 集合該創立者下的 group 集合
-//                    let groupPath =  self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document()
                     let groupPath =  self.db.collection("users").document("\(UserSetup.userID)").collection("groups").document()
                     groupPath.setData([
                         "groupID": "\(groupPath.documentID)",
@@ -118,6 +117,16 @@ extension EditGroupViewController {
         let alertController = UIAlertController(title: "敬請期待新功能", message: nil, preferredStyle: .alert)
         
         let confirmBtn = UIAlertAction(title: "好！", style: .default)
+        alertController.addAction(confirmBtn)
+        // 在這裡顯示 UIAlert
+        // 例如：
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func reachGroupsLimit() {
+        let alertController = UIAlertController(title: "系統訊息", message: "已達群組上線", preferredStyle: .alert)
+        
+        let confirmBtn = UIAlertAction(title: "好吧！", style: .default)
         alertController.addAction(confirmBtn)
         // 在這裡顯示 UIAlert
         // 例如：

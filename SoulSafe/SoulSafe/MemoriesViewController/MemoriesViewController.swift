@@ -9,7 +9,12 @@ import UIKit
 import Kingfisher
 import FirebaseFirestore
 
+protocol MemoriesViewControllerDelegate: AnyObject {
+    func didPressBackBtn(_ viewController: MemoriesViewController)
+}
+
 class MemoriesViewController: UIViewController {
+    weak var delegate: MemoriesViewControllerDelegate?
     let galleryCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let memoriesView = MemoriesView()
     var imageURLs: [String] = []
@@ -81,7 +86,7 @@ class MemoriesViewController: UIViewController {
             galleryCollection.topAnchor.constraint(equalTo: memoriesView.bottomAnchor),
             galleryCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             galleryCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            galleryCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            galleryCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -211,7 +216,7 @@ class MemoriesViewController: UIViewController {
             let spacing: CGFloat = 1
             let totalSpacing = (numberOfColumns - 1) * spacing
             let width = (collectionView.bounds.width - totalSpacing) / numberOfColumns
-            let height = (width / 325) * 404
+            let height = width
             return CGSize(width: width, height: height)
         }
         
@@ -328,9 +333,12 @@ class MemoriesViewController: UIViewController {
         }
     }
     
-    extension MemoriesViewController: MemoriesViewDelegate {
-        func didPressGroupSelector(_ view: MemoriesView) {
-            print("選擇查看的群組")
-            showGroupList(groupTitles)
-        }
+extension MemoriesViewController: MemoriesViewDelegate {
+    func didPressGroupSelector(_ view: MemoriesView) {
+        showGroupList(groupTitles)
     }
+    
+    func didPressBackBtn(_ view: MemoriesView) {
+        delegate?.didPressBackBtn(self)
+    }
+}

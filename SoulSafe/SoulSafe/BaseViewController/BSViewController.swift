@@ -34,6 +34,8 @@ class BSViewController: UIViewController {
         setupScrollView()
         setupScrollViewConponents()
         mainVC.delegate = self
+        memoriesVC.delegate = self
+        settingVC.delegate = self
         observeAppleIDSessionChanges()
         observeIfUserLogout()
     }
@@ -43,14 +45,23 @@ class BSViewController: UIViewController {
     }
     
     private func observeAppleIDSessionChanges() {
-        NotificationCenter.default.addObserver(forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification, object: nil, queue: nil) { (notification: Notification) in
+        NotificationCenter.default.addObserver(
+            forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification,
+            object: nil,
+            queue: nil
+        ) { (notification: Notification) in
             // Sign user in or out
             print("Sign user in or out...")
-      }
+        }
     }
     
     private func observeIfUserLogout() {
-        NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userDefaultsDidChange),
+            name: UserDefaults.didChangeNotification,
+            object: nil
+        )
     }
     
     func setupUserInfo() {
@@ -59,42 +70,6 @@ class BSViewController: UIViewController {
         UserSetup.userName = "尚未設定名稱"
         UserSetup.userImage = UserDefaults.standard.string(forKey: "userAvatar") ?? "defaultAvatar"
     }
-    
-//    func chooseUser() {
-//        let alertController = UIAlertController(title: "選擇使用者", message: nil, preferredStyle: .actionSheet)
-//
-//        let option1Action = UIAlertAction(title: "何婉綾", style: .default) { (action) in
-//            UserSetup.userID = User.howan["userID"] as! String
-//            UserSetup.userName = User.howan["userName"] as! String
-//            UserSetup.userImage = User.howan["userImage"] as! String
-//            self.setupScrollViewConponents()
-//            self.mainVC.delegate = self
-//        }
-//
-//        let option2Action = UIAlertAction(title: "潘厚紳", style: .default) { (action) in
-//            UserSetup.userID = User.pann["userID"] as! String
-//            UserSetup.userName = User.pann["userName"] as! String
-//            UserSetup.userImage = User.pann["userImage"] as! String
-//            self.setupScrollViewConponents()
-//            self.mainVC.delegate = self
-//        }
-//
-//        let option3Action = UIAlertAction(title: "謝承翰", style: .default) { (action) in
-//            UserSetup.userID = User.orton["userID"] as! String
-//            UserSetup.userName = User.orton["userName"] as! String
-//            UserSetup.userImage = User.orton["userImage"] as! String
-//            self.setupScrollViewConponents()
-//            self.mainVC.delegate = self
-//        }
-//
-//        alertController.addAction(option1Action)
-//        alertController.addAction(option2Action)
-//        alertController.addAction(option3Action)
-//
-//        // 在這裡顯示 UIAlert
-//        // 例如：
-//         present(alertController, animated: true, completion: nil)
-//    }
     
     func setupScrollView() {
         scrollView.frame = view.bounds
@@ -145,6 +120,26 @@ class BSViewController: UIViewController {
             }
         }
     }
+    func switchToMemories() {
+        let pageNumber = 0
+        let scrollViewWidth = scrollView.bounds.width
+        let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
+        scrollView.setContentOffset(contentOffset, animated: true)
+    }
+    
+    func switchToMain() {
+        let pageNumber = 1
+        let scrollViewWidth = scrollView.bounds.width
+        let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
+        scrollView.setContentOffset(contentOffset, animated: true)
+    }
+    
+    func switchToSetting() {
+        let pageNumber = 2
+        let scrollViewWidth = scrollView.bounds.width
+        let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
+        scrollView.setContentOffset(contentOffset, animated: true)
+    }
 }
 
 extension BSViewController: UIScrollViewDelegate {
@@ -159,6 +154,14 @@ extension BSViewController: UIScrollViewDelegate {
 }
 
 extension BSViewController: MainViewControllerDelegate {
+    func didPressSettingBtn(_ viewController: MainViewController) {
+        switchToSetting()
+    }
+    
+    func didPressMemoriesBtn(_ viewController: MainViewController) {
+        switchToMemories()
+    }
+    
     func didUpdateGroupID(_ viewController: MainViewController, updatedGroupIDs: [String]) {
         groupIDs = updatedGroupIDs
     }
@@ -167,5 +170,17 @@ extension BSViewController: MainViewControllerDelegate {
     }
     func didPressSendBtn(_ viewController: MainViewController) {
         memoriesVC.getNewGalleryPics()
+    }
+}
+
+extension BSViewController: MemoriesViewControllerDelegate {
+    func didPressBackBtn(_ viewController: MemoriesViewController) {
+        switchToMain()
+    }
+}
+
+extension BSViewController: SettingViewControllerDelegate {
+    func didPressSettingViewBackBtn(_ viewController: SettingViewController) {
+        switchToMain()
     }
 }

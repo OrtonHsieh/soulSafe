@@ -142,12 +142,15 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
         editGroupView.QRCodeBtn.isHidden = false
         editGroupView.copyLinkBtn.isHidden = false
         
-        // 將其他 View 變成 M3
+        // 所有 View 變成 M3
         for visibleCell in editGroupTBView.visibleCells {
             if let cell = visibleCell as? EditGroupTBCell {
                 cell.groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
+                cell.baseGroupLabel.textColor = .gray
             }
         }
+        // 將「+ 新增群組」字樣
+        cell.baseGroupLabel.textColor = .white
     }
     
     func didPressGroupView(_ cell: EditGroupTBCell, view: UIView) {
@@ -167,6 +170,7 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
         for visibleCell in editGroupTBView.visibleCells {
             if let cell = visibleCell as? EditGroupTBCell {
                 cell.groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
+                cell.baseGroupLabel.textColor = .gray
             }
         }
         // 點擊的 View 變成 F1
@@ -180,11 +184,14 @@ extension EditGroupViewController: EditGroupViewDelegate {
     }
     
     func didPressGetLinkBtn(_ view: EditGroupView, button: UIButton) {
-        inputAlertForCreateGroup(from: self)
+        if groupIDs.count == 3 {
+            reachGroupsLimit()
+        } else {
+            inputAlertForCreateGroup(from: self)
+        }
     }
     
     func didPressLeaveBtn(_ view: EditGroupView, button: UIButton) {
-        print("didPressLeaveBtn")
         leaveAlert(from: self)
     }
     

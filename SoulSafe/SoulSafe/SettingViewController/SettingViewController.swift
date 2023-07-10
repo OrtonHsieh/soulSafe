@@ -8,7 +8,12 @@
 import UIKit
 import FirebaseFirestore
 
+protocol SettingViewControllerDelegate: AnyObject {
+    func didPressSettingViewBackBtn(_ viewController: SettingViewController)
+}
+
 class SettingViewController: UIViewController {
+    weak var delegate: SettingViewControllerDelegate?
     let settingView = SettingView()
     let settingTableView = UITableView()
     let db = Firestore.firestore()
@@ -30,6 +35,7 @@ class SettingViewController: UIViewController {
     func setupView() {
         view.addSubview(settingView)
         settingView.backgroundColor = UIColor(hex: CIC.shared.M1)
+        settingView.delegate = self
     }
     
     func setupTableView() {
@@ -98,5 +104,12 @@ extension SettingViewController: UITableViewDataSource {
         cell.layer.shadowOpacity = 1.0
         cell.layer.shadowRadius = 8
         return cell
+    }
+}
+
+extension SettingViewController: SettingViewDelegate {
+    func didPressSettingViewBackBtn(_ view: SettingView) {
+        Vibration.shared.lightV()
+        delegate?.didPressSettingViewBackBtn(self)
     }
 }

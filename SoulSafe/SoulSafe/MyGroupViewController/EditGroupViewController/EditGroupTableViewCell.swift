@@ -41,7 +41,7 @@ class EditGroupTBCell: UITableViewCell {
         
         baseGroupLabel.text = "+ 新增群組"
         baseGroupLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        baseGroupLabel.textColor = UIColor.white
+        baseGroupLabel.textColor = .gray
         
         groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
         

@@ -156,7 +156,7 @@ extension PostViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 && indexPath.row == 0 {
-            return (view.frame.width) / 325 * 403
+            return view.frame.width
         } else if indexPath.section == 0 && indexPath.row == 1 {
             return 60
         } else {

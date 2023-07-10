@@ -15,6 +15,8 @@ protocol MainViewControllerDelegate: AnyObject {
     func didUpdateGroupID(_ viewController: MainViewController, updatedGroupIDs: [String])
     func didUpdateGroupTitle(_ viewController: MainViewController, updatedGroupTitles: [String])
     func didPressSendBtn(_ viewController: MainViewController)
+    func didPressSettingBtn(_ viewController: MainViewController)
+    func didPressMemoriesBtn(_ viewController: MainViewController)
 }
 
 class MainViewController: UIViewController {
@@ -56,7 +58,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: CIC.shared.M1)
-//        groupVC.delegate = self
         createCamera()
         getGroupData()
     }
@@ -81,7 +82,7 @@ class MainViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             groupStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            groupStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
+            groupStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             groupStackView.heightAnchor.constraint(equalToConstant: 60),
             groupStackView.widthAnchor.constraint(equalToConstant: widthValue)
         ])
@@ -166,13 +167,22 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             cameraView?.photoImageView.layer.masksToBounds = true
             cameraView?.photoImageView.layer.shouldRasterize = true
             cameraView?.photoImageView.layer.rasterizationScale = UIScreen.main.scale
-            
             conponentsArrangementWhenCameraOff()
         }
     }
 }
 
 extension MainViewController: CameraViewDelegate {
+    func didPressSettingBtn(_ view: CameraView) {
+        Vibration.shared.lightV()
+        delegate?.didPressSettingBtn(self)
+    }
+    
+    func didPressMemoriesBtn(_ view: CameraView) {
+        Vibration.shared.lightV()
+        delegate?.didPressMemoriesBtn(self)
+    }
+    
     func didPressMapBtn(_ view: CameraView) {
         // 推出 MapView
         if !groupIDs.isEmpty {
@@ -183,8 +193,11 @@ extension MainViewController: CameraViewDelegate {
             Vibration.shared.lightV()
             present(mapViewController, animated: true)
         } else {
-            let alertController = UIAlertController(title: "尚未加入群組", message: "快去跟朋友創建群組再回來看看吧！", preferredStyle: .alert)
-            
+            let alertController = UIAlertController(
+                title: "尚未加入群組",
+                message: "快去跟朋友創建群組再回來看看吧！",
+                preferredStyle: .alert
+            )
             let confirmAlert = UIAlertAction(title: "確認", style: .default)
             alertController.addAction(confirmAlert)
             // 在這裡顯示 UIAlert
@@ -231,16 +244,18 @@ extension MainViewController: CameraViewDelegate {
     func didPressSendBtn(_ view: CameraView, image: UIImage) {
         Vibration.shared.lightV()
         conponentsArrangementWhenCameraOn()
-        
         uploadPhoto(image: image) { result in
             switch result {
             case .success(let url):
                 print(url)
                 // 上傳資料
-//                let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts").document()
                 let postPath = self.db.collection("users").document("\(UserSetup.userID)").collection("posts").document()
                 // 原本 selectedGroupDict 裡面有 UIButton 以及 GroupID 跟 UIButton，這邊先用 compactMap 將 String 以外的型別過濾掉，再用 FlatMap 將所有 Key 的 String 值整合在一個 Array 裏
-                let groupArray = self.selectedGroupDict.flatMap{ $0.value.compactMap{ $0 as? String }}
+                let groupArray = self.selectedGroupDict.flatMap{
+                    $0.value.compactMap{
+                        $0 as? String
+                    }
+                }
                 let groupIDArray = groupArray.enumerated().compactMap {(index, element) -> String? in
                     if index % 2 == 0 {
                         return element
@@ -270,7 +285,6 @@ extension MainViewController: CameraViewDelegate {
                         print("Document successfully written!")
                     }
                 }
-                
                 for groupID in 0..<groupIDArray.count {
                     let groupPostPath = self.db.collection("groups").document("\(groupIDArray[groupID])").collection("posts").document("\(postPath.documentID)")
                     groupPostPath.setData([
@@ -290,7 +304,6 @@ extension MainViewController: CameraViewDelegate {
                 // 這邊等 UI 切好也要一起傳到 group 裡的 post
                 self.cleanGroupSelection()
                 self.delegate?.didPressSendBtn(self)
-                
             case .failure(let error):
                 print(error)
             }
@@ -314,18 +327,6 @@ extension MainViewController: CameraViewDelegate {
         groupVC.groupIDs = groupIDs
         Vibration.shared.lightV()
         
-//        let navigationController = UINavigationController(rootViewController: groupVC)
-//        navigationController.modalPresentationStyle = .formSheet
-//
-//        if let sheetPC = navigationController.presentationController as? UISheetPresentationController {
-//            sheetPC.detents = [.medium()]
-//            sheetPC.prefersGrabberVisible = true
-//            sheetPC.delegate = self
-//            sheetPC.preferredCornerRadius = 20
-//        }
-//
-//        view.window?.rootViewController?.present(navigationController, animated: true)
-        
         let navigationController = UINavigationController(rootViewController: groupVC)
         navigationController.modalPresentationStyle = .formSheet
 
@@ -340,7 +341,6 @@ extension MainViewController: CameraViewDelegate {
     }
     
     func getGroupData() {
-//        let groupsPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups")
         let groupsPath = self.db.collection("users").document("\(UserSetup.userID)").collection("groups")
         
         groupsPath.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, err in

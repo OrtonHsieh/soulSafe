@@ -9,6 +9,7 @@ import UIKit
 
 protocol MemoriesViewDelegate: AnyObject {
     func didPressGroupSelector(_ view: MemoriesView)
+    func didPressBackBtn(_ view: MemoriesView)
 }
 
 class MemoriesView: UIView {
@@ -67,6 +68,8 @@ class MemoriesView: UIView {
     
     @objc func buttonDidPress() {
         print("滑動回去 mainVC")
+        Vibration.shared.lightV()
+        delegate?.didPressBackBtn(self)
     }
     
     @objc func didClickGroupSelector() {

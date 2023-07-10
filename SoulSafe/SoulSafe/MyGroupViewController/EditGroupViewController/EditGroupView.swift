@@ -76,10 +76,12 @@ class EditGroupView: UIView {
         leftHintLabel.font = .systemFont(ofSize: 14, weight: .medium)
         leftHintLabel.text = titleForQRCode
         leftHintLabel.textAlignment = .center
+        leftHintLabel.textColor = .white
         
         rightHintLabel.font = .systemFont(ofSize: 14, weight: .medium)
         rightHintLabel.text = titleForCreateLink
         rightHintLabel.textAlignment = .center
+        rightHintLabel.textColor = .white
 
         QRCodeBtn.setImage(UIImage(named: "icon-QRcode"), for: .normal)
         QRCodeBtn.addTarget(self, action: #selector(didPressQRCodeBtn), for: .touchUpInside)

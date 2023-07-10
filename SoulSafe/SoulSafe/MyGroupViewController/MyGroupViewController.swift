@@ -78,7 +78,7 @@ class GroupViewController: UIViewController {
         NSLayoutConstraint.activate([
             editGroupBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editGroupBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            editGroupBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            editGroupBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             editGroupBtn.heightAnchor.constraint(equalToConstant: 54)
         ])
     }
