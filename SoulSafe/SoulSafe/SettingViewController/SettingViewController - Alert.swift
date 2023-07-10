@@ -82,4 +82,14 @@ extension SettingViewController {
         // 例如：
         present(alertController, animated: true, completion: nil)
     }
+    
+    func commingSoonAlert() {
+        let alertController = UIAlertController(title: "敬請期待新功能", message: nil, preferredStyle: .alert)
+        
+        let confirmBtn = UIAlertAction(title: "好！", style: .default)
+        alertController.addAction(confirmBtn)
+        // 在這裡顯示 UIAlert
+        // 例如：
+        present(alertController, animated: true, completion: nil)
+    }
 }

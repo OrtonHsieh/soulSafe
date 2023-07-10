@@ -33,8 +33,15 @@ class MemoriesView: UIView {
     
     func setupView() {
         [groupSelectorLabel, backButton].forEach { addSubview($0) }
-        backButton.setImage(UIImage(named: "icon-bigBack"), for: .normal)
+        let symbolSize: CGFloat = 28
         backButton.addTarget(self, action: #selector(buttonDidPress), for: .touchUpInside)
+        backButton.setImage(
+            UIImage(systemName: "arrowtriangle.right")?.withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: symbolSize)),
+            for: .normal
+        )
+        backButton.tintColor = UIColor(hex: CIC.shared.F1)
+        backButton.imageView?.contentMode = .scaleAspectFit
         
         groupSelectorLabel.layer.borderWidth = 1
         groupSelectorLabel.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
@@ -60,7 +67,7 @@ class MemoriesView: UIView {
             groupSelectorLabel.heightAnchor.constraint(equalToConstant: 40),
             
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             backButton.widthAnchor.constraint(equalToConstant: spec),
             backButton.heightAnchor.constraint(equalToConstant: spec)
         ])

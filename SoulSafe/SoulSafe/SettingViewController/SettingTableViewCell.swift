@@ -45,7 +45,7 @@ class SettingTableViewCell: UITableViewCell {
             settingOptionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             settingOptionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             settingOptionView.heightAnchor.constraint(equalToConstant: 54),
-            settingOptionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+            settingOptionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
             
             settingOptionLabel.leadingAnchor.constraint(equalTo: settingOptionView.leadingAnchor, constant: 12),
             settingOptionLabel.centerYAnchor.constraint(equalTo: settingOptionView.centerYAnchor)

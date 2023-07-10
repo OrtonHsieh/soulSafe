@@ -43,6 +43,7 @@ class SettingViewController: UIViewController {
         settingTableView.dataSource = self
         settingTableView.backgroundColor = UIColor(hex: CIC.shared.M1)
         settingTableView.clipsToBounds = false
+        settingTableView.isScrollEnabled = false
         settingTableView.register(
             SettingTableViewCell.self,
             forCellReuseIdentifier: "SettingTableViewCell")
@@ -111,5 +112,10 @@ extension SettingViewController: SettingViewDelegate {
     func didPressSettingViewBackBtn(_ view: SettingView) {
         Vibration.shared.lightV()
         delegate?.didPressSettingViewBackBtn(self)
+    }
+    
+    func didPressSettingViewEditBtn(_ view: SettingView) {
+        Vibration.shared.lightV()
+        commingSoonAlert()
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 
 protocol SettingViewDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ view: SettingView)
+    func didPressSettingViewEditBtn(_ view: SettingView)
 }
 
 class SettingView: UIView {
@@ -33,6 +34,14 @@ class SettingView: UIView {
         [avatarImgView, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn].forEach { addSubview($0) }
         
         settingViewBackBtn.setImage(UIImage(named: "icon-bigBack-toLeft"), for: .normal)
+        let symbolSize: CGFloat = 28
+        settingViewBackBtn.setImage(
+            UIImage(systemName: "arrowtriangle.backward")?.withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: symbolSize)),
+            for: .normal
+        )
+        settingViewBackBtn.tintColor = UIColor(hex: CIC.shared.F1)
+        settingViewBackBtn.imageView?.contentMode = .scaleAspectFit
         settingViewBackBtn.addTarget(self, action: #selector(didPressSettingViewBackBtn), for: .touchUpInside)
         
         avatarImgView.image = UIImage(named: "defaultAvatar")
@@ -49,6 +58,7 @@ class SettingView: UIView {
         
         settingViewEditBtn.setTitle("編輯", for: .normal)
         settingViewEditBtn.setTitleColor(UIColor(hex: CIC.shared.F1), for: .normal)
+        settingViewEditBtn.addTarget(self, action: #selector(didPressSettingViewEditBtn), for: .touchUpInside)
     }
     
     private func setupConstraints() {
@@ -57,7 +67,7 @@ class SettingView: UIView {
         }
         
         NSLayoutConstraint.activate([
-            settingViewBackBtn.topAnchor.constraint(equalTo: topAnchor),
+            settingViewBackBtn.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             settingViewBackBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             settingViewBackBtn.widthAnchor.constraint(equalToConstant: 36),
             settingViewBackBtn.heightAnchor.constraint(equalToConstant: 36),
@@ -80,5 +90,9 @@ class SettingView: UIView {
     
     @objc func didPressSettingViewBackBtn() {
         delegate?.didPressSettingViewBackBtn(self)
+    }
+    
+    @objc func didPressSettingViewEditBtn() {
+        delegate?.didPressSettingViewEditBtn(self)
     }
 }
