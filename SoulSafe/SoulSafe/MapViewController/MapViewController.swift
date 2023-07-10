@@ -305,7 +305,7 @@ extension MapViewController: MKMapViewDelegate {
                 // 這邊不會觸發，以防萬一先留著
                 print("我進來了")
             } else {
-                if annotation.userAvatar == UserSetup.userImage {
+                if annotation.userID == UserSetup.userID {
                     // Do nothing
                     print("block me")
                     friendAnnotationView?.isHidden = true
