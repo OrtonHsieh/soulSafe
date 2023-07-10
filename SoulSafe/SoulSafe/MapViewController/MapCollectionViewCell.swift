@@ -31,7 +31,8 @@ class MapCollectionViewCell: UICollectionViewCell {
     private func setupView() {
         [groupIconInMapCollectionView, groupTitleLabel].forEach { addSubview($0) }
         groupIconInMapCollectionView.image = UIImage(named: "icon-community")
-        groupTitleLabel.text = "RealChillSquad"
+//        groupTitleLabel.text = "RealChillSquad"
+        groupTitleLabel.textColor = .white
     }
     
     private func setupConstraints() {

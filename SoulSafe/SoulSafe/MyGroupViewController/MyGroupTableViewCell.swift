@@ -20,6 +20,8 @@ class GroupTBCell: UITableViewCell {
     
     override func layoutSubviews() {
         groupView.layer.cornerRadius = 12
+        
+        groupLabel.textColor = .white
     }
     
     required init?(coder: NSCoder) {

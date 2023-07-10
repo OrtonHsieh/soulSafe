@@ -23,6 +23,7 @@ class PostTBCellList: UITableViewCell {
         groupView.backgroundColor = UIColor(hex: CIC.shared.M3)
         groupView.layer.cornerRadius = 15
         groupLabel.text = "選擇留言串"
+        groupLabel.textColor = .white
         let tap = UITapGestureRecognizer(target: self, action: #selector(didPressGroupSelector))
         groupView.addGestureRecognizer(tap)
         groupLabel.frame = CGRect(x: 11, y: 6, width: groupView.frame.width - 22, height: groupView.frame.height - 12)

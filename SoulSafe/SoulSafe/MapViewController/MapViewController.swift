@@ -407,7 +407,7 @@ extension MapViewController: CLLocationManagerDelegate {
         addAndUpdateCustomPin(center)
 
         numberOfPostCounts += 1
-        if numberOfPostCounts == 3 {
+        if numberOfPostCounts == 10 {
             // 將使用者名稱、ID、位置、頭貼上傳
             for groupID in self.groupIDs {
                 let latitude = String(location.coordinate.latitude)

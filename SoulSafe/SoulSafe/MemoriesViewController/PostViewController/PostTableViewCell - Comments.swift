@@ -26,6 +26,7 @@ class PostTBCellCmt: UITableViewCell {
     func setupView() {
         basicList.forEach { addSubview($0) }
         commentLabel.numberOfLines = 0
+        commentLabel.textColor = .white
     }
     
     func setupConstraints() {
