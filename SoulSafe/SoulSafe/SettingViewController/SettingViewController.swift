@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class SettingViewController: UIViewController {
     let settingView = SettingView()
     let settingTableView = UITableView()
+    let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +68,13 @@ class SettingViewController: UIViewController {
 extension SettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("\(indexPath.row)")
-        if indexPath.row == 2 {
+        if indexPath.row == 0 {
+            print("隱私權政策")
+        } else if indexPath.row == 1 {
+            DispatchQueue.main.async {
+                self.deleteUserAccount()
+            }
+        } else {
             userLogOut()
         }
     }

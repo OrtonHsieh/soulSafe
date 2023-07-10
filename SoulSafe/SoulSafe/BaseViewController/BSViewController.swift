@@ -133,7 +133,7 @@ class BSViewController: UIViewController {
     
     @objc func userDefaultsDidChange(notification: Notification) {
         if let defaults = notification.object as? UserDefaults {
-            if defaults.object(forKey: "userID") == nil {
+            if defaults.object(forKey: "userIDForAuth") == nil {
                 DispatchQueue.main.async {
                     let signInViewController = SignInViewController()
                     signInViewController.modalPresentationStyle = .fullScreen

@@ -183,9 +183,9 @@ extension MainViewController: CameraViewDelegate {
             Vibration.shared.lightV()
             present(mapViewController, animated: true)
         } else {
-            let alertController = UIAlertController(title: "尚未加入群組", message: nil, preferredStyle: .alert)
+            let alertController = UIAlertController(title: "尚未加入群組", message: "快去跟朋友創建群組再回來看看吧！", preferredStyle: .alert)
             
-            let confirmAlert = UIAlertAction(title: "快去跟朋友創建群組再回來看看吧！", style: .default)
+            let confirmAlert = UIAlertAction(title: "確認", style: .default)
             alertController.addAction(confirmAlert)
             // 在這裡顯示 UIAlert
             // 例如：

@@ -164,6 +164,7 @@ class EditGroupView: UIView {
 
     @objc func didPressQRCodeBtn() {
         Vibration.shared.lightV()
+        delegate?.didPressQRCodeBtn(self, button: QRCodeBtn)
     }
 
     @objc func didPressGetLinkBtn() {

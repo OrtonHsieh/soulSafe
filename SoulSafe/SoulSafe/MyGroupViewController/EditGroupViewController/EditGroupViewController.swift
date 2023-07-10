@@ -176,7 +176,7 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
 
 extension EditGroupViewController: EditGroupViewDelegate {
     func didPressQRCodeBtn(_ view: EditGroupView, button: UIButton) {
-        print("didPressQRCodeBtn")
+        commingSoonAlert()
     }
     
     func didPressGetLinkBtn(_ view: EditGroupView, button: UIButton) {

@@ -21,23 +21,23 @@ class SignInViewController: UIViewController {
     }
     
     private func checkSignInStatus() {
-        if let userID = UserDefaults.standard.string(forKey: "userID") {
+        if let userIDForAuth = UserDefaults.standard.string(forKey: "userIDForAuth") {
             // Check the login status of Apple sign in for the app
             // Asynchronous
-            ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userID) { credentialState, error in
+            ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userIDForAuth) { credentialState, error in
                 switch credentialState {
                 case .authorized:
                     print("User remains logged in. Proceed to another view.")
-                    // UploadUserID to fireStore
-                    self.db.collection("users").document("\(userID)").setData([
-                        "userID": "\(userID)"
-                    ]) { err in
-                        if let err = err {
-                            print("Error writing document: \(err)")
-                        } else {
-                            print("UploadUserID to fireStore successfully.")
-                        }
-                    }
+//                    // UploadUserID to fireStore
+//                    self.db.collection("users").document("\(userID)").setData([
+//                        "userID": "\(userID)"
+//                    ]) { err in
+//                        if let err = err {
+//                            print("Error writing document: \(err)")
+//                        } else {
+//                            print("UploadUserID to fireStore successfully.")
+//                        }
+//                    }
                     // Present BaseVC
                     DispatchQueue.main.async {
                         let bsViewController = BSViewController()
@@ -64,44 +64,60 @@ class SignInViewController: UIViewController {
     }
     
     func setupView() {
-        view.addSubview(brandImgView)
-        brandImgView.image = UIImage(named: "brandImg")
-        brandImgView.clipsToBounds = false
+        DispatchQueue.main.async {
+            self.view.addSubview(self.brandImgView)
+            self.brandImgView.image = UIImage(named: "brandImg")
+            self.brandImgView.clipsToBounds = false
+        }
     }
     
     func setupConstraints() {
-        brandImgView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            brandImgView.widthAnchor.constraint(equalToConstant: 360),
-            brandImgView.heightAnchor.constraint(equalToConstant: 374.814),
-            brandImgView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
-            brandImgView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+        DispatchQueue.main.async {
+            self.brandImgView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                self.brandImgView.widthAnchor.constraint(equalToConstant: 360),
+                self.brandImgView.heightAnchor.constraint(equalToConstant: 374.814),
+                self.brandImgView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -50),
+                self.brandImgView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+            ])
+        }
     }
     
     func setupSignInWithApple() {
-        // Do any additional setup after loading the view.
-
-        let siwaButton = ASAuthorizationAppleIDButton()
-
-        // set this so the button will use auto layout constraint
-        siwaButton.translatesAutoresizingMaskIntoConstraints = false
-
-        // add the button to the view controller root view
-        self.view.addSubview(siwaButton)
-        view.backgroundColor = UIColor(hex: CIC.shared.M1)
-
-        // set constraint
-        NSLayoutConstraint.activate([
-            siwaButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50.0),
-            siwaButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50.0),
-            siwaButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70.0),
-            siwaButton.heightAnchor.constraint(equalToConstant: 50.0)
-        ])
-
-        // the function that will be executed when user tap the button
-        siwaButton.addTarget(self, action: #selector(appleSignInTapped), for: .touchUpInside)
+        DispatchQueue.main.async {
+            // Do any additional setup after loading the view.
+            
+            let siwaButton = ASAuthorizationAppleIDButton()
+            
+            // set this so the button will use auto layout constraint
+            siwaButton.translatesAutoresizingMaskIntoConstraints = false
+            
+            // add the button to the view controller root view
+            self.view.addSubview(siwaButton)
+            self.view.backgroundColor = UIColor(hex: CIC.shared.M1)
+            
+            // set constraint
+            NSLayoutConstraint.activate([
+                siwaButton.leadingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 50.0
+                ),
+                siwaButton.trailingAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -50.0
+                ),
+                siwaButton.bottomAnchor.constraint(
+                    equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
+                    constant: -70.0
+                ),
+                siwaButton.heightAnchor.constraint(
+                    equalToConstant: 50.0
+                )
+            ])
+            // the function that will be executed when user tap the button
+            siwaButton.addTarget(self, action: #selector(self.appleSignInTapped), for: .touchUpInside)
+        }
     }
 
     // this is the function that will be executed when user tap the button
@@ -210,22 +226,8 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             // unique ID for each user, this uniqueID will always be returned
-            let userID = appleIDCredential.user
-            
-            // save it to user defaults
-            UserDefaults.standard.set(appleIDCredential.user, forKey: "userID")
-            UserDefaults.standard.set("defaultAvatar", forKey: "userAvatar")
-            
-            // UploadUserID to fireStore
-            db.collection("users").document("\(userID)").setData([
-                "userID" : "\(userID)"
-            ]) { err in
-                if let err = err {
-                    print("Error writing document: \(err)")
-                } else {
-                    print("UploadUserID to fireStore successfully.")
-                }
-            }
+            let userIDForAuth = appleIDCredential.user
+            UserDefaults.standard.set(userIDForAuth, forKey: "userIDForAuth")
 
             // optional, might be nil
             let email = appleIDCredential.email
@@ -275,6 +277,22 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             Task {
                 do {
                     let result = try await Auth.auth().signIn(with: credential)
+                    guard let userID = Auth.auth().currentUser?.uid else { return }
+                    print(userID)
+                    // save it to user defaults
+                    UserDefaults.standard.set(userID, forKey: "userID")
+                    UserDefaults.standard.set("defaultAvatar", forKey: "userAvatar")
+                    
+                    // UploadUserID to fireStore
+                    db.collection("users").document("\(userID)").setData([
+                        "userID": "\(userID)"
+                    ]) { err in
+                        if let err = err {
+                            print("Error writing document: \(err)")
+                        } else {
+                            print("UploadUserID to fireStore successfully.")
+                        }
+                    }
                     // store the data and get into main page
                     DispatchQueue.main.async {
                         let bsViewController = BSViewController()

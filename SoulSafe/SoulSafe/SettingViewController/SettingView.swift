@@ -30,7 +30,7 @@ class SettingView: UIView {
         settingViewBackBtn.setImage(UIImage(named: "icon-bigBack-toLeft"), for: .normal)
         settingViewBackBtn.addTarget(self, action: #selector(didPressSettingViewBackBtn), for: .touchUpInside)
         
-        avatarImgView.image = UIImage(named: "avatar-1")
+        avatarImgView.image = UIImage(named: "defaultAvatar")
         avatarImgView.contentMode = .scaleAspectFill
         avatarImgView.clipsToBounds = true
         
