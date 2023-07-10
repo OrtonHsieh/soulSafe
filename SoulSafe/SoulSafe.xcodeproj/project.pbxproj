@@ -698,8 +698,8 @@
 				INFOPLIST_FILE = SoulSafe/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to share to your friends even on the background mode, don't worry, you can close it any time in setting.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to share to your friends, don't worry, you can close it any time in setting.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -736,8 +736,8 @@
 				INFOPLIST_FILE = SoulSafe/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to share to your friends even on the background mode, don't worry, you can close it any time in setting.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to share to your friends, don't worry, you can close it any time in setting.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

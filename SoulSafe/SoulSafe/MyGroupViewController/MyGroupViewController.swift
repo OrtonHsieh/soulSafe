@@ -51,6 +51,7 @@ class GroupViewController: UIViewController {
         groupTableView.register(GroupTBCell.self, forCellReuseIdentifier: "GroupTBCell")
         groupTableView.backgroundColor = UIColor(hex: CIC.shared.M1)
         groupTableView.separatorStyle = .none
+        groupTableView.isScrollEnabled = false
         view.addSubview(groupTableView)
     }
     
