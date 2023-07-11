@@ -28,16 +28,6 @@ class SignInViewController: UIViewController {
                 switch credentialState {
                 case .authorized:
                     print("User remains logged in. Proceed to another view.")
-//                    // UploadUserID to fireStore
-//                    self.db.collection("users").document("\(userID)").setData([
-//                        "userID": "\(userID)"
-//                    ]) { err in
-//                        if let err = err {
-//                            print("Error writing document: \(err)")
-//                        } else {
-//                            print("UploadUserID to fireStore successfully.")
-//                        }
-//                    }
                     // Present BaseVC
                     DispatchQueue.main.async {
                         let bsViewController = BSViewController()

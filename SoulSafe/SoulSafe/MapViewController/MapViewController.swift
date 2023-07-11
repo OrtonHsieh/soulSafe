@@ -312,7 +312,8 @@ extension MapViewController: MKMapViewDelegate {
                 } else {
                     if let originalImage = UIImage(named: annotation.userAvatar) {
                         let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                        guard let friendAnnotationView = friendAnnotationView else { fatalError("Failed to produce friendAnnotationView.") }
+                        guard let friendAnnotationView = friendAnnotationView else {
+                            fatalError("Failed to produce friendAnnotationView.") }
                         UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
                             friendAnnotationView.image = resizedImage
                             friendAnnotationView.canShowCallout = true

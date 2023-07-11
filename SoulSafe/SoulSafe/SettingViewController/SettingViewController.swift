@@ -76,8 +76,6 @@ extension SettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("\(indexPath.row)")
         if indexPath.row == 0 {
-            print("隱私權政策")
-        } else if indexPath.row == 1 {
             DispatchQueue.main.async {
                 self.deleteUserAccount()
             }
@@ -89,7 +87,7 @@ extension SettingViewController: UITableViewDelegate {
 
 extension SettingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -98,7 +96,7 @@ extension SettingViewController: UITableViewDataSource {
             for: indexPath) as? SettingTableViewCell else {
             fatalError("Failed to produce reuseable cell for SettingTableViewCell.")
         }
-        let settingTableViewTitleArray = ["隱私權政策", "刪除帳號", "登出"]
+        let settingTableViewTitleArray = ["刪除帳號", "登出"]
         cell.settingOptionLabel.text = settingTableViewTitleArray[indexPath.row]
         cell.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 0)
