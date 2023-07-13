@@ -15,6 +15,7 @@ protocol MapViewDelegate: AnyObject {
 class MapView: UIView {
     lazy var map = MKMapView()
     lazy private var closeBtn = UIButton()
+    lazy private var compass = MKCompassButton(mapView: map)
     weak var delegate: MapViewDelegate?
     
     override init(frame: CGRect) {
@@ -28,13 +29,20 @@ class MapView: UIView {
     }
     
     func setupView() {
-        [map, closeBtn].forEach { addSubview($0) }
-        closeBtn.setImage(UIImage(named: "icon-close"), for: .normal)
+        [map, closeBtn, compass].forEach { addSubview($0) }
+        closeBtn.setImage(
+            UIImage(systemName: "xmark.circle"
+        )?.withConfiguration(
+            UIImage.SymbolConfiguration(pointSize: 36)
+        ), for: .normal)
         closeBtn.addTarget(self, action: #selector(didPressCloseBtnOfMapView), for: .touchUpInside)
+        closeBtn.tintColor = UIColor(hex: CIC.shared.F2)
+        
+        map.showsCompass = false
     }
     
     func setupConstraints() {
-        [map, closeBtn].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [map, closeBtn, compass].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             closeBtn.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -45,7 +53,10 @@ class MapView: UIView {
             map.topAnchor.constraint(equalTo: topAnchor),
             map.leadingAnchor.constraint(equalTo: leadingAnchor),
             map.trailingAnchor.constraint(equalTo: trailingAnchor),
-            map.bottomAnchor.constraint(equalTo: bottomAnchor)
+            map.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            compass.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            compass.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
         ])
     }
     

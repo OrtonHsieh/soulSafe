@@ -17,12 +17,30 @@ class CusDateFormatter {
     
     private init() {
         dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = "MM/dd HH:mm"
     }
     
     func formatDate(timeStamp: Timestamp) -> String {
         let date = timeStamp.dateValue()
         let formattedDate = dateFormatter.string(from: date)
         return formattedDate
+    }
+    
+    func calculateHoursPassed(from timeStamp: Timestamp) -> String {
+        let date = timeStamp.dateValue()
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: date, to: currentDate)
+        
+        if let hours = components.hour,
+           let min = components.minute {
+            if hours != 0 {
+                return "\(hours) 小時 \(min) 分鐘前更新   "
+            } else {
+                return "\(min) 分鐘前更新   "
+            }
+        } else {
+            return "無"
+        }
     }
 }

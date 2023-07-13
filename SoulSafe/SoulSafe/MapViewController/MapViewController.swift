@@ -130,11 +130,10 @@ class MapViewController: UIViewController {
         case .authorizedWhenInUse:
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
-            locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.showsBackgroundLocationIndicator = true
         case .denied:
             // Show alert instruction them how to turn on permissions
             // if user turn off location device wide, it call back denied
+            locationManager.requestAlwaysAuthorization()
             break
         case .notDetermined:
             locationManager.requestAlwaysAuthorization()
@@ -145,8 +144,6 @@ class MapViewController: UIViewController {
             // Do stuff here
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
-            locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.showsBackgroundLocationIndicator = true
         @unknown default:
             break
         }
@@ -260,7 +257,9 @@ class MapViewController: UIViewController {
                             userID: locationData["userID"] as? String ?? "",
                             userName: locationData["userName"] as? String ?? "",
                             userLocation: locationData["userLocation"] as? [String] ?? [],
-                            userAvatar: locationData["userAvatar"] as? String ?? "")
+                            userAvatar: locationData["userAvatar"] as? String ?? "",
+                            lastUpdate: locationData["lastUpdate"] as? Timestamp ?? Timestamp(date: Date())
+                        )
                         memberLocationFromSingleGroup.append(oneUserFromSingleGroupLocation)
                         // 將每個 groupID 裡面的成員位置存入 Dict，可以用 groupID 來取用該群組內成員的位置
                         self.groupLocations["\(self.selectedGroupIDInMapView)"] = memberLocationFromSingleGroup
@@ -284,8 +283,9 @@ class MapViewController: UIViewController {
                             groupID: singleGroupLocation[index].groupID,
                             userName: singleGroupLocation[index].userName,
                             userAvatar: singleGroupLocation[index].userAvatar,
-                            coordinate: coordinate)
-
+                            coordinate: coordinate,
+                            lastUpdate: singleGroupLocation[index].lastUpdate
+                        )
                         self.mapView.map.addAnnotation(annotation)
                         print("self.mapView.map.annotations.count: \(self.mapView.map.annotations.count)")
                     }
@@ -297,9 +297,27 @@ class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is FriendsAnnotation {
-            guard let annotation = annotation as? FriendsAnnotation else { fatalError("Failed") }
+            guard let annotation = annotation as? FriendsAnnotation else { fatalError("Failed to make annotation be FriendsAnnotation.") }
             // 這邊實作其他人的 annotationView
             var friendAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "FriendsAnnotationView")
+            guard let friendAnnotationView = friendAnnotationView else {
+                fatalError("Failed to produce friendAnnotationView.") }
+            let lastUpdateInString = CusDateFormatter.shared.calculateHoursPassed(from: annotation.lastUpdate)
+            let subviewTitle = UILabel()
+            subviewTitle.text = "\(lastUpdateInString)"
+            subviewTitle.font = UIFont.systemFont(ofSize: 14)
+            subviewTitle.textAlignment = .center
+            friendAnnotationView.addSubview(subviewTitle)
+            subviewTitle.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                subviewTitle.bottomAnchor.constraint(equalTo: friendAnnotationView.topAnchor, constant: -4),
+                subviewTitle.heightAnchor.constraint(equalToConstant: 24),
+                subviewTitle.centerXAnchor.constraint(equalTo: friendAnnotationView.centerXAnchor)
+            ])
+            subviewTitle.layer.cornerRadius = 4
+            subviewTitle.clipsToBounds = true
+            subviewTitle.textColor = UIColor(hex: CIC.shared.F1)
+            subviewTitle.backgroundColor = UIColor(hex: CIC.shared.M2)
         
             if friendAnnotationView == nil {
                 // 這邊不會觸發，以防萬一先留著
@@ -308,12 +326,10 @@ extension MapViewController: MKMapViewDelegate {
                 if annotation.userID == UserSetup.userID {
                     // Do nothing
                     print("block me")
-                    friendAnnotationView?.isHidden = true
+                    friendAnnotationView.isHidden = true
                 } else {
                     if let originalImage = UIImage(named: annotation.userAvatar) {
                         let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                        guard let friendAnnotationView = friendAnnotationView else {
-                            fatalError("Failed to produce friendAnnotationView.") }
                         UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
                             friendAnnotationView.image = resizedImage
                             friendAnnotationView.canShowCallout = true
@@ -321,7 +337,7 @@ extension MapViewController: MKMapViewDelegate {
                         print("friends")
                     } else {
                         // Provide a default image here
-                        friendAnnotationView?.image = UIImage(named: "DefaultImage")
+                        friendAnnotationView.image = UIImage(named: "DefaultImage")
                     }
                 }
             }
@@ -366,6 +382,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        Vibration.shared.lightV()
         // Check if the annotation is of the desired type, if necessary
         if let annotation = view.annotation {
             if selectedGroupIDInMapView.isEmpty {
@@ -378,13 +395,12 @@ extension MapViewController: MKMapViewDelegate {
             chatRoom.modalPresentationStyle = .fullScreen
             chatRoom.groupID = selectedGroupIDInMapView
             chatRoom.groupTitle = selectedGroupTitleInMapView
-            Vibration.shared.lightV()
             
             // Set any necessary properties or data on the chatRoom view controller
             // Present the view controller from the current view controller
             present(chatRoom, animated: true, completion: nil)
             
-            mapView.deselectAnnotation(annotation, animated: false)
+//            mapView.deselectAnnotation(annotation, animated: false)
         }
     }
 }
@@ -421,7 +437,8 @@ extension MapViewController: CLLocationManagerDelegate {
                     userID: UserSetup.userID,
                     userName: UserSetup.userName,
                     userLocation: userLocation,
-                    userAvatar: UserSetup.userImage).toDict
+                    userAvatar: UserSetup.userImage,
+                    lastUpdate: Timestamp(date: Date())).toDict
                 pathToGroupMemberLocation.setData(location, merge: true) { error in
                     if let error = error {
                         print(error)

@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct Location: Codable {
     var id: String
@@ -14,6 +16,7 @@ struct Location: Codable {
     var userName: String
     var userLocation: [String]
     var userAvatar: String
+    var lastUpdate: Timestamp
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -22,6 +25,7 @@ struct Location: Codable {
         case userName
         case userLocation
         case userAvatar
+        case lastUpdate
     }
     
     var toDict: [String: Any] {
@@ -31,7 +35,8 @@ struct Location: Codable {
             "userID": userID as Any,
             "userName": userName as Any,
             "userLocation": userLocation as Any,
-            "userAvatar": userAvatar as Any
+            "userAvatar": userAvatar as Any,
+            "lastUpdate": lastUpdate as Any
         ]
     }
 }
