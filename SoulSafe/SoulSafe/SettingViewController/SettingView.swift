@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 protocol SettingViewDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ view: SettingView)
@@ -47,8 +48,14 @@ class SettingView: UIView {
         settingViewBackBtn.imageView?.contentMode = .scaleAspectFit
         settingViewBackBtn.addTarget(self, action: #selector(didPressSettingViewBackBtn), for: .touchUpInside)
         
-        
-        avatarImgView.image = UIImage(named: "defaultAvatar")
+        guard let avatarImg = UserDefaults.standard.object(forKey: "userAvatar") as? String else { return }
+        if avatarImg != "defaultAvatar" {
+            if let imageUrl = URL(string: avatarImg) {
+                avatarImgView.kf.setImage(with: imageUrl)
+            }
+        } else {
+            avatarImgView.image = UIImage(named: "\(avatarImg)")
+        }
         avatarImgView.contentMode = .scaleAspectFill
         avatarImgView.clipsToBounds = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(didPressAvatarImgView))
