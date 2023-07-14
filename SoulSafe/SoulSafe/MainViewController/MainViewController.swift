@@ -62,6 +62,20 @@ class MainViewController: UIViewController {
         getGroupData()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        DispatchQueue.global(qos: .background).async {
+            self.captureSession?.stopRunning()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.global(qos: .background).async {
+            self.captureSession?.startRunning()
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
         cameraView?.buttonCorner.layer.cornerRadius = 50
         cameraView?.groupContainerView.layer.cornerRadius = 18

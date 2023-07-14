@@ -126,8 +126,6 @@ class ChatRoomViewController: UIViewController {
                 self.userIDs.append(userID)
                 self.userAvatars.append(userAvatar)
             }
-            print(self.chats)
-            print(self.userIDs)
             print(self.userAvatars)
             self.scrollToNewCell()
         }

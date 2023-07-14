@@ -700,6 +700,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "此應用程式需要訪問您的相簿以選擇大頭貼";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -738,6 +739,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "是否啟用相機拍照功能";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "將取用您的位置顯示於地圖上分享給群組內的朋友，您可以隨時於設定關閉位置分享";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "此應用程式需要訪問您的相簿以選擇大頭貼";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

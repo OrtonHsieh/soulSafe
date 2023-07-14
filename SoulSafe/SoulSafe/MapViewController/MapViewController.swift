@@ -134,7 +134,6 @@ class MapViewController: UIViewController {
             // Show alert instruction them how to turn on permissions
             // if user turn off location device wide, it call back denied
             locationManager.requestAlwaysAuthorization()
-            break
         case .notDetermined:
             locationManager.requestAlwaysAuthorization()
         case .restricted:
@@ -241,104 +240,115 @@ class MapViewController: UIViewController {
             self.mapView.map.removeAnnotations(annotations)
         }, completion: nil)
         
-            let pathToGroupLocationCollection = db.collection("groups").document(selectedGroupIDInMapView).collection("locations")
-            pathToGroupLocationCollection.getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                } else {
-                    guard let snapshot = snapshot else { return }
-                    print("groupID \(self.selectedGroupIDInMapView)")
-                    var memberLocationFromSingleGroup: [Location] = []
-                    for document in snapshot.documents {
-                        let locationData = document.data()
-                        let oneUserFromSingleGroupLocation = Location(
-                            id: locationData["id"] as? String ?? "",
-                            groupID: locationData["groupID"] as? String ?? "",
-                            userID: locationData["userID"] as? String ?? "",
-                            userName: locationData["userName"] as? String ?? "",
-                            userLocation: locationData["userLocation"] as? [String] ?? [],
-                            userAvatar: locationData["userAvatar"] as? String ?? "",
-                            lastUpdate: locationData["lastUpdate"] as? Timestamp ?? Timestamp(date: Date())
-                        )
-                        memberLocationFromSingleGroup.append(oneUserFromSingleGroupLocation)
-                        // 將每個 groupID 裡面的成員位置存入 Dict，可以用 groupID 來取用該群組內成員的位置
-                        self.groupLocations["\(self.selectedGroupIDInMapView)"] = memberLocationFromSingleGroup
-                    }
-                    print("groupLocations: \(self.groupLocations)")
+        let pathToGroupLocationCollection = db.collection("groups").document(selectedGroupIDInMapView).collection("locations")
+        pathToGroupLocationCollection.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                guard let snapshot = snapshot else { return }
+                print("groupID \(self.selectedGroupIDInMapView)")
+                var memberLocationFromSingleGroup: [Location] = []
+                for document in snapshot.documents {
+                    let locationData = document.data()
+                    let oneUserFromSingleGroupLocation = Location(
+                        id: locationData["id"] as? String ?? "",
+                        groupID: locationData["groupID"] as? String ?? "",
+                        userID: locationData["userID"] as? String ?? "",
+                        userName: locationData["userName"] as? String ?? "",
+                        userLocation: locationData["userLocation"] as? [String] ?? [],
+                        // 這邊會拿到 URL
+                        userAvatar: locationData["userAvatar"] as? String ?? "",
+                        lastUpdate: locationData["lastUpdate"] as? Timestamp ?? Timestamp(date: Date())
+                    )
+                    memberLocationFromSingleGroup.append(oneUserFromSingleGroupLocation)
+                    // 將每個 groupID 裡面的成員位置存入 Dict，可以用 groupID 來取用該群組內成員的位置
+                    self.groupLocations["\(self.selectedGroupIDInMapView)"] = memberLocationFromSingleGroup
+                }
+                print("groupLocations: \(self.groupLocations)")
+                
+                guard let maxIndex = self.groupLocations["\(self.selectedGroupIDInMapView)"]?.count else { return }
+                
+                for index in 0..<maxIndex {
+                    guard let singleGroupLocation = self.groupLocations["\(self.selectedGroupIDInMapView)"] else { return }
+                    self.singleGroupLocation = singleGroupLocation
+                    let userLocationInString = singleGroupLocation[index].userLocation
                     
-                    guard let maxIndex = self.groupLocations["\(self.selectedGroupIDInMapView)"]?.count else { return }
+                    guard let latitude = Double(userLocationInString[0]) else { return }
+                    guard let longitude = Double(userLocationInString[1]) else { return }
+                    let location = CLLocation(latitude: latitude, longitude: longitude)
+                    let coordinate = location.coordinate
                     
-                    for index in 0..<maxIndex {
-                        guard let singleGroupLocation = self.groupLocations["\(self.selectedGroupIDInMapView)"] else { return }
-                        self.singleGroupLocation = singleGroupLocation
-                        let userLocationInString = singleGroupLocation[index].userLocation
-
-                        guard let latitude = Double(userLocationInString[0]) else { return }
-                        guard let longitude = Double(userLocationInString[1]) else { return }
-                        let location = CLLocation(latitude: latitude, longitude: longitude)
-                        let coordinate = location.coordinate
-
-                        let annotation = FriendsAnnotation(
-                            userID: singleGroupLocation[index].userID,
-                            groupID: singleGroupLocation[index].groupID,
-                            userName: singleGroupLocation[index].userName,
-                            userAvatar: singleGroupLocation[index].userAvatar,
-                            coordinate: coordinate,
-                            lastUpdate: singleGroupLocation[index].lastUpdate
-                        )
-                        self.mapView.map.addAnnotation(annotation)
-                        print("self.mapView.map.annotations.count: \(self.mapView.map.annotations.count)")
-                    }
+                    let annotation = FriendsAnnotation(
+                        userID: singleGroupLocation[index].userID,
+                        groupID: singleGroupLocation[index].groupID,
+                        userName: singleGroupLocation[index].userName,
+                        userAvatar: singleGroupLocation[index].userAvatar,
+                        coordinate: coordinate,
+                        lastUpdate: singleGroupLocation[index].lastUpdate
+                    )
+                    self.mapView.map.addAnnotation(annotation)
+                    print("self.mapView.map.annotations.count: \(self.mapView.map.annotations.count)")
                 }
             }
+        }
+    }
+    
+    private func resetAnnotationView(_ annotationView: MKAnnotationView) {
+        // Remove all subviews from the annotation view
+        for subview in annotationView.subviews {
+            subview.removeFromSuperview()
+        }
     }
 }
 
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is FriendsAnnotation {
-            guard let annotation = annotation as? FriendsAnnotation else { fatalError("Failed to make annotation be FriendsAnnotation.") }
+            guard let annotation = annotation as? FriendsAnnotation else { fatalError("Failed to make annotation.") }
             // 這邊實作其他人的 annotationView
-            var friendAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "FriendsAnnotationView")
+            let friendAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "FriendsAnnotationView")
             guard let friendAnnotationView = friendAnnotationView else {
                 fatalError("Failed to produce friendAnnotationView.") }
-            let lastUpdateInString = CusDateFormatter.shared.calculateHoursPassed(from: annotation.lastUpdate)
-            let subviewTitle = UILabel()
-            subviewTitle.text = "\(lastUpdateInString)"
-            subviewTitle.font = UIFont.systemFont(ofSize: 14)
-            subviewTitle.textAlignment = .center
-            friendAnnotationView.addSubview(subviewTitle)
-            subviewTitle.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                subviewTitle.bottomAnchor.constraint(equalTo: friendAnnotationView.topAnchor, constant: -4),
-                subviewTitle.heightAnchor.constraint(equalToConstant: 24),
-                subviewTitle.centerXAnchor.constraint(equalTo: friendAnnotationView.centerXAnchor)
-            ])
-            subviewTitle.layer.cornerRadius = 4
-            subviewTitle.clipsToBounds = true
-            subviewTitle.textColor = UIColor(hex: CIC.shared.F1)
-            subviewTitle.backgroundColor = UIColor(hex: CIC.shared.M2)
-        
-            if friendAnnotationView == nil {
-                // 這邊不會觸發，以防萬一先留著
-                print("我進來了")
+            // 先將原本 Cell 的衣服脫乾淨
+            resetAnnotationView(friendAnnotationView)
+            
+            func setupUpdateTime() {
+                let lastUpdateInString = CusDateFormatter.shared.calculateHoursPassed(from: annotation.lastUpdate)
+                let subviewTitle = UILabel()
+                subviewTitle.text = "\(lastUpdateInString)"
+                subviewTitle.font = UIFont.systemFont(ofSize: 14)
+                subviewTitle.textAlignment = .center
+                friendAnnotationView.addSubview(subviewTitle)
+                subviewTitle.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    subviewTitle.bottomAnchor.constraint(equalTo: friendAnnotationView.topAnchor, constant: -4),
+                    subviewTitle.heightAnchor.constraint(equalToConstant: 24),
+                    subviewTitle.centerXAnchor.constraint(equalTo: friendAnnotationView.centerXAnchor)
+                ])
+                subviewTitle.layer.cornerRadius = 4
+                subviewTitle.clipsToBounds = true
+                subviewTitle.textColor = UIColor(hex: CIC.shared.F1)
+                subviewTitle.backgroundColor = UIColor(hex: CIC.shared.M2)
+            }
+            
+            if annotation.userID == UserSetup.userID {
+                // Do nothing
+                print("block me")
+                friendAnnotationView.isHidden = true
             } else {
-                if annotation.userID == UserSetup.userID {
-                    // Do nothing
-                    print("block me")
-                    friendAnnotationView.isHidden = true
+                // 這邊 userAvatar 還是 URL 要用 kf 轉成圖片
+                if let originalImage = UIImage(named: annotation.userAvatar) {
+                    let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
+                    UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
+                        friendAnnotationView.image = resizedImage
+                        friendAnnotationView.canShowCallout = true
+                        setupUpdateTime()
+                    }, completion: nil)
+                    print("friends")
                 } else {
-                    if let originalImage = UIImage(named: annotation.userAvatar) {
-                        let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                        UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
-                            friendAnnotationView.image = resizedImage
-                            friendAnnotationView.canShowCallout = true
-                        }, completion: nil)
-                        print("friends")
-                    } else {
-                        // Provide a default image here
-                        friendAnnotationView.image = UIImage(named: "DefaultImage")
-                    }
+                    // Provide a default image here
+                    setupUpdateTime()
+                    friendAnnotationView.image = UIImage(named: "DefaultImage")
                 }
             }
             return friendAnnotationView

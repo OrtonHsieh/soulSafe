@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseStorage
 
 struct UploadImg: Codable {
     var image: String

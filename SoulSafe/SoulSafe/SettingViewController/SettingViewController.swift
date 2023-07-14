@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseStorage
 
 protocol SettingViewControllerDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ viewController: SettingViewController)
@@ -29,7 +30,6 @@ class SettingViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         settingView.avatarImgView.applyCircularMask()
-        settingView.avatarImgView = Blur.shared.setImgViewShadow(settingView.avatarImgView)
     }
     
     func setupView() {
@@ -70,6 +70,20 @@ class SettingViewController: UIViewController {
             settingTableView.heightAnchor.constraint(equalToConstant: 170)
         ])
     }
+    
+    func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
+        if let data = image.jpegData(compressionQuality: 0.2) {
+            fileReference.putData(data, metadata: nil) { result in
+                switch result {
+                case .success:
+                    fileReference.downloadURL(completion: completion)
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }
 
 extension SettingViewController: UITableViewDelegate {
@@ -107,6 +121,11 @@ extension SettingViewController: UITableViewDataSource {
 }
 
 extension SettingViewController: SettingViewDelegate {
+    func presentImagePicker(_ view: SettingView) {
+        Vibration.shared.lightV()
+        chooseImageAlert()
+    }
+    
     func didPressSettingViewBackBtn(_ view: SettingView) {
         Vibration.shared.lightV()
         delegate?.didPressSettingViewBackBtn(self)
@@ -116,4 +135,38 @@ extension SettingViewController: SettingViewDelegate {
         Vibration.shared.lightV()
         commingSoonAlert()
     }
+}
+
+extension SettingViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[.originalImage] as? UIImage
+        guard let image = image else { return }
+        // 拿 image 上傳到 firebaseStorage
+        uploadPhoto(image: image) { result in
+            switch result {
+            case .success(let url):
+                print(url)
+                // 拿到 url 後上傳到 fireStore 跟存到 UserDefault
+                UserDefaults.standard.set("\(url)", forKey: "userAvatar")
+                let storeAvatarPath = self.db.collection("users").document("\(UserSetup.userID)")
+                storeAvatarPath.setData(["userAvatar" : "\(url)"]) { err in
+                    if let err = err {
+                        print("Failed to upload img: \(err)")
+                    } else {
+                        print("Upload userAvatar to user path successfully.")
+                        picker.dismiss(animated: true) {
+                            DispatchQueue.main.async {
+                                self.settingView.avatarImgView.kf.setImage(with: url)
+                            }
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+}
+
+extension SettingViewController: UINavigationControllerDelegate {
 }

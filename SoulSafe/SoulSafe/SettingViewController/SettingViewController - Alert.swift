@@ -92,4 +92,32 @@ extension SettingViewController {
         // 例如：
         present(alertController, animated: true, completion: nil)
     }
+    
+    func chooseImageAlert() {
+        let alert = UIAlertController(title: "選擇照片來源", message: nil, preferredStyle: .actionSheet)
+        
+        let dismissAlert = UIAlertAction(title: "關閉", style: .cancel) { _ in
+            alert.dismiss(animated: true)
+        }
+        
+        let galleryAction = UIAlertAction(title: "從相簿選擇", style: .default) { _ in
+            let picController = UIImagePickerController()
+            picController.sourceType = .photoLibrary
+            picController.delegate = self
+            self.present(picController, animated: true, completion: nil)
+        }
+        
+        let cameraAction = UIAlertAction(title: "開啟相機", style: .default) { _ in
+            let picController = UIImagePickerController()
+            picController.sourceType = .camera
+            picController.delegate = self
+            self.present(picController, animated: true, completion: nil)
+        }
+        
+        alert.addAction(dismissAlert)
+        alert.addAction(galleryAction)
+        alert.addAction(cameraAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
 }

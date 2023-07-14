@@ -68,6 +68,7 @@ class BSViewController: UIViewController {
         // 這邊要將資料從 FireBase 拿回來存
         UserSetup.userID = UserDefaults.standard.string(forKey: "userID") ?? "尚未登入"
         UserSetup.userName = "尚未設定名稱"
+        // 這邊要打 API 去 fireStore 拿最新的大頭貼存到 UserDefaults
         UserSetup.userImage = UserDefaults.standard.string(forKey: "userAvatar") ?? "defaultAvatar"
     }
     

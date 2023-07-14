@@ -10,7 +10,6 @@ import UIKit
 class ChatRoomTableViewCellMine: UITableViewCell {
     lazy var msgLabel = UILabel()
     lazy var msgView = UIView()
-//    lazy var leadingCons: CGFloat = 44
     lazy var trailingCons: CGFloat = 0
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -46,19 +45,4 @@ class ChatRoomTableViewCellMine: UITableViewCell {
             msgLabel.leadingAnchor.constraint(equalTo: msgView.leadingAnchor, constant: 8)
         ])
     }
-    
-//    func createParagraphStyle(withInsets insets: UIEdgeInsets) -> NSParagraphStyle {
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.alignment = .right
-//        paragraphStyle.lineBreakMode = .byWordWrapping
-//        paragraphStyle.lineSpacing = 0
-//        paragraphStyle.paragraphSpacing = 0
-//        paragraphStyle.headIndent = insets.left
-//        paragraphStyle.tailIndent = -insets.right
-//        paragraphStyle.firstLineHeadIndent = insets.left
-//        paragraphStyle.paragraphSpacingBefore = 0
-//        paragraphStyle.maximumLineHeight = msgLabel.font.lineHeight
-//        paragraphStyle.minimumLineHeight = msgLabel.font.lineHeight
-//        return paragraphStyle
-//    }
 }

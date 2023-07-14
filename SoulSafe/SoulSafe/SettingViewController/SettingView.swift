@@ -10,10 +10,12 @@ import UIKit
 protocol SettingViewDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ view: SettingView)
     func didPressSettingViewEditBtn(_ view: SettingView)
+    func presentImagePicker(_ view: SettingView)
 }
 
 class SettingView: UIView {
     weak var delegate: SettingViewDelegate?
+    lazy var avatarImgViewContainer = UIView()
     lazy var avatarImgView = UIImageView()
     private lazy var userNameLabel = UILabel()
     lazy var generalLabel = UILabel()
@@ -31,7 +33,8 @@ class SettingView: UIView {
     }
     
     private func setupView() {
-        [avatarImgView, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn].forEach { addSubview($0) }
+        [avatarImgViewContainer, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn].forEach { addSubview($0) }
+        avatarImgViewContainer.addSubview(avatarImgView)
         
         settingViewBackBtn.setImage(UIImage(named: "icon-bigBack-toLeft"), for: .normal)
         let symbolSize: CGFloat = 28
@@ -44,9 +47,16 @@ class SettingView: UIView {
         settingViewBackBtn.imageView?.contentMode = .scaleAspectFit
         settingViewBackBtn.addTarget(self, action: #selector(didPressSettingViewBackBtn), for: .touchUpInside)
         
+        
         avatarImgView.image = UIImage(named: "defaultAvatar")
         avatarImgView.contentMode = .scaleAspectFill
         avatarImgView.clipsToBounds = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didPressAvatarImgView))
+        avatarImgView.addGestureRecognizer(tap)
+        avatarImgView.isUserInteractionEnabled = true
+        avatarImgView.layer.cornerRadius = 54
+        
+        avatarImgViewContainer = Blur.shared.setViewShadow(avatarImgViewContainer)
         
         userNameLabel.text = "編輯我的名稱"
         userNameLabel.font = UIFont.systemFont(ofSize: 22, weight: .regular)
@@ -62,7 +72,7 @@ class SettingView: UIView {
     }
     
     private func setupConstraints() {
-        [avatarImgView, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn].forEach {
+        [avatarImgView, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn, avatarImgViewContainer].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -74,6 +84,11 @@ class SettingView: UIView {
             
             settingViewEditBtn.centerYAnchor.constraint(equalTo: settingViewBackBtn.centerYAnchor),
             settingViewEditBtn.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            avatarImgViewContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
+            avatarImgViewContainer.widthAnchor.constraint(equalToConstant: 108),
+            avatarImgViewContainer.heightAnchor.constraint(equalToConstant: 108),
+            avatarImgViewContainer.topAnchor.constraint(equalTo: topAnchor, constant: 56),
             
             avatarImgView.centerXAnchor.constraint(equalTo: centerXAnchor),
             avatarImgView.widthAnchor.constraint(equalToConstant: 108),
@@ -94,5 +109,9 @@ class SettingView: UIView {
     
     @objc func didPressSettingViewEditBtn() {
         delegate?.didPressSettingViewEditBtn(self)
+    }
+    
+    @objc func didPressAvatarImgView() {
+        delegate?.presentImagePicker(self)
     }
 }
