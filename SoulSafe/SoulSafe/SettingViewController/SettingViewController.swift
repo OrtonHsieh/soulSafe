@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseStorage
+import CropViewController
 
 protocol SettingViewControllerDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ viewController: SettingViewController)
@@ -73,7 +74,7 @@ class SettingViewController: UIViewController {
     
     func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        if let data = image.jpegData(compressionQuality: 0.2) {
+        if let data = image.jpegData(compressionQuality: 0.1) {
             fileReference.putData(data, metadata: nil) { result in
                 switch result {
                 case .success:
@@ -83,6 +84,13 @@ class SettingViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func presentCropViewController(_ img: UIImage) {
+        let image = img
+        let cropViewController = CropViewController(croppingStyle: .circular, image: image)
+        cropViewController.delegate = self
+        self.present(cropViewController, animated: true, completion: nil)
     }
 }
 
@@ -138,23 +146,34 @@ extension SettingViewController: SettingViewDelegate {
 }
 
 extension SettingViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         let image = info[.originalImage] as? UIImage
         guard let image = image else { return }
-        // 拿 image 上傳到 firebaseStorage
+        picker.dismiss(animated: true)
+        // 裁切成圓形
+        presentCropViewController(image)
+    }
+}
+
+extension SettingViewController: UINavigationControllerDelegate {
+}
+
+extension SettingViewController: CropViewControllerDelegate {
+    func cropViewController(_ cropViewController: CropViewController, didCropToCircularImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         uploadPhoto(image: image) { result in
             switch result {
             case .success(let url):
                 print(url)
                 // 拿到 url 後上傳到 fireStore 跟存到 UserDefault
                 UserDefaults.standard.set("\(url)", forKey: "userAvatar")
+                let imggg = UserDefaults.standard.object(forKey: "userAvatar")
                 let storeAvatarPath = self.db.collection("users").document("\(UserSetup.userID)")
-                storeAvatarPath.setData(["userAvatar" : "\(url)"]) { err in
+                storeAvatarPath.setData(["userAvatar": "\(url)"]) { err in
                     if let err = err {
                         print("Failed to upload img: \(err)")
                     } else {
                         print("Upload userAvatar to user path successfully.")
-                        picker.dismiss(animated: true) {
+                        cropViewController.dismiss(animated: true) {
                             DispatchQueue.main.async {
                                 self.settingView.avatarImgView.kf.setImage(with: url)
                             }
@@ -166,7 +185,4 @@ extension SettingViewController: UIImagePickerControllerDelegate {
             }
         }
     }
-}
-
-extension SettingViewController: UINavigationControllerDelegate {
 }

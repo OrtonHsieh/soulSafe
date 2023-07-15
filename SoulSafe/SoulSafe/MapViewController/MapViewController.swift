@@ -9,6 +9,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import FirebaseFirestore
+import Kingfisher
 
 class MapViewController: UIViewController {
     lazy var mapCollectionView = UICollectionView()
@@ -26,6 +27,7 @@ class MapViewController: UIViewController {
     }
     // groupIDs 與 groupTitles 的數量要始終一起變動
     lazy var groupIDs: [String] = []
+    
     lazy var isInitialized = false
     lazy var mapView = MapView()
     private lazy var locationManager = CLLocationManager()
@@ -70,6 +72,13 @@ class MapViewController: UIViewController {
             name: NSNotification.Name("AnnotationCoordinateUpdated"),
             object: nil
         )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: NSNotification.Name("AnnotationCoordinateUpdated"),
+            object: nil)
     }
     
     private func setupView() {
@@ -227,7 +236,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    func getAnnotationLocations() {
+    private func getAnnotationLocations() {
         // 這邊去抓資料
         var annotations: [MKAnnotation] = []
         for annotation in mapView.map.annotations {
@@ -337,6 +346,7 @@ extension MapViewController: MKMapViewDelegate {
                 friendAnnotationView.isHidden = true
             } else {
                 // 這邊 userAvatar 還是 URL 要用 kf 轉成圖片
+                
                 if let originalImage = UIImage(named: annotation.userAvatar) {
                     let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
                     UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
@@ -371,17 +381,37 @@ extension MapViewController: MKMapViewDelegate {
             // Set image
             switch annotation.title {
             case "Pokemon Here":
-                let image: UIImage = {
-                    if let originalImage = UIImage(named: "\(UserSetup.userImage)") {
-                        let scaledImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                        return scaledImage
-                    } else {
-                        // Provide a default image here
-                        return UIImage(named: "DefaultImage") ?? UIImage()
+                guard let avatarImg = UserDefaults.standard.object(forKey: "userAvatar") as? String else {
+                    fatalError("No such img in UserDefaults of which the key is userAvatar.")
+                }
+                if avatarImg != "defaultAvatar" {
+                    if let imageUrl = URL(string: avatarImg) {
+                        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
+                            switch result {
+                            case .success(let value):
+                                let img = value.image.resizedImage(with: CGSize(width: 50, height: 50))
+                                annotationView?.image = img
+                                annotationView?.layer.cornerRadius = 25
+                                annotationView?.clipsToBounds = true
+                                annotationView?.layer.masksToBounds = true
+                                annotationView?.contentMode = .scaleAspectFill
+                            case .failure(let error):
+                                print("Failed to retrieve image: \(error)")
+                            }
+                        }
                     }
-                }()
-                annotationView?.image = image
-                annotationView?.canShowCallout = true
+                } else {
+                    let image: UIImage = {
+                        if let originalImage = UIImage(named: "\(UserSetup.userImage)") {
+                            let scaledImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
+                            return scaledImage
+                        } else {
+                            // Provide a default image here
+                            return UIImage(named: "DefaultImage") ?? UIImage()
+                        }
+                    }()
+                    annotationView?.image = image
+                }
                 annotationView?.isHidden = false
             default:
                 break
@@ -410,7 +440,7 @@ extension MapViewController: MKMapViewDelegate {
             // Present the view controller from the current view controller
             present(chatRoom, animated: true, completion: nil)
             
-//            mapView.deselectAnnotation(annotation, animated: false)
+            mapView.deselectAnnotation(annotation, animated: false)
         }
     }
 }
@@ -419,6 +449,7 @@ extension MapViewController: MapViewDelegate {
     func didPressCloseBtnOfMapView(_ view: MapView) {
         Vibration.shared.lightV()
         dismiss(animated: true)
+        
     }
 }
 

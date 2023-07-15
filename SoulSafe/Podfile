@@ -13,5 +13,6 @@ target 'SoulSafe' do
   pod 'FirebaseStorage', '9.0'
   pod 'Kingfisher', '~> 7.0'
   pod 'FirebaseFirestoreSwift', '> 7.0-beta'
+  pod 'CropViewController'
 
 end
