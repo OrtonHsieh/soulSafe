@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseCore
 import FirebaseFirestore
+import Kingfisher
 
 class PostViewController: UIViewController {
     lazy var imageView = UIImageView()
@@ -233,7 +234,16 @@ extension PostViewController: UITableViewDataSource {
             
             let userAvatar = userAvatarFromGroupsCollectionPath[indexPath.row]
             
-            cell.avatarView.image = UIImage(named: "\(userAvatar)")
+            if userAvatar != "defaultAvatar" {
+                let url = URL(string: "\(userAvatar)")
+                cell.avatarView.kf.setImage(with: url)
+            } else {
+                cell.avatarView.image = UIImage(named: "\(userAvatar)")
+                cell.avatarView.contentMode = .scaleAspectFill
+                cell.avatarView.clipsToBounds = true
+                cell.avatarView.layer.masksToBounds = true
+                cell.avatarView.layer.cornerRadius = 10
+            }
             return cell
         }
     }
@@ -251,6 +261,7 @@ extension PostViewController: TextAreaViewDelegate {
             let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
             let postPathForGroup = self.db.collection("groups").document("\(selectedGroupInPostVC)").collection("posts")
             let postCommentPathForGroup = postPathForGroup.document("\(currentPostID)").collection("comments").document("\(postCommentPath.documentID)")
+            let avatar = UserDefaults.standard.object(forKey: "userAvatar") ?? "defaultAvatar"
             
             // 將留言上傳到 user 分類
             postCommentPath.setData([
@@ -258,7 +269,7 @@ extension PostViewController: TextAreaViewDelegate {
                 "commentID": "\(postCommentPath.documentID)",
                 "timeStamp": Timestamp(date: Date()),
                 "comment": comment,
-                "userAvatar": "\(UserSetup.userImage)"
+                "userAvatar": "\(avatar)"
             ])
             
             // 將留言上傳到 Groups 分類
@@ -267,7 +278,7 @@ extension PostViewController: TextAreaViewDelegate {
                 "commentID": "\(postCommentPath.documentID)",
                 "timeStamp": Timestamp(date: Date()),
                 "comment": comment,
-                "userAvatar": "\(UserSetup.userImage)"
+                "userAvatar": "\(avatar)"
             ]) { err in
                 if let err = err {
                     print("Error writing document: \(err)")
