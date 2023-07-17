@@ -23,6 +23,11 @@ class PostTBCellCmt: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        avatarView.image = UIImage(named: "defaultAvatar")
+    }
+    
     func setupView() {
         basicList.forEach { addSubview($0) }
         commentLabel.numberOfLines = 0

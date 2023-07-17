@@ -23,6 +23,7 @@ class BSViewController: UIViewController {
     var groupIDs: [String] = [] {
         didSet {
             memoriesVC.groupIDs = groupIDs
+            settingVC.groupIDs = groupIDs
         }
     }
     let db = Firestore.firestore()

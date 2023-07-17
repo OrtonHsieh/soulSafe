@@ -18,6 +18,7 @@ class SettingViewController: UIViewController {
     weak var delegate: SettingViewControllerDelegate?
     let settingView = SettingView()
     let settingTableView = UITableView()
+    var groupIDs: [String] = []
     let db = Firestore.firestore()
     
     override func viewDidLoad() {
@@ -168,7 +169,10 @@ extension SettingViewController: CropViewControllerDelegate {
                 UserDefaults.standard.set("\(url)", forKey: "userAvatar")
                 let imggg = UserDefaults.standard.object(forKey: "userAvatar")
                 let storeAvatarPath = self.db.collection("users").document("\(UserSetup.userID)")
-                storeAvatarPath.setData(["userAvatar": "\(url)"]) { err in
+                storeAvatarPath.setData([
+                    "userAvatar": "\(url)",
+                    "userID": "\(UserDefaults.standard.object(forKey: "userID"))"
+                ]) { err in
                     if let err = err {
                         print("Failed to upload img: \(err)")
                     } else {
@@ -178,6 +182,16 @@ extension SettingViewController: CropViewControllerDelegate {
                                 self.settingView.avatarImgView.kf.setImage(with: url)
                             }
                         }
+                    }
+                }
+                
+                if !self.groupIDs.isEmpty {
+                    guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
+                    for groupID in self.groupIDs {
+                        let storeAvatarInGroupMemberListPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(userID)")
+                        storeAvatarInGroupMemberListPath.setData([
+                            "userAvatar" : "\(url)"
+                        ], merge: true)
                     }
                 }
             case .failure(let error):

@@ -15,31 +15,42 @@ class PostViewController: UIViewController {
     lazy var textAreaView = TextAreaView()
     lazy var postTableView = UITableView()
     let db = Firestore.firestore()
-    var currentPostID = String()
+    lazy var currentPostID = String()
     
-    var commentsFromGroupsCollectionPath: [String] = []
-    var timeStamps: [Timestamp] = []
-    var userAvatarFromGroupsCollectionPath: [String] = []
+    // userIDs 與 comments 會有相同排序，可以依據 userIDs 作為篩選順序去找對應留言的頭貼
+    lazy var commentsFromGroupsCollectionPath: [String] = []
+    lazy var timeStamps: [Timestamp] = []
+    lazy var userIDsFromGroupsCollectionPath: [String] = []
+//    var userAvatarFromGroupsCollectionPath: [String] = []
     
-    var selectedGroup = String()
-    var selectedGroupTitle = String()
+    lazy var selectedGroup = String()
+    lazy var selectedGroupTitle = String()
     
-    var selectedGroupInPostVC = String()
-    var selectedGroupTitleForPost = String()
+    lazy var selectedGroupInPostVC = String()
+    lazy var selectedGroupTitleForPost = String()
     lazy var commentsFromGroupPath: [String] = []
     
     // 以下為用來放置對應 postID 所分享的群組
-    var groupIDArray: [String] = []
-    var groupTitleArray: [String] = []
-    var ifGroupViewTextIsMyPost = true
+    lazy var groupIDArray: [String] = []
+    lazy var groupTitleArray: [String] = []
+    lazy var ifGroupViewTextIsMyPost = true
+    
+    // 存取目前被選擇群組內成員
+    lazy var memberIDsInSelectedGroup: [String] = []
+    lazy var memberAvatarsInSelectedGroup: [String] = []
+    lazy var memberAvatarsInSelectedGroupInOrder: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        memberIDsInSelectedGroup.removeAll()
+        memberAvatarsInSelectedGroup.removeAll()
+        memberAvatarsInSelectedGroupInOrder.removeAll()
+        userIDsFromGroupsCollectionPath.removeAll()
         setupTableView()
         setupInputView()
         setupTableViewConstraints()
         setupInputViewConstraints()
-        getPostComment()
+        getGroupMembers()
     }
     
     override func viewDidLayoutSubviews() {
@@ -87,6 +98,55 @@ class PostViewController: UIViewController {
         ])
     }
     
+    func getGroupMembers() {
+        func fetchData(_ path: CollectionReference) {
+            // 把之前的清掉防止疊加
+//            memberIDsInSelectedGroup.removeAll()
+//            memberAvatarsInSelectedGroup.removeAll()
+            path.getDocuments { snapshot, err in
+                if let err = err {
+                    print("Failed to get single group document: \(err)")
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    let documents = snapshot.documents
+                    for document in documents {
+                        let data = document.data()
+                        guard let memberIDInSelectedGroup = data["userID"] as? String else { return }
+                        guard let memberAvatarInSelectedGroup = data["userAvatar"] as? String else { return }
+                        self.memberIDsInSelectedGroup.append(memberIDInSelectedGroup)
+                        self.memberAvatarsInSelectedGroup.append(memberAvatarInSelectedGroup)
+                    }
+                    self.getPostComment()
+                }
+            }
+        }
+        
+        if !selectedGroup.isEmpty {
+            let groupMemberPath = db.collection("groups").document("\(selectedGroup)").collection("members")
+            fetchData(groupMemberPath)
+        } else {
+            let groupMemberPath = db.collection("groups").document("\(groupIDArray[0])").collection("members")
+            fetchData(groupMemberPath)
+        }
+    }
+    
+//    func getMemberAvatars() {
+//        self.memberAvatarsInSelectedGroup.removeAll()
+//        for memberID in memberIDsInSelectedGroup {
+//            let userPath = db.collection("users").document("\(memberID)")
+//            userPath.getDocument { snapshot, err in
+//                if let err = err {
+//                    print("Failed to get userDocument: \(err)")
+//                } else {
+//                    guard let snapshot = snapshot else { return }
+//                    guard let data = snapshot.data() else { return }
+//                    guard let userAvatar = data["userAvatar"] as? String else { return }
+//                    self.memberAvatarsInSelectedGroup.append(userAvatar)
+//                }
+//            }
+//        }
+//    }
+    
     func getPostComment() {
         var postPathInGroups: CollectionReference?
         
@@ -100,7 +160,7 @@ class PostViewController: UIViewController {
         
         guard let postPathInGroups = postPathInGroups else { return }
         let commentRef = postPathInGroups.document("\(currentPostID)").collection("comments").order(
-            by: "timeStamp", descending: true
+            by: "timeStamp"
         )
         commentRef.getDocuments {
             (querySnapshot, err) in
@@ -108,7 +168,6 @@ class PostViewController: UIViewController {
                 print("Error getting documents: \(err)")
             } else {
                 self.commentsFromGroupsCollectionPath.removeAll() // 確認中
-                self.userAvatarFromGroupsCollectionPath.removeAll()
                 self.timeStamps.removeAll()
                 var index = 0
                 guard let querySnapshot = querySnapshot else { return }
@@ -117,14 +176,15 @@ class PostViewController: UIViewController {
                     guard let comment = data["comment"] as? String else { return }
                     guard let timeStamp = data["timeStamp"] as? Timestamp else { return }
                     guard let userAvatar = data["userAvatar"] as? String else { return }
+                    guard let userID = data["userID"] as? String else { return }
                     
                     if index <= self.commentsFromGroupsCollectionPath.count - 1 {
                         self.commentsFromGroupsCollectionPath[index] = comment
-                        self.userAvatarFromGroupsCollectionPath[index] = userAvatar
+                        self.userIDsFromGroupsCollectionPath[index] = userID
                         self.timeStamps[index] = timeStamp
                     } else {
                         self.commentsFromGroupsCollectionPath.append(comment)
-                        self.userAvatarFromGroupsCollectionPath.append(userAvatar)
+                        self.userIDsFromGroupsCollectionPath.append(userID)
                         self.timeStamps.append(timeStamp)
                     }
                     index += 1
@@ -232,20 +292,47 @@ extension PostViewController: UITableViewDataSource {
             
             cell.commentLabel.text = commentsFromGroupsCollectionPath[indexPath.row]
             
-            let userAvatar = userAvatarFromGroupsCollectionPath[indexPath.row]
+//            let userAvatar = userAvatarFromGroupsCollectionPath[indexPath.row]
             
-            if userAvatar != "defaultAvatar" {
-                let url = URL(string: "\(userAvatar)")
-                cell.avatarView.kf.setImage(with: url)
+            cell.avatarView.contentMode = .scaleAspectFill
+            cell.avatarView.clipsToBounds = true
+            cell.avatarView.layer.masksToBounds = true
+            cell.avatarView.layer.cornerRadius = 10
+            
+            if !userIDsFromGroupsCollectionPath.isEmpty {
+                // 現在拿到了群組成員的頭貼連結，要有「」才能比對是否吻合，若吻合就將該大頭貼塞給這個留言
+//                memberAvatarsInSelectedGroupInOrder.removeAll()
+                // 如果留言的 id 數量大於群組成員的數量
+                memberAvatarsInSelectedGroupInOrder = getMemberAvatarsInSelectedGroup(
+                    from: self.memberIDsInSelectedGroup,
+                    memberAvatarsInSelectedGroup: self.memberAvatarsInSelectedGroup,
+                    userIDsFromGroupsCollectionPath: self.userIDsFromGroupsCollectionPath
+                )
+                let userAvatar = memberAvatarsInSelectedGroupInOrder[indexPath.row]
+                if userAvatar != "defaultAvatar" {
+                    let url = URL(string: "\(userAvatar)")
+                    cell.avatarView.kf.setImage(with: url)
+                } else {
+                    cell.avatarView.image = UIImage(named: "\(userAvatar)")
+                }
             } else {
-                cell.avatarView.image = UIImage(named: "\(userAvatar)")
-                cell.avatarView.contentMode = .scaleAspectFill
-                cell.avatarView.clipsToBounds = true
-                cell.avatarView.layer.masksToBounds = true
-                cell.avatarView.layer.cornerRadius = 10
+                cell.avatarView.image = UIImage(named: "defaultAvatar")
             }
+            
             return cell
         }
+    }
+    
+    func getMemberAvatarsInSelectedGroup(from memberIDsInSelectedGroup: [String], memberAvatarsInSelectedGroup: [String], userIDsFromGroupsCollectionPath: [String]) -> [String] {
+        var memberAvatarsInSelectedGroupInOrder: [String] = []
+
+        for element in userIDsFromGroupsCollectionPath {
+            if let matchingIndex = memberIDsInSelectedGroup.firstIndex(of: element) {
+                memberAvatarsInSelectedGroupInOrder.append(memberAvatarsInSelectedGroup[matchingIndex])
+            }
+        }
+
+        return memberAvatarsInSelectedGroupInOrder
     }
 }
 
@@ -255,8 +342,6 @@ extension PostViewController: TextAreaViewDelegate {
         
         if textAreaView.inputTextView.text.isEmpty == false {
             
-            //            if !selectedGroup.isEmpty {
-//            let postPath = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("posts")
             let postPath = self.db.collection("users").document("\(UserSetup.userID)").collection("posts")
             let postCommentPath = postPath.document("\(currentPostID)").collection("comments").document()
             let postPathForGroup = self.db.collection("groups").document("\(selectedGroupInPostVC)").collection("posts")

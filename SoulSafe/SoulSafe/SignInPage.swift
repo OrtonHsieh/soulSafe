@@ -275,7 +275,8 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                     
                     // UploadUserID to fireStore
                     db.collection("users").document("\(userID)").setData([
-                        "userID": "\(userID)"
+                        "userID": "\(userID)",
+                        "userAvatar": "defaultAvatar"
                     ]) { err in
                         if let err = err {
                             print("Error writing document: \(err)")

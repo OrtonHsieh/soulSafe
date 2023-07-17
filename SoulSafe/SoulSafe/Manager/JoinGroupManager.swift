@@ -76,7 +76,8 @@ class JoinGroupManager {
             
             didJoinGroupPath.setData([
                 "userID": "\(UserSetup.userID)",
-                "joinedTime": Timestamp(date: Date())
+                "joinedTime": Timestamp(date: Date()),
+                "userAvatar": "\(UserDefaults.standard.bool(forKey: "userAvatar"))"
             ])
             
             self.db.collection("groups").document("\(groupID)").updateData([
