@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseFirestore
 import IQKeyboardManagerSwift
+import Kingfisher
 
 class ChatRoomViewController: UIViewController {
     lazy var closeBtn = UIButton()
@@ -15,14 +16,17 @@ class ChatRoomViewController: UIViewController {
     lazy var textAreaView = ChatRoomView()
     lazy var headerAreaView = ChatRoomHeaderView()
     
-    var chats: [String] = []
-    var userIDs: [String] = []
+    lazy var chats: [String] = []
+    lazy var userIDs: [String] = []
     // 這邊現在是存 local 的圖片字串，等個人頁做好後要改成上傳圖片
-    var userAvatars: [String] = []
+    lazy var userAvatars: [String] = []
     
-    var groupID = String()
+    lazy var groupID = String()
+    lazy var groupMemberIDsInTargetGroup: [String] = []
+    lazy var groupMemberAvatarsInTargetGroup: [String] = []
+    lazy var groupMemberAvatarsInOrderInTargetGroup: [String] = []
     var listener: ListenerRegistration?
-    var groupTitle = String()
+    lazy var groupTitle = String()
     var keyboardHeightCons: NSLayoutConstraint?
     lazy var db = Firestore.firestore()
 
@@ -30,7 +34,7 @@ class ChatRoomViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: CIC.shared.M1)
         setupView()
-        getChats()
+        getGroupMember()
         setupConstraints()
         registerForKeyboardNotifications()
     }
@@ -97,6 +101,28 @@ class ChatRoomViewController: UIViewController {
             textAreaView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+    
+    func getGroupMember() {
+        groupMemberIDsInTargetGroup.removeAll()
+        groupMemberAvatarsInTargetGroup.removeAll()
+        let groupMemberInChatRoomPath = db.collection("groups").document("\(groupID)").collection("members")
+        groupMemberInChatRoomPath.getDocuments { snapshot, err in
+            if let err = err {
+                print("Failed to get group member of target chat room: \(err).")
+            } else {
+                guard let snapshot = snapshot else { return }
+                let documents = snapshot.documents
+                for document in documents {
+                    let data = document.data()
+                    guard let userID = data["userID"] as? String else { return }
+                    guard let userAvatar = data["userAvatar"] as? String else { return }
+                    self.groupMemberIDsInTargetGroup.append(userID)
+                    self.groupMemberAvatarsInTargetGroup.append(userAvatar)
+                }
+                self.getChats()
+            }
+        }
+    }
 
     func getChats() {
         let chatRoomPath = db.collection("groups").document("\(groupID)").collection("messages").order(by: "timeStamp")
@@ -126,9 +152,24 @@ class ChatRoomViewController: UIViewController {
                 self.userIDs.append(userID)
                 self.userAvatars.append(userAvatar)
             }
-            print(self.userAvatars)
+            self.groupMemberAvatarsInOrderInTargetGroup = self.getMemberAvatarsInSelectedGroup(
+                from: self.groupMemberIDsInTargetGroup,
+                memberAvatarsInSelectedGroup: self.groupMemberAvatarsInTargetGroup,
+                userIDsFromGroupsCollectionPath: self.userIDs
+            )
             self.scrollToNewCell()
         }
+    }
+    
+    func getMemberAvatarsInSelectedGroup(from memberIDsInSelectedGroup: [String], memberAvatarsInSelectedGroup: [String], userIDsFromGroupsCollectionPath: [String]) -> [String] {
+        var memberAvatarsInSelectedGroupInOrder: [String] = []
+
+        for element in userIDsFromGroupsCollectionPath {
+            if let matchingIndex = memberIDsInSelectedGroup.firstIndex(of: element) {
+                memberAvatarsInSelectedGroupInOrder.append(memberAvatarsInSelectedGroup[matchingIndex])
+            }
+        }
+        return memberAvatarsInSelectedGroupInOrder
     }
 
     func scrollToNewCell() {
@@ -191,9 +232,18 @@ extension ChatRoomViewController: UITableViewDataSource {
             }
             cell.msgLabel.text = chats[indexPath.row]
             cell.msgView.layer.cornerRadius = 8
-            cell.avatarView.image = UIImage(named: "\(userAvatars[indexPath.row])")
+            let avatar = groupMemberAvatarsInOrderInTargetGroup[indexPath.row]
+            if avatar == "defaultAvatar" {
+                cell.avatarView.image = UIImage(named: "\(avatar)")
+            } else {
+                let url = URL(string: "\(avatar)")
+                cell.avatarView.kf.setImage(with: url)
+            }
             cell.backgroundColor = UIColor(hex: CIC.shared.M1)
             cell.selectionStyle = .none
+            cell.avatarView.clipsToBounds = true
+            cell.avatarView.layer.masksToBounds = true
+            cell.avatarView.layer.cornerRadius = 10
             return cell
         }
     }
