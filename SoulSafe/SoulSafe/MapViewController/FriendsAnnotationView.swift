@@ -13,16 +13,22 @@ class FriendsAnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         configure()
+        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         configure()
+        setupView()
     }
     
     private func configure() {
         // 自定圖片
-        let image = UIImage(named: "icon-return")
+        let image = UIImage(named: "defaultAvatar")
         self.image = image
+    }
+    
+    private func setupView() {
+        frame = CGRect(x: 0, y: 0, width: 50, height: 50)
     }
 }

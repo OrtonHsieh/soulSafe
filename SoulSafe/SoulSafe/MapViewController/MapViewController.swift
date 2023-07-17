@@ -315,9 +315,12 @@ extension MapViewController: MKMapViewDelegate {
         if annotation is FriendsAnnotation {
             guard let annotation = annotation as? FriendsAnnotation else { fatalError("Failed to make annotation.") }
             // 這邊實作其他人的 annotationView
-            let friendAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "FriendsAnnotationView")
-            guard let friendAnnotationView = friendAnnotationView else {
-                fatalError("Failed to produce friendAnnotationView.") }
+            let friendAnnotationView = mapView.dequeueReusableAnnotationView(
+                withIdentifier: "FriendsAnnotationView"
+            ) as? FriendsAnnotationView ?? FriendsAnnotationView(
+                annotation: annotation,
+                reuseIdentifier: "FriendsAnnotationView"
+            )
             // 先將原本 Cell 的衣服脫乾淨
             resetAnnotationView(friendAnnotationView)
             
@@ -328,14 +331,14 @@ extension MapViewController: MKMapViewDelegate {
                 subviewTitle.font = UIFont.systemFont(ofSize: 14)
                 subviewTitle.textAlignment = .center
                 friendAnnotationView.addSubview(subviewTitle)
-                subviewTitle.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    subviewTitle.bottomAnchor.constraint(equalTo: friendAnnotationView.topAnchor, constant: -4),
-                    subviewTitle.heightAnchor.constraint(equalToConstant: 24),
-                    subviewTitle.centerXAnchor.constraint(equalTo: friendAnnotationView.centerXAnchor)
-                ])
+                if lastUpdateInString.contains("0 分鐘前更新") && lastUpdateInString.first == "0" {
+                    subviewTitle.frame = CGRect(x: -26, y: -30, width: 100, height: 20)
+                } else {
+                    subviewTitle.frame = CGRect(x: -56, y: -30, width: 160, height: 20)
+                }
                 subviewTitle.layer.cornerRadius = 4
                 subviewTitle.clipsToBounds = true
+                subviewTitle.layer.masksToBounds = true
                 subviewTitle.textColor = UIColor(hex: CIC.shared.F1)
                 subviewTitle.backgroundColor = UIColor(hex: CIC.shared.M2)
             }
@@ -349,16 +352,34 @@ extension MapViewController: MKMapViewDelegate {
                 
                 if let originalImage = UIImage(named: annotation.userAvatar) {
                     let resizedImage = originalImage.resizedImage(with: CGSize(width: 50, height: 50))
-                    UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
+//                    UIView.transition(with: friendAnnotationView, duration: 2, options: .curveEaseIn, animations: {
                         friendAnnotationView.image = resizedImage
-                        friendAnnotationView.canShowCallout = true
                         setupUpdateTime()
-                    }, completion: nil)
+//                    }, completion: nil)
                     print("friends")
                 } else {
-                    // Provide a default image here
-                    setupUpdateTime()
-                    friendAnnotationView.image = UIImage(named: "DefaultImage")
+                    // 有頭貼
+                    if let imageUrl = URL(string: annotation.userAvatar) {
+                        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
+                            switch result {
+                            case .success(let value):
+                                let img = value.image.resizedImage(with: CGSize(width: 50, height: 50))
+                                friendAnnotationView.backgroundColor = .clear
+                                friendAnnotationView.layer.backgroundColor = UIColor.clear.cgColor
+                                let imgView = UIImageView()
+                                imgView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+                                imgView.image = img
+                                imgView.layer.cornerRadius = 25
+                                imgView.clipsToBounds = true
+                                imgView.layer.masksToBounds = true
+                                imgView.contentMode = .scaleAspectFill
+                                friendAnnotationView.addSubview(imgView)
+                                setupUpdateTime()
+                            case .failure(let error):
+                                print("Failed to retrieve image: \(error)")
+                            }
+                        }
+                    }
                 }
             }
             return friendAnnotationView
@@ -467,6 +488,7 @@ extension MapViewController: CLLocationManagerDelegate {
         numberOfPostCounts += 1
         if numberOfPostCounts == 10 {
             // 將使用者名稱、ID、位置、頭貼上傳
+            guard let userAvatar = UserDefaults.standard.object(forKey: "userAvatar") else { return }
             for groupID in self.groupIDs {
                 let latitude = String(location.coordinate.latitude)
                 let longitude = String(location.coordinate.longitude)
@@ -478,7 +500,7 @@ extension MapViewController: CLLocationManagerDelegate {
                     userID: UserSetup.userID,
                     userName: UserSetup.userName,
                     userLocation: userLocation,
-                    userAvatar: UserSetup.userImage,
+                    userAvatar: "\(userAvatar)",
                     lastUpdate: Timestamp(date: Date())).toDict
                 pathToGroupMemberLocation.setData(location, merge: true) { error in
                     if let error = error {

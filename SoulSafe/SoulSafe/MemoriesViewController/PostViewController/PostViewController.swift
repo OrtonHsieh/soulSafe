@@ -130,23 +130,6 @@ class PostViewController: UIViewController {
         }
     }
     
-//    func getMemberAvatars() {
-//        self.memberAvatarsInSelectedGroup.removeAll()
-//        for memberID in memberIDsInSelectedGroup {
-//            let userPath = db.collection("users").document("\(memberID)")
-//            userPath.getDocument { snapshot, err in
-//                if let err = err {
-//                    print("Failed to get userDocument: \(err)")
-//                } else {
-//                    guard let snapshot = snapshot else { return }
-//                    guard let data = snapshot.data() else { return }
-//                    guard let userAvatar = data["userAvatar"] as? String else { return }
-//                    self.memberAvatarsInSelectedGroup.append(userAvatar)
-//                }
-//            }
-//        }
-//    }
-    
     func getPostComment() {
         var postPathInGroups: CollectionReference?
         
@@ -309,7 +292,7 @@ extension PostViewController: UITableViewDataSource {
                     userIDsFromGroupsCollectionPath: self.userIDsFromGroupsCollectionPath
                 )
                 let userAvatar = memberAvatarsInSelectedGroupInOrder[indexPath.row]
-                if userAvatar != "defaultAvatar" {
+                if userAvatar != "defaultAvatar" && userAvatar != "false" {
                     let url = URL(string: "\(userAvatar)")
                     cell.avatarView.kf.setImage(with: url)
                 } else {

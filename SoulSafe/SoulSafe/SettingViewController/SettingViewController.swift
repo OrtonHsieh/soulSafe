@@ -190,8 +190,9 @@ extension SettingViewController: CropViewControllerDelegate {
                     for groupID in self.groupIDs {
                         let storeAvatarInGroupMemberListPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(userID)")
                         storeAvatarInGroupMemberListPath.setData([
-                            "userAvatar" : "\(url)"
-                        ], merge: true)
+                            "userAvatar": "\(url)"
+                        ],
+                        merge: true)
                     }
                 }
             case .failure(let error):
