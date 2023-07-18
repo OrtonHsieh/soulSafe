@@ -76,6 +76,9 @@ extension SettingViewController {
         
         let myPostAction = UIAlertAction(title: "返回登入頁", style: .default) { _ in
             UserDefaults.standard.removeObject(forKey: "userIDForAuth")
+            UserDefaults.standard.removeObject(forKey: "userID")
+            UserDefaults.standard.removeObject(forKey: "userName")
+            UserDefaults.standard.removeObject(forKey: "userAvatar")
         }
         alertController.addAction(myPostAction)
         // 在這裡顯示 UIAlert

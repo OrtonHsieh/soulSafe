@@ -23,6 +23,8 @@
 		911092A62A57E993002C5928 /* SignInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A52A57E993002C5928 /* SignInPage.swift */; };
 		911092A82A5AF6D5002C5928 /* Extension - UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A72A5AF6D5002C5928 /* Extension - UIWindow.swift */; };
 		911092AA2A5B0965002C5928 /* SettingViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */; };
+		911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BC2A6660AC002C5928 /* EditNameViewController.swift */; };
+		911092BF2A666126002C5928 /* EditNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BE2A666126002C5928 /* EditNameView.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
@@ -98,6 +100,8 @@
 		911092A52A57E993002C5928 /* SignInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPage.swift; sourceTree = "<group>"; };
 		911092A72A5AF6D5002C5928 /* Extension - UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIWindow.swift"; sourceTree = "<group>"; };
 		911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingViewController - Alert.swift"; sourceTree = "<group>"; };
+		911092BC2A6660AC002C5928 /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
+		911092BE2A666126002C5928 /* EditNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameView.swift; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
@@ -235,6 +239,8 @@
 				911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */,
 				9110929F2A56E79E002C5928 /* SettingView.swift */,
 				911092A12A56E7A6002C5928 /* SettingTableViewCell.swift */,
+				911092BC2A6660AC002C5928 /* EditNameViewController.swift */,
+				911092BE2A666126002C5928 /* EditNameView.swift */,
 			);
 			path = SettingViewController;
 			sourceTree = "<group>";
@@ -516,6 +522,7 @@
 				911092922A526EB9002C5928 /* MapView.swift in Sources */,
 				911092A02A56E79E002C5928 /* SettingView.swift in Sources */,
 				9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */,
+				911092BF2A666126002C5928 /* EditNameView.swift in Sources */,
 				911092982A53F23D002C5928 /* FriendsAnnotation.swift in Sources */,
 				91DBA5DC2A48104700D8D790 /* JoinGroupManager.swift in Sources */,
 				911092942A52F343002C5928 /* MapCollectionViewCell.swift in Sources */,
@@ -536,6 +543,7 @@
 				911092A42A56EE4C002C5928 /* Extension - UIImageView.swift in Sources */,
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
 				9110928D2A4EB66B002C5928 /* PostViewController - Alert.swift in Sources */,
+				911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */,
 				911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
 				911092AA2A5B0965002C5928 /* SettingViewController - Alert.swift in Sources */,

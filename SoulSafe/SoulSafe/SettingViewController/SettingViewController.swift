@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseStorage
 import CropViewController
+import Kingfisher
 
 protocol SettingViewControllerDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ viewController: SettingViewController)
@@ -21,6 +22,23 @@ class SettingViewController: UIViewController {
     var groupIDs: [String] = []
     let db = Firestore.firestore()
     
+    var userAvatar = "" {
+        didSet {
+            if userAvatar == "defaultAvatar" {
+                settingView.avatarImgView.image = UIImage(named: "\(userAvatar)")
+            } else {
+                let url = URL(string: "\(userAvatar)")
+                settingView.avatarImgView.kf.setImage(with: url)
+            }
+        }
+    }
+
+    var userName: String = "" {
+        didSet {
+            settingView.userNameLabel.text = userName
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: CIC.shared.M1)
@@ -28,10 +46,28 @@ class SettingViewController: UIViewController {
         setupTableView()
         setupConstraints()
         setupTableViewConstaints()
+        setupPersonalInfo()
     }
     
     override func viewDidLayoutSubviews() {
         settingView.avatarImgView.applyCircularMask()
+    }
+    
+    func setupPersonalInfo() {
+        guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
+        let getPersonalInfoPath = db.collection("users").document("\(userID)")
+        getPersonalInfoPath.getDocument { snapshot, err in
+            if let err = err {
+                print(err)
+            } else {
+                guard let snapshot = snapshot else { return }
+                guard  let data = snapshot.data() else { return }
+                guard let userAvatar = data["userAvatar"] as? String else { return }
+                guard let userName = data["userName"] as? String else { return }
+                self.userAvatar = userAvatar
+                self.userName = userName
+            }
+        }
     }
     
     func setupView() {
@@ -141,8 +177,15 @@ extension SettingViewController: SettingViewDelegate {
     }
     
     func didPressSettingViewEditBtn(_ view: SettingView) {
+        let editNameViewController = EditNameViewController()
+        editNameViewController.delegate = self
+        editNameViewController.modalPresentationStyle = .formSheet
+        editNameViewController.sheetPresentationController?.detents = [.large()]
+        editNameViewController.sheetPresentationController?.delegate = self
+        editNameViewController.sheetPresentationController?.preferredCornerRadius = 20
         Vibration.shared.lightV()
-        commingSoonAlert()
+
+        present(editNameViewController, animated: true, completion: nil)
     }
 }
 
@@ -162,17 +205,17 @@ extension SettingViewController: UINavigationControllerDelegate {
 extension SettingViewController: CropViewControllerDelegate {
     func cropViewController(_ cropViewController: CropViewController, didCropToCircularImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         uploadPhoto(image: image) { result in
+            guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
             switch result {
             case .success(let url):
                 print(url)
                 // 拿到 url 後上傳到 fireStore 跟存到 UserDefault
                 UserDefaults.standard.set("\(url)", forKey: "userAvatar")
-                let imggg = UserDefaults.standard.object(forKey: "userAvatar")
                 let storeAvatarPath = self.db.collection("users").document("\(UserSetup.userID)")
                 storeAvatarPath.setData([
                     "userAvatar": "\(url)",
-                    "userID": "\(UserDefaults.standard.object(forKey: "userID"))"
-                ]) { err in
+                    "userID": "\(userID)"
+                ], merge: true) { err in
                     if let err = err {
                         print("Failed to upload img: \(err)")
                     } else {
@@ -186,7 +229,6 @@ extension SettingViewController: CropViewControllerDelegate {
                 }
                 
                 if !self.groupIDs.isEmpty {
-                    guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
                     for groupID in self.groupIDs {
                         let storeAvatarInGroupMemberListPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(userID)")
                         storeAvatarInGroupMemberListPath.setData([
@@ -198,6 +240,44 @@ extension SettingViewController: CropViewControllerDelegate {
             case .failure(let error):
                 print(error)
             }
+        }
+    }
+}
+
+extension SettingViewController: UISheetPresentationControllerDelegate {
+}
+
+extension SettingViewController: EditNameViewControllerDelegate {
+    func didPressSaveBtn(_ view: EditNameViewController, name: String) {
+        guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
+        UserDefaults.standard.set("\(name)", forKey: "userName")
+        settingView.userNameLabel.text = name
+        let storeNamePath = self.db.collection("users").document("\(userID)")
+        storeNamePath.setData([
+            "userName": "\(name)"
+        ], merge: true) { err in
+            if let err = err {
+                print("Failed to upload img: \(err)")
+            } else {
+                print("Upload userAvatar to user path successfully.")
+            }
+        }
+        
+        if !self.groupIDs.isEmpty {
+            for groupID in self.groupIDs {
+                let storeNameInGroupMemberListPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(userID)")
+                storeNameInGroupMemberListPath.setData([
+                    "userName": "\(name)"
+                ], merge: true) { err in
+                    if let err = err {
+                        print(err)
+                    } else {
+                        print("stored userName in groups")
+                    }
+                }
+            }
+        } else {
+            settingView.userNameLabel.text = name
         }
     }
 }

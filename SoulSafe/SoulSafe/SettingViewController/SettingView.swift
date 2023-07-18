@@ -18,7 +18,7 @@ class SettingView: UIView {
     weak var delegate: SettingViewDelegate?
     lazy var avatarImgViewContainer = UIView()
     lazy var avatarImgView = UIImageView()
-    private lazy var userNameLabel = UILabel()
+    lazy var userNameLabel = UILabel()
     lazy var generalLabel = UILabel()
     private lazy var settingViewBackBtn = UIButton()
     private lazy var settingViewEditBtn = UIButton()
@@ -38,10 +38,10 @@ class SettingView: UIView {
         avatarImgViewContainer.addSubview(avatarImgView)
         
         settingViewBackBtn.setImage(UIImage(named: "icon-bigBack-toLeft"), for: .normal)
-        let symbolSize: CGFloat = 28
+        let symbolSizeForBackBtn: CGFloat = 28
         settingViewBackBtn.setImage(
             UIImage(systemName: "arrowtriangle.backward")?.withConfiguration(
-                UIImage.SymbolConfiguration(pointSize: symbolSize)),
+                UIImage.SymbolConfiguration(pointSize: symbolSizeForBackBtn)),
             for: .normal
         )
         settingViewBackBtn.tintColor = UIColor(hex: CIC.shared.F1)
@@ -65,7 +65,8 @@ class SettingView: UIView {
         
         avatarImgViewContainer = Blur.shared.setViewShadow(avatarImgViewContainer)
         
-        userNameLabel.text = "編輯我的名稱"
+        let userName = UserDefaults.standard.object(forKey: "userName")
+        userNameLabel.text = "尚未設定名稱"
         userNameLabel.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         userNameLabel.textColor = .white
         
@@ -73,13 +74,21 @@ class SettingView: UIView {
         generalLabel.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         generalLabel.textColor = UIColor(hex: CIC.shared.F1)
         
-        settingViewEditBtn.setTitle("編輯", for: .normal)
-        settingViewEditBtn.setTitleColor(UIColor(hex: CIC.shared.F1), for: .normal)
+        let symbolSizeForEditBtn: CGFloat = 18
+        settingViewEditBtn.setImage(
+            UIImage(systemName: "pencil.line")?.withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: symbolSizeForEditBtn)),
+            for: .normal
+        )
+        settingViewEditBtn.tintColor = UIColor(hex: CIC.shared.F1)
+        settingViewEditBtn.imageView?.contentMode = .scaleAspectFit
         settingViewEditBtn.addTarget(self, action: #selector(didPressSettingViewEditBtn), for: .touchUpInside)
     }
     
     private func setupConstraints() {
-        [avatarImgView, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn, avatarImgViewContainer].forEach {
+        [avatarImgView, userNameLabel, generalLabel,
+         settingViewBackBtn, settingViewEditBtn, avatarImgViewContainer
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -88,9 +97,6 @@ class SettingView: UIView {
             settingViewBackBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             settingViewBackBtn.widthAnchor.constraint(equalToConstant: 36),
             settingViewBackBtn.heightAnchor.constraint(equalToConstant: 36),
-            
-            settingViewEditBtn.centerYAnchor.constraint(equalTo: settingViewBackBtn.centerYAnchor),
-            settingViewEditBtn.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             avatarImgViewContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
             avatarImgViewContainer.widthAnchor.constraint(equalToConstant: 108),
@@ -105,8 +111,11 @@ class SettingView: UIView {
             userNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             userNameLabel.topAnchor.constraint(equalTo: avatarImgView.bottomAnchor, constant: 16),
             
+            settingViewEditBtn.centerYAnchor.constraint(equalTo: userNameLabel.centerYAnchor),
+            settingViewEditBtn.leadingAnchor.constraint(equalTo: userNameLabel.trailingAnchor, constant: 4),
+            
             generalLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            generalLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 16)
+            generalLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 24)
         ])
     }
     

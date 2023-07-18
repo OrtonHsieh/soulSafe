@@ -66,7 +66,7 @@ extension EditGroupViewController {
     }
     
     func leaveAlert(from viewController: UIViewController) {
-        let alertController = UIAlertController(title: "退出群組", message: "是否忍痛退出ＱＱ？", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "退出群組", message: "確認是否退出群組？", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
         alertController.addAction(cancelAction)

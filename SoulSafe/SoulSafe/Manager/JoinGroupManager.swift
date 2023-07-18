@@ -74,10 +74,12 @@ class JoinGroupManager {
 //            let addGroupToUser = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
             let addGroupToUser = self.db.collection("users").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
             guard let avatar = UserDefaults.standard.object(forKey: "userAvatar") else { return }
+            guard let userName = UserDefaults.standard.object(forKey: "userName") else { return }
             didJoinGroupPath.setData([
                 "userID": "\(UserSetup.userID)",
                 "joinedTime": Timestamp(date: Date()),
-                "userAvatar": "\(avatar)"
+                "userAvatar": "\(avatar)",
+                "userName": "\(userName)"
             ])
             
             self.db.collection("groups").document("\(groupID)").updateData([

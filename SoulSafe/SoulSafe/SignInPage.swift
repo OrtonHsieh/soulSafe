@@ -297,27 +297,105 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                     print(userID)
                     // save it to user defaults
                     UserDefaults.standard.set(userID, forKey: "userID")
-                    UserDefaults.standard.set("defaultAvatar", forKey: "userAvatar")
                     
-                    // UploadUserID to fireStore
-                    db.collection("users").document("\(userID)").setData([
-                        "userID": "\(userID)",
-                        "userAvatar": "defaultAvatar"
-                    ]) { err in
-                        if let err = err {
-                            print("Error writing document: \(err)")
-                        } else {
-                            print("UploadUserID to fireStore successfully.")
+                    var userAvatar = ""
+                    var userName = ""
+                    var didUploadAllInfo = 0 {
+                        didSet {
+                            if didUploadAllInfo == 2 {
+                                proceedToLandingPage()
+                            }
                         }
                     }
-                    // store the data and get into main page
-                    DispatchQueue.main.async {
-                        let bsViewController = BSViewController()
-                        bsViewController.modalPresentationStyle = .fullScreen
-                        Vibration.shared.lightV()
-                        
-                        // Present the BSViewController from the current view controller
-                        self.present(bsViewController, animated: true, completion: nil)
+                    
+                    if UserDefaults.standard.object(forKey: "userAvatar") != nil {
+                        guard let userAvatarFromDefault = UserDefaults.standard.object(forKey: "userAvatar") as? String else { return }
+                        userAvatar = userAvatarFromDefault
+                        didUploadAllInfo += 1
+                    } else {
+                        db.collection("users").document("\(userID)").getDocument { snapshot, err in
+                            if let err = err {
+                                print(err)
+                            } else {
+                                guard let snapshot = snapshot else { return }
+                                guard let data = snapshot.data() else {
+                                    userAvatar = "defaultAvatar"
+                                    UserDefaults.standard.set("\(userAvatar)", forKey: "userAvatar")
+                                    uploadUserAvatar()
+                                    return
+                                }
+                                guard let userAvatarFromUsersCollection = data["userAvatar"] as? String else { return }
+                                userAvatar = userAvatarFromUsersCollection
+                                UserDefaults.standard.set("\(userAvatar)", forKey: "userAvatar")
+                                uploadUserAvatar()
+                            }
+                        }
+                    }
+                    
+                    if UserDefaults.standard.object(forKey: "userName") != nil {
+                        guard let userNameFromDefault = UserDefaults.standard.object(forKey: "userName") as? String else { return }
+                        userName = userNameFromDefault
+                        didUploadAllInfo += 1
+                    } else {
+                        db.collection("users").document("\(userID)").getDocument { snapshot, err in
+                            if let err = err {
+                                print(err)
+                            } else {
+                                guard let snapshot = snapshot else { return }
+                                guard let data = snapshot.data() else {
+                                    userName = "尚未設定名稱"
+                                    UserDefaults.standard.set("\(userName)", forKey: "userName")
+                                    uploadUserName()
+                                    return
+                                }
+                                guard let userAvatarFromUsersCollection = data["userName"] as? String else { return }
+                                userName = userAvatarFromUsersCollection
+                                UserDefaults.standard.set("\(userName)", forKey: "userName")
+                                uploadUserName()
+                            }
+                        }
+                    }
+                    
+                    func uploadUserAvatar() {
+                        // UploadUserID to fireStore
+                        db.collection("users").document("\(userID)").setData([
+                            "userID": "\(userID)",
+                            "userAvatar": "\(userAvatar)"
+                        ], merge: true) { err in
+                            if let err = err {
+                                print("Error writing document: \(err)")
+                            } else {
+                                print("UploadUserID to fireStore successfully.")
+                                didUploadAllInfo += 1
+                            }
+                        }
+                    }
+                    
+                    func uploadUserName() {
+                        // UploadUserID to fireStore
+                        db.collection("users").document("\(userID)").setData([
+                            "userID": "\(userID)",
+                            "userName": "\(userName)"
+                        ], merge: true) { err in
+                            if let err = err {
+                                print("Error writing document: \(err)")
+                            } else {
+                                print("UploadUserID to fireStore successfully.")
+                                didUploadAllInfo += 1
+                            }
+                        }
+                    }
+                    
+                    func proceedToLandingPage() {
+                        // store the data and get into main page
+                        DispatchQueue.main.async {
+                            let bsViewController = BSViewController()
+                            bsViewController.modalPresentationStyle = .fullScreen
+                            Vibration.shared.lightV()
+                            
+                            // Present the BSViewController from the current view controller
+                            self.present(bsViewController, animated: true, completion: nil)
+                        }
                     }
                 }
                 catch {
