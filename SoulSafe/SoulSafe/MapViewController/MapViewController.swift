@@ -540,7 +540,9 @@ extension MapViewController: UICollectionViewDataSource {
             fatalError("map cell cannot be created.")
         }
         // Configure the custom cell's properties or UI elements as needed
-        cell.layer.borderWidth = 1
+        if indexPath.row == 0 {
+            cell.layer.borderWidth = 1
+        }
         cell.layer.borderColor = UIColor(hex: CIC.shared.F2).cgColor
         cell.layer.cornerRadius = 14
         cell.groupTitleLabel.text = groupTitles[indexPath.row]
@@ -550,6 +552,18 @@ extension MapViewController: UICollectionViewDataSource {
 
 extension MapViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Deselect all cells to reset their appearance
+        for visibleIndexPath in collectionView.indexPathsForVisibleItems {
+            if let cell = collectionView.cellForItem(at: visibleIndexPath) {
+                cell.layer.borderWidth = 0
+            }
+        }
+        
+        // Select the tapped cell and update its appearance
+        if let selectedCell = collectionView.cellForItem(at: indexPath) {
+            selectedCell.layer.borderWidth = 1
+        }
+        
         Vibration.shared.hardV()
         selectedGroupIDInMapView = groupIDs[indexPath.row]
         selectedGroupTitleInMapView = groupTitles[indexPath.row]
