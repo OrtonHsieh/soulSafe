@@ -353,8 +353,8 @@ extension PostViewController: TextAreaViewDelegate {
                 } else {
                     print("Document successfully written!")
                     self.textAreaView.inputTextView.text = ""
-//                    self.viewDidLoad()
-                    self.getGroupMembers()
+                    self.viewDidLoad()
+//                    self.getGroupMembers()
                 }
             }
         }
