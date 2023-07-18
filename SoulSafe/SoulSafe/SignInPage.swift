@@ -24,26 +24,46 @@ class SignInViewController: UIViewController {
         if let userIDForAuth = UserDefaults.standard.string(forKey: "userIDForAuth") {
             // Check the login status of Apple sign in for the app
             // Asynchronous
-            ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userIDForAuth) { credentialState, error in
-                switch credentialState {
-                case .authorized:
-                    print("User remains logged in. Proceed to another view.")
-                    // Present BaseVC
-                    DispatchQueue.main.async {
-                        let bsViewController = BSViewController()
-                        bsViewController.modalPresentationStyle = .fullScreen
-                        Vibration.shared.lightV()
-                        
-                        // Present the BSViewController from the current view controller
-                        self.present(bsViewController, animated: true, completion: nil)
+            let userID = UserDefaults.standard.string(forKey: "userID")
+            let checkIfUserExistedPath = db.collection("users").document("\(userID)")
+            checkIfUserExistedPath.getDocument { snapshot, err in
+                if let err = err {
+                    print(err)
+                } else {
+                    guard let snapshot = snapshot else { return }
+                    guard let data = snapshot.data() else {
+                        self.setupView()
+                        self.setupConstraints()
+                        self.setupSignInWithApple()
+                        return
                     }
-                case .revoked, .notFound:
-                    print("User logged in before but revoked.")
-                    self.setupView()
-                    self.setupConstraints()
-                    self.setupSignInWithApple()
-                default:
-                    print("Unknown state.")
+                    ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userIDForAuth) { credentialState, error in
+                        switch credentialState {
+                        case .authorized:
+                            print("User remains logged in. Proceed to another view.")
+                            // Present BaseVC
+                            DispatchQueue.main.async {
+                                let bsViewController = BSViewController()
+                                bsViewController.modalPresentationStyle = .fullScreen
+                                Vibration.shared.lightV()
+                                
+                                // Present the BSViewController from the current view controller
+                                self.present(bsViewController, animated: true, completion: nil)
+                            }
+                        case .revoked:
+                            print("User logged in before but revoked.")
+                            self.setupView()
+                            self.setupConstraints()
+                            self.setupSignInWithApple()
+                        case .notFound:
+                            print("User logged in before but revoked.")
+                            self.setupView()
+                            self.setupConstraints()
+                            self.setupSignInWithApple()
+                        default:
+                            print("Unknown state.")
+                        }
+                    }
                 }
             }
         } else {
