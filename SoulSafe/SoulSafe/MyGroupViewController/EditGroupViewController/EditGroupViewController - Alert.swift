@@ -44,9 +44,11 @@ extension EditGroupViewController {
                         ],
                         "timeStamp": Timestamp(date: Date())
                     ])
+                    guard let avatar = UserDefaults.standard.object(forKey: "userAvatar") else { return }
                     initGroupPath.collection("members").document("\(UserSetup.userID)").setData([
                         "userID": "\(UserSetup.userID)",
-                        "joinedTime": Timestamp(date: Date())
+                        "joinedTime": Timestamp(date: Date()),
+                        "userAvatar": "\(avatar)"
                     ])
                     
                     self.currentGroupID = groupPath.documentID

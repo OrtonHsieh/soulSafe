@@ -352,10 +352,11 @@ extension PostViewController: TextAreaViewDelegate {
                     print("Error writing document: \(err)")
                 } else {
                     print("Document successfully written!")
+                    self.textAreaView.inputTextView.text = ""
+//                    self.viewDidLoad()
+                    self.getGroupMembers()
                 }
             }
-            textAreaView.inputTextView.text = ""
-            viewDidLoad()
         }
     }
 }

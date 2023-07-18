@@ -17,6 +17,9 @@ class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupView()
+        self.setupConstraints()
+        self.view.backgroundColor = UIColor(hex: CIC.shared.M1)
         checkSignInStatus()
     }
     
@@ -24,19 +27,22 @@ class SignInViewController: UIViewController {
         if let userIDForAuth = UserDefaults.standard.string(forKey: "userIDForAuth") {
             // Check the login status of Apple sign in for the app
             // Asynchronous
-            let userID = UserDefaults.standard.string(forKey: "userID")
+            guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
             let checkIfUserExistedPath = db.collection("users").document("\(userID)")
             checkIfUserExistedPath.getDocument { snapshot, err in
                 if let err = err {
                     print(err)
                 } else {
                     guard let snapshot = snapshot else { return }
+                    // 這邊是判斷 users 的 collection 是否也有該 user
                     guard let data = snapshot.data() else {
                         self.setupView()
                         self.setupConstraints()
                         self.setupSignInWithApple()
                         return
                     }
+                    guard let userIDFromUserCollection = data["userID"] as? String else { return }
+                    print(userIDFromUserCollection)
                     ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userIDForAuth) { credentialState, error in
                         switch credentialState {
                         case .authorized:
@@ -52,13 +58,13 @@ class SignInViewController: UIViewController {
                             }
                         case .revoked:
                             print("User logged in before but revoked.")
-                            self.setupView()
-                            self.setupConstraints()
+//                            self.setupView()
+//                            self.setupConstraints()
                             self.setupSignInWithApple()
                         case .notFound:
                             print("User logged in before but revoked.")
-                            self.setupView()
-                            self.setupConstraints()
+//                            self.setupView()
+//                            self.setupConstraints()
                             self.setupSignInWithApple()
                         default:
                             print("Unknown state.")
