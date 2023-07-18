@@ -13,7 +13,9 @@ import CryptoKit
 class SignInViewController: UIViewController {
     let brandImgView = UIImageView()
     let db = Firestore.firestore()
+    let activityIndicator = UIActivityIndicatorView(style: .large)
     var currentNonce: String?
+    let siwaButton = ASAuthorizationAppleIDButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,18 +86,24 @@ class SignInViewController: UIViewController {
             self.view.addSubview(self.brandImgView)
             self.brandImgView.image = UIImage(named: "brandImg")
             self.brandImgView.clipsToBounds = false
+            self.view.addSubview(self.activityIndicator)
+            self.activityIndicator.color = .gray
         }
     }
     
     func setupConstraints() {
         DispatchQueue.main.async {
             self.brandImgView.translatesAutoresizingMaskIntoConstraints = false
+            self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
                 self.brandImgView.widthAnchor.constraint(equalToConstant: 360),
                 self.brandImgView.heightAnchor.constraint(equalToConstant: 374.814),
                 self.brandImgView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -50),
-                self.brandImgView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+                self.brandImgView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                
+                self.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+                self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
             ])
         }
     }
@@ -104,35 +112,35 @@ class SignInViewController: UIViewController {
         DispatchQueue.main.async {
             // Do any additional setup after loading the view.
             
-            let siwaButton = ASAuthorizationAppleIDButton()
+//            let siwaButton = ASAuthorizationAppleIDButton()
             
             // set this so the button will use auto layout constraint
-            siwaButton.translatesAutoresizingMaskIntoConstraints = false
+            self.siwaButton.translatesAutoresizingMaskIntoConstraints = false
             
             // add the button to the view controller root view
-            self.view.addSubview(siwaButton)
+            self.view.addSubview(self.siwaButton)
             self.view.backgroundColor = UIColor(hex: CIC.shared.M1)
             
             // set constraint
             NSLayoutConstraint.activate([
-                siwaButton.leadingAnchor.constraint(
+                self.siwaButton.leadingAnchor.constraint(
                     equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                     constant: 50.0
                 ),
-                siwaButton.trailingAnchor.constraint(
+                self.siwaButton.trailingAnchor.constraint(
                     equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                     constant: -50.0
                 ),
-                siwaButton.bottomAnchor.constraint(
+                self.siwaButton.bottomAnchor.constraint(
                     equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
                     constant: -70.0
                 ),
-                siwaButton.heightAnchor.constraint(
+                self.siwaButton.heightAnchor.constraint(
                     equalToConstant: 50.0
                 )
             ])
             // the function that will be executed when user tap the button
-            siwaButton.addTarget(self, action: #selector(self.appleSignInTapped), for: .touchUpInside)
+            self.siwaButton.addTarget(self, action: #selector(self.appleSignInTapped), for: .touchUpInside)
         }
     }
 
@@ -241,6 +249,9 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
     ///   - authorization: _
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            
+            self.activityIndicator.startAnimating()
+            self.siwaButton.isUserInteractionEnabled = false
             // unique ID for each user, this uniqueID will always be returned
             let userIDForAuth = appleIDCredential.user
             UserDefaults.standard.set(userIDForAuth, forKey: "userIDForAuth")
@@ -389,6 +400,8 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                     func proceedToLandingPage() {
                         // store the data and get into main page
                         DispatchQueue.main.async {
+                            self.activityIndicator.stopAnimating()
+                            self.siwaButton.isUserInteractionEnabled = true
                             let bsViewController = BSViewController()
                             bsViewController.modalPresentationStyle = .fullScreen
                             Vibration.shared.lightV()
