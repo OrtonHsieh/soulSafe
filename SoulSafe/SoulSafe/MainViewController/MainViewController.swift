@@ -347,8 +347,16 @@ extension MainViewController: CameraViewDelegate {
     
     func didPressReverseBtn(_ view: CameraView) {
         Vibration.shared.lightV()
+        
         cameraView?.removeFromSuperview()
         toggleCamera()
+
+        UIView.animate(withDuration: 0.3, animations: {
+            // Rotate the button 180 degrees (π radians) around the y-axis
+            self.cameraView?.reverseButton.transform = self.cameraView?.reverseButton.transform.rotated(by: CGFloat.pi) ?? CGAffineTransform.identity
+        }, completion: { _ in
+            print("rotated.")
+        })
     }
     
     func cleanGroupSelection() {

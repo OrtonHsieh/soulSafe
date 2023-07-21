@@ -17,7 +17,6 @@ protocol CameraViewDelegate: AnyObject {
     func didPressSettingBtn(_ view: CameraView)
     func didPressMemoriesBtn(_ view: CameraView)
     func didPressReverseBtn(_ view: CameraView)
-    func didPressFlashBtn(_ view: CameraView)
 }
 
 class CameraView: UIView {
