@@ -21,6 +21,7 @@ protocol MainViewControllerDelegate: AnyObject {
 
 class MainViewController: UIViewController {
     var captureSession: AVCaptureSession?
+    var currentCamera: AVCaptureDevice.Position = .back
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
     weak var delegate: MainViewControllerDelegate?
@@ -103,6 +104,11 @@ class MainViewController: UIViewController {
     }
     
     func createCamera() {
+        guard let captureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: currentCamera) else { return }
+        createCamera(captureDevice: captureDevice)
+    }
+    
+    func createCamera(captureDevice: AVCaptureDevice) {
         // Set up capture session
         captureSession = AVCaptureSession()
         
@@ -112,9 +118,6 @@ class MainViewController: UIViewController {
         if captureSession.canSetSessionPreset(.photo) {
             captureSession.sessionPreset = .photo
         }
-        
-        // Set up capture device
-        guard let captureDevice = AVCaptureDevice.default(for: .video) else { return }
         
         do {
             let input = try AVCaptureDeviceInput(device: captureDevice)
@@ -143,6 +146,8 @@ class MainViewController: UIViewController {
                 // Start running the capture session
                 captureSession.startRunning()
             }
+            
+            view.bringSubviewToFront(groupStackView)
         } catch {
             print("Error setting up capture device: \(error.localizedDescription)")
         }
@@ -161,6 +166,17 @@ class MainViewController: UIViewController {
             }
         }
     }
+    
+    func toggleCamera() {
+        captureSession?.stopRunning()
+        
+        if currentCamera == .back {
+            currentCamera = .front
+        } else {
+            currentCamera = .back
+        }
+        createCamera()
+    }
 }
 
 extension MainViewController: AVCapturePhotoCaptureDelegate {
@@ -174,7 +190,10 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
         guard let imageData = photo.fileDataRepresentation() else { return }
         
         if let image = UIImage(data: imageData) {
-            cameraView?.photoImageView.image = image
+            // Check if the current camera is the front camera
+            let isFrontCamera = currentCamera == .front
+            let flippedImage = isFrontCamera ? UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored) : image
+            cameraView?.photoImageView.image = flippedImage
             cameraView?.photoImageView.contentMode = .scaleAspectFill
             // 設置圓角目前會導致光暈吃不到參數
             cameraView?.photoImageView.layer.cornerRadius = 30
@@ -235,6 +254,7 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.picButton.isHidden = false
         cameraView?.sendButton.isHidden = true
         cameraView?.groupContainerView.isHidden = false
+        cameraView?.reverseButton.isHidden = false
         groupStackView.isHidden = true
     }
     
@@ -246,6 +266,7 @@ extension MainViewController: CameraViewDelegate {
         cameraView?.picButton.isHidden = true
         cameraView?.sendButton.isHidden = false
         cameraView?.groupContainerView.isHidden = true
+        cameraView?.reverseButton.isHidden = true
         groupStackView.isHidden = false
     }
     
@@ -322,6 +343,12 @@ extension MainViewController: CameraViewDelegate {
                 print(error)
             }
         }
+    }
+    
+    func didPressReverseBtn(_ view: CameraView) {
+        Vibration.shared.lightV()
+        cameraView?.removeFromSuperview()
+        toggleCamera()
     }
     
     func cleanGroupSelection() {

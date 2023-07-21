@@ -16,6 +16,8 @@ protocol CameraViewDelegate: AnyObject {
     func didPressMapBtn(_ view: CameraView)
     func didPressSettingBtn(_ view: CameraView)
     func didPressMemoriesBtn(_ view: CameraView)
+    func didPressReverseBtn(_ view: CameraView)
+    func didPressFlashBtn(_ view: CameraView)
 }
 
 class CameraView: UIView {
@@ -123,6 +125,16 @@ class CameraView: UIView {
         settingButton.imageView?.contentMode = .scaleAspectFit
         settingButton.addTarget(self, action: #selector(didPressSettingBtn), for: .touchUpInside)
         
+        reverseButton.setImage(
+            UIImage(systemName: "arrow.triangle.2.circlepath")?.withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: symbolSize)),
+            for: .normal
+        )
+        reverseButton.tintColor = UIColor(hex: CIC.shared.F2)
+        reverseButton.backgroundColor = .clear
+        reverseButton.imageView?.contentMode = .scaleAspectFit
+        reverseButton.addTarget(self, action: #selector(didPressReverseBtn), for: .touchUpInside)
+        
         memoriesButton.setImage(
             UIImage(systemName: "photo.on.rectangle")?.withConfiguration(
                 UIImage.SymbolConfiguration(pointSize: symbolSize)),
@@ -165,10 +177,15 @@ class CameraView: UIView {
             closeButton.leadingAnchor.constraint(equalTo: buttonCorner.trailingAnchor, constant: 50),
             closeButton.topAnchor.constraint(equalTo: buttonCorner.topAnchor, constant: 30),
             
+            reverseButton.heightAnchor.constraint(equalToConstant: 40),
+            reverseButton.widthAnchor.constraint(equalToConstant: 40),
+            reverseButton.leadingAnchor.constraint(equalTo: buttonCorner.trailingAnchor, constant: 50),
+            reverseButton.topAnchor.constraint(equalTo: buttonCorner.topAnchor, constant: 30),
+            
             photoImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             photoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            photoImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -62),
+            photoImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -54),
             photoImageView.widthAnchor.constraint(equalToConstant: cameraWidth),
             photoImageView.heightAnchor.constraint(equalToConstant: cameraHeight),
             
@@ -229,7 +246,6 @@ class CameraView: UIView {
         
         if let previewLayer = videoPreviewLayer {
             cameraView.layer.addSublayer(previewLayer)
-            
             cameraView.layer.masksToBounds = true
             cameraView.layer.cornerRadius = 30
             cameraView.layer.shouldRasterize = true
@@ -271,5 +287,9 @@ class CameraView: UIView {
     
     @objc func didPressSettingBtn() {
         delegate?.didPressSettingBtn(self)
+    }
+    
+    @objc func didPressReverseBtn() {
+        delegate?.didPressReverseBtn(self)
     }
 }
