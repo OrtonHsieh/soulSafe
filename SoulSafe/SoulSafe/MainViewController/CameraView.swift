@@ -21,16 +21,14 @@ protocol CameraViewDelegate: AnyObject {
 
 class CameraView: UIView {
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    
     let cameraView = UIView()
     let picButton = PicButton()
     lazy var buttonCorner = UIView()
     let flashButton = UIButton()
     let reverseButton = UIButton()
     let closeButton = UIButton()
-    
+    let symbolSize: CGFloat = 32
     let memoriesButton = UIButton()
-    
     let settingButton = UIButton()
     
     let mapContainerView = UIView()
@@ -46,6 +44,9 @@ class CameraView: UIView {
     
     init(frame: CGRect, session: AVCaptureSession) {
         super.init(frame: frame)
+        setupCameraView()
+        setupPictureTakingBtn()
+        setupGroupSelectionSection()
         setupView()
         setupConstrants()
         setupVideoPreviewLayer(session: session)
@@ -56,26 +57,92 @@ class CameraView: UIView {
         setupVideoPreviewLayer(session: nil)
     }
     
+    func setupCameraView() {
+        addSubview(cameraView)
+        cameraView.translatesAutoresizingMaskIntoConstraints = false
+        let cameraWidth: CGFloat = frame.width
+        let cameraHeight: CGFloat = cameraWidth
+        NSLayoutConstraint.activate([
+            cameraView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            cameraView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            cameraView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            cameraView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -54),
+            cameraView.widthAnchor.constraint(equalToConstant: cameraWidth),
+            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight)
+        ])
+    }
+    
+    func setupPictureTakingBtn() {
+        addSubview(buttonCorner)
+        buttonCorner.addSubview(picButton)
+        buttonCorner.backgroundColor = UIColor(hex: CIC.shared.F2)
+        buttonCorner = Blur.shared.setViewShadow(buttonCorner)
+        picButton.addTarget(self, action: #selector(takePic), for: .touchUpInside)
+        
+        let list = [buttonCorner, picButton]
+        list.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        
+        NSLayoutConstraint.activate([
+            buttonCorner.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 28),
+            buttonCorner.centerXAnchor.constraint(equalTo: centerXAnchor),
+            buttonCorner.heightAnchor.constraint(equalToConstant: 100),
+            buttonCorner.widthAnchor.constraint(equalToConstant: 100),
+            
+            picButton.centerXAnchor.constraint(equalTo: buttonCorner.centerXAnchor),
+            picButton.centerYAnchor.constraint(equalTo: buttonCorner.centerYAnchor)
+        ])
+    }
+    
+    func setupGroupSelectionSection() {
+        addSubview(groupContainerView)
+        [groupImgView, groupLabel].forEach {
+            groupContainerView.addSubview($0)
+        }
+        
+        groupContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)
+        let tapGestureForGroup = UITapGestureRecognizer(target: self, action: #selector(groupContainerViewTapped))
+        groupContainerView.addGestureRecognizer(tapGestureForGroup)
+        groupLabel.text = "群組"
+        groupLabel.textColor = UIColor(hex: CIC.shared.F2)
+        groupImgView.image = UIImage(systemName: "person.3.fill")?.withConfiguration(
+            UIImage.SymbolConfiguration(pointSize: symbolSize + 2))
+        groupImgView.tintColor = UIColor(hex: CIC.shared.F2)
+        groupImgView.backgroundColor = .clear
+        groupImgView.contentMode = .scaleAspectFit
+        
+        let list = [groupContainerView, groupImgView, groupLabel]
+        list.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        
+        NSLayoutConstraint.activate([
+            groupContainerView.bottomAnchor.constraint(
+                equalTo: safeAreaLayoutGuide.bottomAnchor,
+                constant: -20
+            ),
+            groupContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            groupContainerView.widthAnchor.constraint(equalToConstant: 111),
+            groupContainerView.heightAnchor.constraint(equalToConstant: 36),
+            
+            groupImgView.leadingAnchor.constraint(equalTo: groupContainerView.leadingAnchor, constant: 15),
+            groupImgView.centerYAnchor.constraint(equalTo: groupContainerView.centerYAnchor),
+            groupImgView.widthAnchor.constraint(equalToConstant: 34),
+            groupImgView.heightAnchor.constraint(equalToConstant: 34),
+            
+            groupLabel.trailingAnchor.constraint(equalTo: groupContainerView.trailingAnchor, constant: -15),
+            groupLabel.centerYAnchor.constraint(equalTo: groupContainerView.centerYAnchor)
+        ])
+    }
+    
     func setupView() {
         [
-            cameraView, buttonCorner, flashButton, reverseButton,
-            closeButton, photoImageView, sendButton, groupContainerView,
+            flashButton, reverseButton,
+            closeButton, photoImageView, sendButton,
             mapContainerView, settingButton, memoriesButton
         ].forEach {
             addSubview($0)
         }
-        [groupImgView, groupLabel].forEach {
-            groupContainerView.addSubview($0)
-        }
         [mapImgView, mapLabel].forEach {
             mapContainerView.addSubview($0)
         }
-        buttonCorner.addSubview(picButton)
-        buttonCorner.backgroundColor = UIColor(hex: CIC.shared.F2)
-        buttonCorner = Blur.shared.setViewShadow(buttonCorner)
-        
-        picButton.addTarget(self, action: #selector(takePic), for: .touchUpInside)
-        
         closeButton.setImage(UIImage(named: "icon-return"), for: .normal)
         closeButton.backgroundColor = UIColor.clear
         closeButton.addTarget(self, action: #selector(closeBtmPressed), for: .touchUpInside)
@@ -90,18 +157,6 @@ class CameraView: UIView {
         sendButton.addTarget(self, action: #selector(sendBtmPressed), for: .touchUpInside)
         sendButton.isEnabled = false
         sendButton.isHidden = true
-        
-        let symbolSize: CGFloat = 32
-        groupContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)
-        let tapGestureForGroup = UITapGestureRecognizer(target: self, action: #selector(groupContainerViewTapped))
-        groupContainerView.addGestureRecognizer(tapGestureForGroup)
-        groupLabel.text = "群組"
-        groupLabel.textColor = UIColor(hex: CIC.shared.F2)
-        groupImgView.image = UIImage(systemName: "person.3.fill")?.withConfiguration(
-            UIImage.SymbolConfiguration(pointSize: symbolSize + 2))
-        groupImgView.tintColor = UIColor(hex: CIC.shared.F2)
-        groupImgView.backgroundColor = .clear
-        groupImgView.contentMode = .scaleAspectFit
         
         mapContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)
         let tapGestureForMap = UITapGestureRecognizer(target: self, action: #selector(mapContainerViewTapped))
@@ -148,29 +203,13 @@ class CameraView: UIView {
     func setupConstrants() {
         let list = [
             cameraView, buttonCorner, flashButton, reverseButton,
-            picButton, closeButton, photoImageView, sendButton,
-            groupContainerView, groupImgView, groupLabel, mapContainerView,
+            picButton, closeButton, photoImageView, sendButton, mapContainerView,
             mapImgView, mapLabel, settingButton, memoriesButton
         ]
         list.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         let cameraWidth: CGFloat = frame.width
         let cameraHeight: CGFloat = cameraWidth
         NSLayoutConstraint.activate([
-            cameraView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            cameraView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            cameraView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            cameraView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -54),
-            cameraView.widthAnchor.constraint(equalToConstant: cameraWidth),
-            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight),
-            
-            buttonCorner.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 28),
-            buttonCorner.centerXAnchor.constraint(equalTo: centerXAnchor),
-            buttonCorner.heightAnchor.constraint(equalToConstant: 100),
-            buttonCorner.widthAnchor.constraint(equalToConstant: 100),
-            
-            picButton.centerXAnchor.constraint(equalTo: buttonCorner.centerXAnchor),
-            picButton.centerYAnchor.constraint(equalTo: buttonCorner.centerYAnchor),
-            
             closeButton.heightAnchor.constraint(equalToConstant: 40),
             closeButton.widthAnchor.constraint(equalToConstant: 40),
             closeButton.leadingAnchor.constraint(equalTo: buttonCorner.trailingAnchor, constant: 50),
@@ -192,22 +231,6 @@ class CameraView: UIView {
             sendButton.centerYAnchor.constraint(equalTo: buttonCorner.centerYAnchor),
             sendButton.heightAnchor.constraint(equalToConstant: 100),
             sendButton.widthAnchor.constraint(equalToConstant: 100),
-            
-            groupContainerView.bottomAnchor.constraint(
-                equalTo: safeAreaLayoutGuide.bottomAnchor,
-                constant: -20
-            ),
-            groupContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            groupContainerView.widthAnchor.constraint(equalToConstant: 111),
-            groupContainerView.heightAnchor.constraint(equalToConstant: 36),
-            
-            groupImgView.leadingAnchor.constraint(equalTo: groupContainerView.leadingAnchor, constant: 15),
-            groupImgView.centerYAnchor.constraint(equalTo: groupContainerView.centerYAnchor),
-            groupImgView.widthAnchor.constraint(equalToConstant: 34),
-            groupImgView.heightAnchor.constraint(equalToConstant: 34),
-            
-            groupLabel.trailingAnchor.constraint(equalTo: groupContainerView.trailingAnchor, constant: -15),
-            groupLabel.centerYAnchor.constraint(equalTo: groupContainerView.centerYAnchor),
             
             mapContainerView.topAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.topAnchor,
@@ -259,36 +282,22 @@ class CameraView: UIView {
         videoPreviewLayer?.frame = CGRect(x: 0, y: 0, width: width, height: height)
     }
     
-    @objc func takePic() {
-        delegate?.didTakePic(self)
-    }
+    @objc func takePic() {delegate?.didTakePic(self)}
     
-    @objc func closeBtmPressed() {
-        delegate?.didPressCloseBtn(self)
-    }
+    @objc func closeBtmPressed() {delegate?.didPressCloseBtn(self)}
     
     @objc func sendBtmPressed() {
         guard let picImage = photoImageView.image else { return }
         delegate?.didPressSendBtn(self, image: picImage)
     }
     
-    @objc func groupContainerViewTapped() {
-        delegate?.didPressGroupBtn(self)
-    }
+    @objc func groupContainerViewTapped() {delegate?.didPressGroupBtn(self)}
     
-    @objc func mapContainerViewTapped() {
-        delegate?.didPressMapBtn(self)
-    }
+    @objc func mapContainerViewTapped() {delegate?.didPressMapBtn(self)}
     
-    @objc func didPressMemoriesBtn() {
-        delegate?.didPressMemoriesBtn(self)
-    }
+    @objc func didPressMemoriesBtn() {delegate?.didPressMemoriesBtn(self)}
     
-    @objc func didPressSettingBtn() {
-        delegate?.didPressSettingBtn(self)
-    }
+    @objc func didPressSettingBtn() {delegate?.didPressSettingBtn(self)}
     
-    @objc func didPressReverseBtn() {
-        delegate?.didPressReverseBtn(self)
-    }
+    @objc func didPressReverseBtn() {delegate?.didPressReverseBtn(self)}
 }

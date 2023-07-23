@@ -27,6 +27,7 @@
 		911092BF2A666126002C5928 /* EditNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BE2A666126002C5928 /* EditNameView.swift */; };
 		911092D42A6A9DEE002C5928 /* MapViewController - Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D32A6A9DEE002C5928 /* MapViewController - Extensions.swift */; };
 		911092D62A6AA0F9002C5928 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D52A6AA0F9002C5928 /* UserAnnotationView.swift */; };
+		911092D82A6BA167002C5928 /* MainViewController - Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D72A6BA167002C5928 /* MainViewController - Extension.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
@@ -106,6 +107,7 @@
 		911092BE2A666126002C5928 /* EditNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameView.swift; sourceTree = "<group>"; };
 		911092D32A6A9DEE002C5928 /* MapViewController - Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController - Extensions.swift"; sourceTree = "<group>"; };
 		911092D52A6AA0F9002C5928 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
+		911092D72A6BA167002C5928 /* MainViewController - Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController - Extension.swift"; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				91D5A07C2A39CC3500B093AE /* MainViewController.swift */,
+				911092D72A6BA167002C5928 /* MainViewController - Extension.swift */,
 				9127BBCB2A3AE197008DB929 /* CameraView.swift */,
 				9111205B2A4D390E0003F923 /* GroupSelectionView.swift */,
 				9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */,
@@ -538,6 +541,7 @@
 				911092A62A57E993002C5928 /* SignInPage.swift in Sources */,
 				9110929C2A53FEF2002C5928 /* LocationModel.swift in Sources */,
 				9127BBD92A3C8131008DB929 /* MemoriesView.swift in Sources */,
+				911092D82A6BA167002C5928 /* MainViewController - Extension.swift in Sources */,
 				9110928F2A526EA7002C5928 /* MapViewController.swift in Sources */,
 				9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */,
 				917CF5502A3EFB1A00F02D48 /* MyGroupViewController.swift in Sources */,
