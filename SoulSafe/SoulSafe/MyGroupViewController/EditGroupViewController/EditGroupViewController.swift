@@ -101,7 +101,9 @@ extension EditGroupViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditGroupTBCell", for: indexPath) as? EditGroupTBCell else { fatalError() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "EditGroupTBCell", for: indexPath
+        ) as? EditGroupTBCell else { fatalError("Failed to dequeue EditGroupTableViewCell.") }
         
         if indexPath.row == 0 {
             cell.groupView.backgroundColor = UIColor(hex: CIC.shared.F1)
@@ -197,7 +199,9 @@ extension EditGroupViewController: EditGroupViewDelegate {
     
     func didPressCopyLinkBtn(_ view: EditGroupView, button: UIButton) {
         print("didPressCopyLinkBtn")
-        let activityViewController = UIActivityViewController(activityItems: [self.groupLink], applicationActivities: nil)
+        let activityViewController = UIActivityViewController(
+            activityItems: [self.groupLink], applicationActivities: nil
+        )
         self.present(activityViewController, animated: true, completion: nil)
     }
 }
