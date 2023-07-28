@@ -12,10 +12,13 @@ import CryptoKit
 
 class SignInViewController: UIViewController {
     let brandImgView = UIImageView()
+    // swiftlint:disable all
     let db = Firestore.firestore()
+    // swiftlint:enable all
     let activityIndicator = UIActivityIndicatorView(style: .large)
     var currentNonce: String?
     let siwaButton = ASAuthorizationAppleIDButton()
+    private var signInManager: SignInManager = SignInManager(db: Firestore.firestore())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +48,9 @@ class SignInViewController: UIViewController {
                     }
                     guard let userIDFromUserCollection = data["userID"] as? String else { return }
                     print(userIDFromUserCollection)
-                    ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userIDForAuth) { credentialState, error in
+                    ASAuthorizationAppleIDProvider().getCredentialState(
+                        forUserID: userIDForAuth
+                    ) { credentialState, _ in
                         switch credentialState {
                         case .authorized:
                             print("User remains logged in. Proceed to another view.")
@@ -60,13 +65,9 @@ class SignInViewController: UIViewController {
                             }
                         case .revoked:
                             print("User logged in before but revoked.")
-//                            self.setupView()
-//                            self.setupConstraints()
                             self.setupSignInWithApple()
                         case .notFound:
                             print("User logged in before but revoked.")
-//                            self.setupView()
-//                            self.setupConstraints()
                             self.setupSignInWithApple()
                         default:
                             print("Unknown state.")
@@ -111,9 +112,6 @@ class SignInViewController: UIViewController {
     func setupSignInWithApple() {
         DispatchQueue.main.async {
             // Do any additional setup after loading the view.
-            
-//            let siwaButton = ASAuthorizationAppleIDButton()
-            
             // set this so the button will use auto layout constraint
             self.siwaButton.translatesAutoresizingMaskIntoConstraints = false
             
@@ -143,7 +141,7 @@ class SignInViewController: UIViewController {
             self.siwaButton.addTarget(self, action: #selector(self.appleSignInTapped), for: .touchUpInside)
         }
     }
-
+    
     // this is the function that will be executed when user tap the button
     @objc func appleSignInTapped() {
         let provider = ASAuthorizationAppleIDProvider()
@@ -153,14 +151,14 @@ class SignInViewController: UIViewController {
         let nonce = randomNonceString()
         currentNonce = nonce
         request.nonce = sha256(nonce)
-
+        
         // pass the request to the initializer of the controller
         let authController = ASAuthorizationController(authorizationRequests: [request])
-      
+        
         // similar to delegate, this will ask the view controller
         // which window to present the ASAuthorizationController
         authController.presentationContextProvider = self
-          // delegate functions will be called when user data is
+        // delegate functions will be called when user data is
         // successfully retrieved or error occured
         authController.delegate = self
         
@@ -170,42 +168,42 @@ class SignInViewController: UIViewController {
     
     // For every sign-in request, generate a random string—a "nonce"—which you will use to make sure the ID token you get was granted specifically in response to your app's authentication request. This step is important to prevent replay attacks.
     private func randomNonceString(length: Int = 32) -> String {
-      precondition(length > 0)
-      var randomBytes = [UInt8](repeating: 0, count: length)
-      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-      if errorCode != errSecSuccess {
-        fatalError(
-          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-        )
-      }
-
-      let charset: [Character] =
+        precondition(length > 0)
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        if errorCode != errSecSuccess {
+            fatalError(
+                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+            )
+        }
+        
+        let charset: [Character] =
         Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-
-      let nonce = randomBytes.map { byte in
-        // Pick a random character from the set, wrapping around if needed.
-        charset[Int(byte) % charset.count]
-      }
-
-      return String(nonce)
+        
+        let nonce = randomBytes.map { byte in
+            // Pick a random character from the set, wrapping around if needed.
+            charset[Int(byte) % charset.count]
+        }
+        
+        return String(nonce)
     }
     // You will send the SHA256 hash of the nonce with your sign-in request, which Apple will pass unchanged in the response. Firebase validates the response by hashing the original nonce and comparing it to the value passed by Apple.
     @available(iOS 13, *)
     private func sha256(_ input: String) -> String {
-      let inputData = Data(input.utf8)
-      let hashedData = SHA256.hash(data: inputData)
-      let hashString = hashedData.compactMap {
-        String(format: "%02x", $0)
-      }.joined()
-
-      return hashString
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap { String(format: "%02x", $0) }.joined()
+        
+        return hashString
     }
 }
 
 extension SignInViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         // return the current view window
+        // swiftlint:disable all
         return self.view.window!
+        // swiftlint:enable all
     }
 }
 
@@ -219,7 +217,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
         guard let error = error as? ASAuthorizationError else {
             return
         }
-
+        
         switch error.code {
         case .canceled:
             // user press "cancel" during the login prompt
@@ -249,170 +247,28 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
     ///   - authorization: _
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            
             self.activityIndicator.startAnimating()
             self.siwaButton.isUserInteractionEnabled = false
-            // unique ID for each user, this uniqueID will always be returned
-            let userIDForAuth = appleIDCredential.user
-            UserDefaults.standard.set(userIDForAuth, forKey: "userIDForAuth")
-
-            // optional, might be nil
-            let email = appleIDCredential.email
-
-            // optional, might be nil
-            let givenName = appleIDCredential.fullName?.givenName
-
-            // optional, might be nil
-            let familyName = appleIDCredential.fullName?.familyName
-
-            // optional, might be nil
-            let nickName = appleIDCredential.fullName?.nickname
-
-            /*
-                useful for server side, the app can send identityToken and authorizationCode
-                to the server for verification purpose
-            */
             guard let nonce = currentNonce else {
                 fatalError("Invalid state: a login callback was received, but no login request was sent.")
             }
             
-            guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Unable to fetch identity token.")
-                return
-            }
-            
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-                return
-            }
-            
-//            var identityToken: String?
-//            if let token = appleIDCredential.identityToken {
-//                identityToken = String(bytes: token, encoding: .utf8)
-//            }
-//
-//            var authorizationCode: String?
-//            if let code = appleIDCredential.authorizationCode {
-//                authorizationCode = String(bytes: code, encoding: .utf8)
-//            }
-            
-            let credential = OAuthProvider.credential(
-                withProviderID: "apple.com",
-                idToken: idTokenString,
-                rawNonce: nonce)
-            
-            Task {
-                do {
-                    let result = try await Auth.auth().signIn(with: credential)
-                    guard let userID = Auth.auth().currentUser?.uid else { return }
-                    print(userID)
-                    // save it to user defaults
-                    UserDefaults.standard.set(userID, forKey: "userID")
-                    
-                    var userAvatar = ""
-                    var userName = ""
-                    var didUploadAllInfo = 0 {
-                        didSet {
-                            if didUploadAllInfo == 2 {
-                                proceedToLandingPage()
-                            }
-                        }
+            signInManager.handleAppleIDAuthorization(appleIDCredential: appleIDCredential, nonce: nonce) {
+                [weak self] success in
+                guard let self = self else { return }
+                if success {
+                    DispatchQueue.main.async {
+                        self.activityIndicator.stopAnimating()
+                        self.siwaButton.isUserInteractionEnabled = true
+                        let bsViewController = BSViewController()
+                        bsViewController.modalPresentationStyle = .fullScreen
+                        Vibration.shared.lightV()
+                        
+                        // Present the BSViewController from the current view controller
+                        self.present(bsViewController, animated: true, completion: nil)
                     }
-                    
-                    if UserDefaults.standard.object(forKey: "userAvatar") != nil {
-                        guard let userAvatarFromDefault = UserDefaults.standard.object(forKey: "userAvatar") as? String else { return }
-                        userAvatar = userAvatarFromDefault
-                        didUploadAllInfo += 1
-                    } else {
-                        db.collection("users").document("\(userID)").getDocument { snapshot, err in
-                            if let err = err {
-                                print(err)
-                            } else {
-                                guard let snapshot = snapshot else { return }
-                                guard let data = snapshot.data() else {
-                                    userAvatar = "defaultAvatar"
-                                    UserDefaults.standard.set("\(userAvatar)", forKey: "userAvatar")
-                                    uploadUserAvatar()
-                                    return
-                                }
-                                guard let userAvatarFromUsersCollection = data["userAvatar"] as? String else { return }
-                                userAvatar = userAvatarFromUsersCollection
-                                UserDefaults.standard.set("\(userAvatar)", forKey: "userAvatar")
-                                uploadUserAvatar()
-                            }
-                        }
-                    }
-                    
-                    if UserDefaults.standard.object(forKey: "userName") != nil {
-                        guard let userNameFromDefault = UserDefaults.standard.object(forKey: "userName") as? String else { return }
-                        userName = userNameFromDefault
-                        didUploadAllInfo += 1
-                    } else {
-                        db.collection("users").document("\(userID)").getDocument { snapshot, err in
-                            if let err = err {
-                                print(err)
-                            } else {
-                                guard let snapshot = snapshot else { return }
-                                guard let data = snapshot.data() else {
-                                    userName = "尚未設定名稱"
-                                    UserDefaults.standard.set("\(userName)", forKey: "userName")
-                                    uploadUserName()
-                                    return
-                                }
-                                guard let userAvatarFromUsersCollection = data["userName"] as? String else { return }
-                                userName = userAvatarFromUsersCollection
-                                UserDefaults.standard.set("\(userName)", forKey: "userName")
-                                uploadUserName()
-                            }
-                        }
-                    }
-                    
-                    func uploadUserAvatar() {
-                        // UploadUserID to fireStore
-                        db.collection("users").document("\(userID)").setData([
-                            "userID": "\(userID)",
-                            "userAvatar": "\(userAvatar)"
-                        ], merge: true) { err in
-                            if let err = err {
-                                print("Error writing document: \(err)")
-                            } else {
-                                print("UploadUserID to fireStore successfully.")
-                                didUploadAllInfo += 1
-                            }
-                        }
-                    }
-                    
-                    func uploadUserName() {
-                        // UploadUserID to fireStore
-                        db.collection("users").document("\(userID)").setData([
-                            "userID": "\(userID)",
-                            "userName": "\(userName)"
-                        ], merge: true) { err in
-                            if let err = err {
-                                print("Error writing document: \(err)")
-                            } else {
-                                print("UploadUserID to fireStore successfully.")
-                                didUploadAllInfo += 1
-                            }
-                        }
-                    }
-                    
-                    func proceedToLandingPage() {
-                        // store the data and get into main page
-                        DispatchQueue.main.async {
-                            self.activityIndicator.stopAnimating()
-                            self.siwaButton.isUserInteractionEnabled = true
-                            let bsViewController = BSViewController()
-                            bsViewController.modalPresentationStyle = .fullScreen
-                            Vibration.shared.lightV()
-                            
-                            // Present the BSViewController from the current view controller
-                            self.present(bsViewController, animated: true, completion: nil)
-                        }
-                    }
-                }
-                catch {
-                    print("Error authenticating: \(error.localizedDescription)")
+                } else {
+                    print("Error authenticating.")
                 }
             }
         }

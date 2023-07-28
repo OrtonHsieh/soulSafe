@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2BA622A3FDB341C77624419C /* Pods_SoulSafe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */; };
+		910226BA2A6E2BA200EEA468 /* SignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910226B92A6E2BA200EEA468 /* SignInManager.swift */; };
 		9110928D2A4EB66B002C5928 /* PostViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */; };
 		9110928F2A526EA7002C5928 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110928E2A526EA7002C5928 /* MapViewController.swift */; };
 		911092922A526EB9002C5928 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092912A526EB9002C5928 /* MapView.swift */; };
@@ -88,6 +89,7 @@
 /* Begin PBXFileReference section */
 		0494520C1224165E0ED5398A /* Pods-SoulSafe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.debug.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.debug.xcconfig"; sourceTree = "<group>"; };
 		35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSafe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		910226B92A6E2BA200EEA468 /* SignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInManager.swift; sourceTree = "<group>"; };
 		9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostViewController - Alert.swift"; sourceTree = "<group>"; };
 		9110928E2A526EA7002C5928 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		911092912A526EB9002C5928 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				91D5A0782A39CC3500B093AE /* AppDelegate.swift */,
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
 				911092A52A57E993002C5928 /* SignInPage.swift */,
+				910226B92A6E2BA200EEA468 /* SignInManager.swift */,
 				911092902A526EAA002C5928 /* MapViewController */,
 				91DBA5F72A49944D00D8D790 /* ChatRoomViewController */,
 				91DBA5DF2A482F6500D8D790 /* Manager */,
@@ -507,6 +510,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91DBA5FD2A49A51E00D8D790 /* ChatRoomHeaderView.swift in Sources */,
+				910226BA2A6E2BA200EEA468 /* SignInManager.swift in Sources */,
 				91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */,
 				91DBA5FF2A4A812E00D8D790 /* ChatRoomTableViewCell - Mine.swift in Sources */,
 				917CF5552A3F1B8E00F02D48 /* EditGroupViewController.swift in Sources */,
