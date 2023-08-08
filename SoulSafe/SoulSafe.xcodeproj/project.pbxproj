@@ -26,7 +26,7 @@
 		911092AA2A5B0965002C5928 /* SettingViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */; };
 		911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BC2A6660AC002C5928 /* EditNameViewController.swift */; };
 		911092BF2A666126002C5928 /* EditNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BE2A666126002C5928 /* EditNameView.swift */; };
-		911092D42A6A9DEE002C5928 /* MapViewController - Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D32A6A9DEE002C5928 /* MapViewController - Extensions.swift */; };
+		911092D42A6A9DEE002C5928 /* MapViewController + Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */; };
 		911092D62A6AA0F9002C5928 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D52A6AA0F9002C5928 /* UserAnnotationView.swift */; };
 		911092D82A6BA167002C5928 /* MainViewController - Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D72A6BA167002C5928 /* MainViewController - Extension.swift */; };
 		911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */; };
@@ -58,6 +58,8 @@
 		917CF55E2A407FAF00F02D48 /* Struct - User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF55D2A407FAF00F02D48 /* Struct - User.swift */; };
 		917CF5602A40809200F02D48 /* Struct - UploadImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */; };
 		9189BC092A79F45300D38783 /* MemoriesViewController - Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC082A79F45300D38783 /* MemoriesViewController - Extension.swift */; };
+		9189BC112A81DF1A00D38783 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC102A81DF1A00D38783 /* MapViewModel.swift */; };
+		9189BC132A81ED7C00D38783 /* MapViewController + CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC122A81ED7C00D38783 /* MapViewController + CollectionView.swift */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -108,7 +110,7 @@
 		911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingViewController - Alert.swift"; sourceTree = "<group>"; };
 		911092BC2A6660AC002C5928 /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
 		911092BE2A666126002C5928 /* EditNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameView.swift; sourceTree = "<group>"; };
-		911092D32A6A9DEE002C5928 /* MapViewController - Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController - Extensions.swift"; sourceTree = "<group>"; };
+		911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController + Locations.swift"; sourceTree = "<group>"; };
 		911092D52A6AA0F9002C5928 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
 		911092D72A6BA167002C5928 /* MainViewController - Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController - Extension.swift"; sourceTree = "<group>"; };
 		911120572A4C18FF0003F923 /* Extension - DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - DateFormatter.swift"; sourceTree = "<group>"; };
@@ -140,6 +142,8 @@
 		917CF55D2A407FAF00F02D48 /* Struct - User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct - User.swift"; sourceTree = "<group>"; };
 		917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct - UploadImg.swift"; sourceTree = "<group>"; };
 		9189BC082A79F45300D38783 /* MemoriesViewController - Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController - Extension.swift"; sourceTree = "<group>"; };
+		9189BC102A81DF1A00D38783 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		9189BC122A81ED7C00D38783 /* MapViewController + CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController + CollectionView.swift"; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -184,7 +188,9 @@
 			isa = PBXGroup;
 			children = (
 				9110928E2A526EA7002C5928 /* MapViewController.swift */,
-				911092D32A6A9DEE002C5928 /* MapViewController - Extensions.swift */,
+				911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */,
+				9189BC122A81ED7C00D38783 /* MapViewController + CollectionView.swift */,
+				9189BC102A81DF1A00D38783 /* MapViewModel.swift */,
 				9110929B2A53FEF2002C5928 /* LocationModel.swift */,
 				911092912A526EB9002C5928 /* MapView.swift */,
 				911092932A52F343002C5928 /* MapCollectionViewCell.swift */,
@@ -512,6 +518,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9189BC132A81ED7C00D38783 /* MapViewController + CollectionView.swift in Sources */,
 				91DBA5FD2A49A51E00D8D790 /* ChatRoomHeaderView.swift in Sources */,
 				910226BA2A6E2BA200EEA468 /* SignInManager.swift in Sources */,
 				91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */,
@@ -522,7 +529,7 @@
 				9110929A2A53F429002C5928 /* FriendsAnnotationView.swift in Sources */,
 				9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */,
 				91DBA5FB2A49947D00D8D790 /* ChatRoomView.swift in Sources */,
-				911092D42A6A9DEE002C5928 /* MapViewController - Extensions.swift in Sources */,
+				911092D42A6A9DEE002C5928 /* MapViewController + Locations.swift in Sources */,
 				911120622A4DB00F0003F923 /* MemoriesViewController - Alert.swift in Sources */,
 				917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */,
 				917CF5522A3EFB8E00F02D48 /* MyGroupTableViewCell.swift in Sources */,
@@ -566,6 +573,7 @@
 				911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
 				911092AA2A5B0965002C5928 /* SettingViewController - Alert.swift in Sources */,
+				9189BC112A81DF1A00D38783 /* MapViewModel.swift in Sources */,
 				911092D62A6AA0F9002C5928 /* UserAnnotationView.swift in Sources */,
 				91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,

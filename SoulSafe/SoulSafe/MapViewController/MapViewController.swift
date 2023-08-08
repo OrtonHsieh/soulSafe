@@ -30,8 +30,8 @@ class MapViewController: UIViewController {
     
     lazy var isInitialized = false
     lazy var mapView = MapView()
-    private lazy var locationManager = CLLocationManager()
-    private lazy var regionInMeter: Double = 5000
+    lazy var locationManager = CLLocationManager()
+    lazy var regionInMeter: Double = 5000
     private var existingAnnotation: UserAnnotation?
     // 這邊計算 Post 自己位置的次數，控制打幾次時更新一次其他人的位置，先設定三次
     var numberOfPostCounts = 0
@@ -48,17 +48,15 @@ class MapViewController: UIViewController {
     lazy var selectedGroupIDInMapView = String()
     lazy var selectedGroupTitleInMapView = String()
     
-    lazy var db = Firestore.firestore()
     // 這邊每當 didUpdateLocations 觸發五次時就 post 一次位置至 FireStore
     lazy var updateCount = 0
+    lazy var viewModel = MapViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // 先 Default 將選擇的 Group 設定為第一個，並且顯示該群裡的人
         selectedGroupIDInMapView = groupIDs[0]
         selectedGroupTitleInMapView = groupTitles[0]
-        
         setupView()
         setupConstraints()
         setupLocationManager()
@@ -93,16 +91,6 @@ class MapViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
-    private func centerViewOnUserLocation() {
-        if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion.init(
-                center: location,
-                latitudinalMeters: regionInMeter,
-                longitudinalMeters: regionInMeter)
-            mapView.map.setRegion(region, animated: true)
-        }
-    }
-    
     func addAndUpdateCustomPin(_ coordinate: CLLocationCoordinate2D) {
         if let existingAnnotation = existingAnnotation {
             // Update the coordinates of the existing annotation
@@ -117,29 +105,6 @@ class MapViewController: UIViewController {
             
             mapView.map.addAnnotation(annotation)
             existingAnnotation = annotation
-        }
-    }
-    
-    func checkLocationAuthorization() {
-        switch locationManager.authorizationStatus {
-        case .authorizedWhenInUse:
-            centerViewOnUserLocation()
-            locationManager.startUpdatingLocation()
-        case .denied:
-            // Show alert instruction them how to turn on permissions
-            // if user turn off location device wide, it call back denied
-            locationManager.requestAlwaysAuthorization()
-        case .notDetermined:
-            locationManager.requestAlwaysAuthorization()
-        case .restricted:
-            // Show an alert letting them know what's up
-            break
-        case .authorizedAlways:
-            // Do stuff here
-            centerViewOnUserLocation()
-            locationManager.startUpdatingLocation()
-        @unknown default:
-            break
         }
     }
     
@@ -171,47 +136,8 @@ class MapViewController: UIViewController {
         ])
     }
     
-    private func updateCollectionViewLayout() {
-        // Invalidate the layout to trigger a redraw
-        mapCollectionView.collectionViewLayout.invalidateLayout()
-    }
-    
     private func registerCell() {
         mapCollectionView.register(MapCollectionViewCell.self, forCellWithReuseIdentifier: "MapCollectionViewCell")
-    }
-    
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        // 如果是三個 item 則 1/3 如果是兩個則 1/2 如果是一個則 1
-        var widthForItem = Double()
-        var widthForGroup = Double()
-        if groupTitles.isEmpty {
-            widthForItem = 0
-            widthForGroup = 0
-        } else if groupTitles.count == 1 {
-            widthForItem = 1
-            widthForGroup = 0.6
-        } else if groupTitles.count == 2 {
-            widthForItem = 1 / 2
-            widthForGroup = 1.2
-        } else {
-            widthForItem = 1 / 3
-            widthForGroup = 1.8
-        }
-        
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(widthForItem),
-            heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10) // Add content insets
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(widthForGroup),
-            heightDimension: .absolute(68)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        return layout
     }
     
     private func removeExistingAnnoations() {
@@ -233,56 +159,26 @@ class MapViewController: UIViewController {
     }
     
     private func fetchGroupLocations() {
-        let pathToGroupLocationCollection = db.collection("groups").document(selectedGroupIDInMapView).collection("locations")
-        pathToGroupLocationCollection.getDocuments { snapshot, error in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                guard let snapshot = snapshot else { return }
-                var memberLocationFromSingleGroup: [Location] = []
-                for document in snapshot.documents {
-                    let locationData = document.data()
-                    let oneUserFromSingleGroupLocation = Location(
-                        id: locationData["id"] as? String ?? "",
-                        groupID: locationData["groupID"] as? String ?? "",
-                        userID: locationData["userID"] as? String ?? "",
-                        userName: locationData["userName"] as? String ?? "",
-                        userLocation: locationData["userLocation"] as? [String] ?? [],
-                        // 這邊會拿到 URL
-                        userAvatar: locationData["userAvatar"] as? String ?? "",
-                        lastUpdate: locationData["lastUpdate"] as? Timestamp ?? Timestamp(date: Date())
-                    )
-                    memberLocationFromSingleGroup.append(oneUserFromSingleGroupLocation)
-                    // 將每個 groupID 裡面的成員位置存入 Dict，可以用 groupID 來取用該群組內成員的位置
-                    self.groupLocations["\(self.selectedGroupIDInMapView)"] = memberLocationFromSingleGroup
-                    self.addAnnotationForGroupLocations()
-                }
-            }
+        viewModel.fetchGroupLocations(
+            selectedGroupIDInMapView: selectedGroupIDInMapView
+        ) { [weak self] result in
+            guard let self = self else { return }
+            self.groupLocations = result
+            self.addAnnotationForGroupLocations()
         }
     }
     
     private func addAnnotationForGroupLocations() {
         guard let maxIndex = self.groupLocations["\(self.selectedGroupIDInMapView)"]?.count else { return }
-        
-        for index in 0..<maxIndex {
-            guard let singleGroupLocation = self.groupLocations["\(self.selectedGroupIDInMapView)"] else { return }
-            self.singleGroupLocation = singleGroupLocation
-            let userLocationInString = singleGroupLocation[index].userLocation
-            
-            guard let latitude = Double(userLocationInString[0]) else { return }
-            guard let longitude = Double(userLocationInString[1]) else { return }
-            let location = CLLocation(latitude: latitude, longitude: longitude)
-            let coordinate = location.coordinate
-            
-            let annotation = FriendsAnnotation(
-                userID: singleGroupLocation[index].userID,
-                groupID: singleGroupLocation[index].groupID,
-                userName: singleGroupLocation[index].userName,
-                userAvatar: singleGroupLocation[index].userAvatar,
-                coordinate: coordinate,
-                lastUpdate: singleGroupLocation[index].lastUpdate
-            )
-            self.mapView.map.addAnnotation(annotation)
+        viewModel.addAnnotationForGroupLocations(
+            maxIndex: maxIndex,
+            groupLocations: groupLocations,
+            selectedGroupIDInMapView: selectedGroupIDInMapView
+        ) { [weak self] annotations in
+            guard let self = self else { return }
+            for annotation in annotations {
+                self.mapView.map.addAnnotation(annotation)
+            }
         }
     }
     
@@ -291,25 +187,6 @@ class MapViewController: UIViewController {
         for subview in annotationView.subviews {
             subview.removeFromSuperview()
         }
-    }
-    
-    func setupUpdateTime(annotationView: FriendsAnnotationView, annotation: FriendsAnnotation) {
-        let lastUpdateInString = CusDateFormatter.shared.calculateHoursPassed(from: annotation.lastUpdate)
-        let subviewTitle = UILabel()
-        subviewTitle.text = "\(lastUpdateInString)"
-        subviewTitle.font = UIFont.systemFont(ofSize: 14)
-        subviewTitle.textAlignment = .center
-        annotationView.addSubview(subviewTitle)
-        if lastUpdateInString.contains("0 分鐘前更新") && lastUpdateInString.first == "0" {
-            subviewTitle.frame = CGRect(x: -26, y: -30, width: 100, height: 20)
-        } else {
-            subviewTitle.frame = CGRect(x: -56, y: -30, width: 160, height: 20)
-        }
-        subviewTitle.layer.cornerRadius = 4
-        subviewTitle.clipsToBounds = true
-        subviewTitle.layer.masksToBounds = true
-        subviewTitle.textColor = UIColor(hex: CIC.shared.F1)
-        subviewTitle.backgroundColor = UIColor(hex: CIC.shared.M2)
     }
     
     func configureFriendsAnnotationView(for annotation: FriendsAnnotation, mapView: MKMapView) -> MKAnnotationView {
