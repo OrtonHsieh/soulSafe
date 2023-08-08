@@ -20,7 +20,9 @@ class SettingViewController: UIViewController {
     let settingView = SettingView()
     let settingTableView = UITableView()
     var groupIDs: [String] = []
+    // swiftlint:disable all
     let db = Firestore.firestore()
+    // swiftlint:enable all
     
     var userAvatar = "" {
         didSet {
@@ -131,41 +133,7 @@ class SettingViewController: UIViewController {
     }
 }
 
-extension SettingViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("\(indexPath.row)")
-        if indexPath.row == 0 {
-            DispatchQueue.main.async {
-                self.deleteUserAccount()
-            }
-        } else {
-            userLogOut()
-        }
-    }
-}
-
-extension SettingViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "SettingTableViewCell",
-            for: indexPath) as? SettingTableViewCell else {
-            fatalError("Failed to produce reuseable cell for SettingTableViewCell.")
-        }
-        let settingTableViewTitleArray = ["刪除帳號", "登出"]
-        cell.settingOptionLabel.text = settingTableViewTitleArray[indexPath.row]
-        cell.layer.shadowColor = UIColor(red: 24 / 255, green: 183 / 255, blue: 231 / 255, alpha: 0.4).cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 0)
-        cell.layer.shadowOpacity = 1.0
-        cell.layer.shadowRadius = 8
-        return cell
-    }
-}
-
-extension SettingViewController: SettingViewDelegate {
+extension SettingViewController: SettingViewDelegate, UISheetPresentationControllerDelegate {
     func presentImagePicker(_ view: SettingView) {
         Vibration.shared.lightV()
         chooseImageAlert()
@@ -199,9 +167,6 @@ extension SettingViewController: UIImagePickerControllerDelegate {
     }
 }
 
-extension SettingViewController: UINavigationControllerDelegate {
-}
-
 extension SettingViewController: CropViewControllerDelegate {
     func cropViewController(_ cropViewController: CropViewController, didCropToCircularImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         uploadPhoto(image: image) { result in
@@ -212,10 +177,12 @@ extension SettingViewController: CropViewControllerDelegate {
                 // 拿到 url 後上傳到 fireStore 跟存到 UserDefault
                 UserDefaults.standard.set("\(url)", forKey: "userAvatar")
                 let storeAvatarPath = self.db.collection("users").document("\(UserSetup.userID)")
-                storeAvatarPath.setData([
-                    "userAvatar": "\(url)",
-                    "userID": "\(userID)"
-                ], merge: true) { err in
+                storeAvatarPath.setData(
+                    [
+                        "userAvatar": "\(url)",
+                        "userID": "\(userID)"
+                    ],
+                    merge: true) { err in
                     if let err = err {
                         print("Failed to upload img: \(err)")
                     } else {
@@ -229,12 +196,14 @@ extension SettingViewController: CropViewControllerDelegate {
                 }
                 
                 if !self.groupIDs.isEmpty {
+                    let groupPath = self.db.collection("groups")
                     for groupID in self.groupIDs {
-                        let storeAvatarInGroupMemberListPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(userID)")
-                        storeAvatarInGroupMemberListPath.setData([
-                            "userAvatar": "\(url)"
-                        ],
-                        merge: true)
+                        let groupPathToMembers = groupPath.document("\(groupID)").collection("members")
+                        let storeAvatarInGroupMemberListPath = groupPathToMembers.document("\(userID)")
+                        storeAvatarInGroupMemberListPath.setData(
+                            ["userAvatar": "\(url)"],
+                            merge: true
+                        )
                     }
                 }
             case .failure(let error):
@@ -244,18 +213,15 @@ extension SettingViewController: CropViewControllerDelegate {
     }
 }
 
-extension SettingViewController: UISheetPresentationControllerDelegate {
-}
-
 extension SettingViewController: EditNameViewControllerDelegate {
     func didPressSaveBtn(_ view: EditNameViewController, name: String) {
         guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
         UserDefaults.standard.set("\(name)", forKey: "userName")
         settingView.userNameLabel.text = name
         let storeNamePath = self.db.collection("users").document("\(userID)")
-        storeNamePath.setData([
-            "userName": "\(name)"
-        ], merge: true) { err in
+        storeNamePath.setData(
+            ["userName": "\(name)"],
+            merge: true) { err in
             if let err = err {
                 print("Failed to upload img: \(err)")
             } else {
@@ -264,11 +230,13 @@ extension SettingViewController: EditNameViewControllerDelegate {
         }
         
         if !self.groupIDs.isEmpty {
+            let groupPath = db.collection("groups")
             for groupID in self.groupIDs {
-                let storeNameInGroupMemberListPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(userID)")
-                storeNameInGroupMemberListPath.setData([
-                    "userName": "\(name)"
-                ], merge: true) { err in
+                let groupPathToMembers = groupPath.document("\(groupID)").collection("members")
+                let storeNameInGroupMemberListPath = groupPathToMembers.document("\(userID)")
+                storeNameInGroupMemberListPath.setData(
+                    ["userName": "\(name)"],
+                    merge: true) { err in
                     if let err = err {
                         print(err)
                     } else {

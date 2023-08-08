@@ -37,7 +37,9 @@ class MemoriesViewController: UIViewController {
     var groupIDArrays: [[String]] = []
     var groupTitleArrays: [[String]] = []
     var ifGroupViewTextIsMyPost = true
+    // swiftlint:disable all
     let db = Firestore.firestore()
+    // swiftlint:enable all
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,29 +92,6 @@ class MemoriesViewController: UIViewController {
         ])
     }
     
-    func presentPostViewController(_ imageURL: String, postID: String, groupIDArray: [String], groupTitleArray: [String]) {
-        let postVC = PostViewController()
-        postVC.modalPresentationStyle = .formSheet
-        let url = URL(string: imageURL)
-        postVC.imageView.kf.setImage(with: url)
-        postVC.currentPostID = postID
-        // 這邊目前 Post 點進去時會是上一張照片
-        postVC.selectedGroup = selectedGroup
-        postVC.selectedGroupTitle = selectedGroupTitle
-        postVC.selectedGroupInPostVC = selectedGroup
-        postVC.groupIDArray = groupIDArray
-        postVC.groupTitleArray = groupTitleArray
-        Vibration.shared.lightV()
-        present(postVC, animated: true)
-        
-        if let sheetPC = postVC.sheetPresentationController {
-            sheetPC.detents = [.large()]
-            sheetPC.prefersGrabberVisible = true
-            sheetPC.delegate = self
-            sheetPC.preferredCornerRadius = 20
-        }
-    }
-    
     func getNewGalleryPics() {
         let docRef = db.collection("users").document("\(UserSetup.userID)").collection("posts")
         docRef.order(by: "timeStamp", descending: true).addSnapshotListener { querySnapshot, error in
@@ -159,9 +138,11 @@ class MemoriesViewController: UIViewController {
     
     func getGroupsPosts() {
         groupPostDict.removeAll()
-        
+        let groupPath = db.collection("groups")
         for groupID in groupIDs {
-            let groupPostPath = db.collection("groups").document("\(groupID)").collection("posts").order(by: "timeStamp", descending: true)
+            let groupPostPath = groupPath.document("\(groupID)").collection("posts").order(
+                by: "timeStamp",
+                descending: true)
             
             listener = groupPostPath.addSnapshotListener { querySnapshot, error in
                 if let error = error {

@@ -26,8 +26,9 @@ class BSViewController: UIViewController {
             settingVC.groupIDs = groupIDs
         }
     }
+    // swiftlint:disable all
     let db = Firestore.firestore()
-    
+    // swiftlint:enable all
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
@@ -50,7 +51,7 @@ class BSViewController: UIViewController {
             forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification,
             object: nil,
             queue: nil
-        ) { (notification: Notification) in
+        ) { _ in
             // Sign user in or out
             print("Sign user in or out...")
         }
@@ -145,10 +146,6 @@ class BSViewController: UIViewController {
 }
 
 extension BSViewController: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let currentPage = Int(scrollView.contentOffset.x / scrollView.bounds.width)
-    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // 鎖住垂直滾動，將 y 軸偏移量設為 0
         scrollView.contentOffset.y = 0

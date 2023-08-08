@@ -10,14 +10,14 @@ import FirebaseAuth
 import AuthenticationServices
 import FirebaseFirestore
 
-extension SettingViewController {
+extension SettingViewController: UINavigationControllerDelegate {
     func userLogOut() {
         let alertController = UIAlertController(title: "確認登出", message: nil, preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
         alertController.addAction(cancelAction)
         
-        let myPostAction = UIAlertAction(title: "確認", style: .default) { action in
+        let myPostAction = UIAlertAction(title: "確認", style: .default) { _ in
             UserDefaults.standard.removeObject(forKey: "userIDForAuth")
         }
         alertController.addAction(myPostAction)
@@ -32,7 +32,7 @@ extension SettingViewController {
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
         alertController.addAction(cancelAction)
         
-        let myPostAction = UIAlertAction(title: "確認", style: .default) { action in
+        let myPostAction = UIAlertAction(title: "確認", style: .default) { _ in
             let user = Auth.auth().currentUser
             
             user?.delete { error in
@@ -43,7 +43,7 @@ extension SettingViewController {
                     let cancelAction = UIAlertAction(title: "取消", style: .cancel)
                     alertController.addAction(cancelAction)
                     
-                    let myPostAction = UIAlertAction(title: "登出", style: .default) { action in
+                    let myPostAction = UIAlertAction(title: "登出", style: .default) { _ in
                         UserDefaults.standard.removeObject(forKey: "userIDForAuth")
                     }
                     alertController.addAction(myPostAction)
@@ -54,7 +54,7 @@ extension SettingViewController {
                     guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
                     // 先刪掉 group 再刪掉 post 最後刪掉 document 路徑
                     let accountDeletePath = self.db.collection("users").document("\(userID)")
-                    accountDeletePath.delete() { err in
+                    accountDeletePath.delete { err in
                         if let err = err {
                             print("Error removing document: \(err)")
                         } else {

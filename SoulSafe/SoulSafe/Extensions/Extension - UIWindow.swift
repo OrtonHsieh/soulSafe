@@ -11,10 +11,12 @@ extension UIWindow {
     var topViewController: UIViewController? {
         // 用遞迴的方式找到最後被呈現的 view controller。
         if var topVC = rootViewController {
+            // swiftlint:disable all
             while let vc = topVC.presentedViewController {
                 topVC = vc
             }
             return topVC
+            // swiftlint:enable all
         } else {
             return nil
         }

@@ -23,7 +23,7 @@
 		911092A42A56EE4C002C5928 /* Extension - UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A32A56EE4C002C5928 /* Extension - UIImageView.swift */; };
 		911092A62A57E993002C5928 /* SignInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A52A57E993002C5928 /* SignInPage.swift */; };
 		911092A82A5AF6D5002C5928 /* Extension - UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A72A5AF6D5002C5928 /* Extension - UIWindow.swift */; };
-		911092AA2A5B0965002C5928 /* SettingViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */; };
+		911092AA2A5B0965002C5928 /* SettingViewController + Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A92A5B0965002C5928 /* SettingViewController + Alert.swift */; };
 		911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BC2A6660AC002C5928 /* EditNameViewController.swift */; };
 		911092BF2A666126002C5928 /* EditNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BE2A666126002C5928 /* EditNameView.swift */; };
 		911092D42A6A9DEE002C5928 /* MapViewController + Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */; };
@@ -33,7 +33,7 @@
 		9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205B2A4D390E0003F923 /* GroupSelectionView.swift */; };
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
 		911120602A4D39630003F923 /* GroupSelectionView - Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205F2A4D39630003F923 /* GroupSelectionView - Delegate.swift */; };
-		911120622A4DB00F0003F923 /* MemoriesViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120612A4DB00F0003F923 /* MemoriesViewController - Alert.swift */; };
+		911120622A4DB00F0003F923 /* MemoriesViewController + Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120612A4DB00F0003F923 /* MemoriesViewController + Alert.swift */; };
 		9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC32A3ABCD5008DB929 /* BSViewController.swift */; };
 		9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */; };
 		9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */; };
@@ -55,11 +55,12 @@
 		917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5562A3F1B9600F02D48 /* EditGroupView.swift */; };
 		917CF5592A3F1BA100F02D48 /* EditGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */; };
 		917CF55B2A3FFEC700F02D48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */; };
-		917CF55E2A407FAF00F02D48 /* Struct - User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF55D2A407FAF00F02D48 /* Struct - User.swift */; };
 		917CF5602A40809200F02D48 /* Struct - UploadImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */; };
-		9189BC092A79F45300D38783 /* MemoriesViewController - Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC082A79F45300D38783 /* MemoriesViewController - Extension.swift */; };
+		9189BC092A79F45300D38783 /* MemoriesViewController + CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC082A79F45300D38783 /* MemoriesViewController + CollectionView.swift */; };
 		9189BC112A81DF1A00D38783 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC102A81DF1A00D38783 /* MapViewModel.swift */; };
 		9189BC132A81ED7C00D38783 /* MapViewController + CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC122A81ED7C00D38783 /* MapViewController + CollectionView.swift */; };
+		9189BC152A8211CD00D38783 /* SettingViewController + TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC142A8211CD00D38783 /* SettingViewController + TableView.swift */; };
+		9189BC172A82179900D38783 /* MemoriesViewController + UISheet + Others.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9189BC162A82179900D38783 /* MemoriesViewController + UISheet + Others.swift */; };
 		91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A0782A39CC3500B093AE /* AppDelegate.swift */; };
 		91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */; };
 		91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5A07C2A39CC3500B093AE /* MainViewController.swift */; };
@@ -107,7 +108,7 @@
 		911092A32A56EE4C002C5928 /* Extension - UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIImageView.swift"; sourceTree = "<group>"; };
 		911092A52A57E993002C5928 /* SignInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPage.swift; sourceTree = "<group>"; };
 		911092A72A5AF6D5002C5928 /* Extension - UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIWindow.swift"; sourceTree = "<group>"; };
-		911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingViewController - Alert.swift"; sourceTree = "<group>"; };
+		911092A92A5B0965002C5928 /* SettingViewController + Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingViewController + Alert.swift"; sourceTree = "<group>"; };
 		911092BC2A6660AC002C5928 /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
 		911092BE2A666126002C5928 /* EditNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameView.swift; sourceTree = "<group>"; };
 		911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController + Locations.swift"; sourceTree = "<group>"; };
@@ -117,7 +118,7 @@
 		9111205B2A4D390E0003F923 /* GroupSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelectionView.swift; sourceTree = "<group>"; };
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
 		9111205F2A4D39630003F923 /* GroupSelectionView - Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - Delegate.swift"; sourceTree = "<group>"; };
-		911120612A4DB00F0003F923 /* MemoriesViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController - Alert.swift"; sourceTree = "<group>"; };
+		911120612A4DB00F0003F923 /* MemoriesViewController + Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController + Alert.swift"; sourceTree = "<group>"; };
 		9127BBC32A3ABCD5008DB929 /* BSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSViewController.swift; sourceTree = "<group>"; };
 		9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
 		9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -139,11 +140,12 @@
 		917CF5562A3F1B9600F02D48 /* EditGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupView.swift; sourceTree = "<group>"; };
 		917CF5582A3F1BA100F02D48 /* EditGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupTableViewCell.swift; sourceTree = "<group>"; };
 		917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		917CF55D2A407FAF00F02D48 /* Struct - User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct - User.swift"; sourceTree = "<group>"; };
 		917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Struct - UploadImg.swift"; sourceTree = "<group>"; };
-		9189BC082A79F45300D38783 /* MemoriesViewController - Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController - Extension.swift"; sourceTree = "<group>"; };
+		9189BC082A79F45300D38783 /* MemoriesViewController + CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController + CollectionView.swift"; sourceTree = "<group>"; };
 		9189BC102A81DF1A00D38783 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		9189BC122A81ED7C00D38783 /* MapViewController + CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController + CollectionView.swift"; sourceTree = "<group>"; };
+		9189BC142A8211CD00D38783 /* SettingViewController + TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingViewController + TableView.swift"; sourceTree = "<group>"; };
+		9189BC162A82179900D38783 /* MemoriesViewController + UISheet + Others.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController + UISheet + Others.swift"; sourceTree = "<group>"; };
 		91D5A0752A39CC3500B093AE /* SoulSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoulSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D5A0782A39CC3500B093AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -243,8 +245,9 @@
 			isa = PBXGroup;
 			children = (
 				9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */,
-				9189BC082A79F45300D38783 /* MemoriesViewController - Extension.swift */,
-				911120612A4DB00F0003F923 /* MemoriesViewController - Alert.swift */,
+				9189BC082A79F45300D38783 /* MemoriesViewController + CollectionView.swift */,
+				911120612A4DB00F0003F923 /* MemoriesViewController + Alert.swift */,
+				9189BC162A82179900D38783 /* MemoriesViewController + UISheet + Others.swift */,
 				9127BBD82A3C8131008DB929 /* MemoriesView.swift */,
 				9127BBDA2A3C8A0C008DB929 /* MemoriesCollectionViewCell.swift */,
 				9127BBE02A3D8C09008DB929 /* PostViewController */,
@@ -256,7 +259,8 @@
 			isa = PBXGroup;
 			children = (
 				9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */,
-				911092A92A5B0965002C5928 /* SettingViewController - Alert.swift */,
+				911092A92A5B0965002C5928 /* SettingViewController + Alert.swift */,
+				9189BC142A8211CD00D38783 /* SettingViewController + TableView.swift */,
 				9110929F2A56E79E002C5928 /* SettingView.swift */,
 				911092A12A56E7A6002C5928 /* SettingTableViewCell.swift */,
 				911092BC2A6660AC002C5928 /* EditNameViewController.swift */,
@@ -302,7 +306,6 @@
 		917CF55C2A407F5E00F02D48 /* Struct */ = {
 			isa = PBXGroup;
 			children = (
-				917CF55D2A407FAF00F02D48 /* Struct - User.swift */,
 				917CF55F2A40809100F02D48 /* Struct - UploadImg.swift */,
 			);
 			path = Struct;
@@ -525,12 +528,13 @@
 				91DBA5FF2A4A812E00D8D790 /* ChatRoomTableViewCell - Mine.swift in Sources */,
 				917CF5552A3F1B8E00F02D48 /* EditGroupViewController.swift in Sources */,
 				911120602A4D39630003F923 /* GroupSelectionView - Delegate.swift in Sources */,
+				9189BC172A82179900D38783 /* MemoriesViewController + UISheet + Others.swift in Sources */,
 				9127BBDB2A3C8A0C008DB929 /* MemoriesCollectionViewCell.swift in Sources */,
 				9110929A2A53F429002C5928 /* FriendsAnnotationView.swift in Sources */,
 				9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */,
 				91DBA5FB2A49947D00D8D790 /* ChatRoomView.swift in Sources */,
 				911092D42A6A9DEE002C5928 /* MapViewController + Locations.swift in Sources */,
-				911120622A4DB00F0003F923 /* MemoriesViewController - Alert.swift in Sources */,
+				911120622A4DB00F0003F923 /* MemoriesViewController + Alert.swift in Sources */,
 				917CF5572A3F1B9600F02D48 /* EditGroupView.swift in Sources */,
 				917CF5522A3EFB8E00F02D48 /* MyGroupTableViewCell.swift in Sources */,
 				9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */,
@@ -551,6 +555,7 @@
 				91DBA5DC2A48104700D8D790 /* JoinGroupManager.swift in Sources */,
 				911092942A52F343002C5928 /* MapCollectionViewCell.swift in Sources */,
 				91DBA5F62A49944900D8D790 /* ChatRoomViewController.swift in Sources */,
+				9189BC152A8211CD00D38783 /* SettingViewController + TableView.swift in Sources */,
 				91D5A0792A39CC3500B093AE /* AppDelegate.swift in Sources */,
 				911092A62A57E993002C5928 /* SignInPage.swift in Sources */,
 				9110929C2A53FEF2002C5928 /* LocationModel.swift in Sources */,
@@ -564,7 +569,7 @@
 				91DBA5F92A49947300D8D790 /* ChatRoomTableViewCell.swift in Sources */,
 				917CF54B2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift in Sources */,
 				9127BBD02A3C381B008DB929 /* Extension - Vibration.swift in Sources */,
-				9189BC092A79F45300D38783 /* MemoriesViewController - Extension.swift in Sources */,
+				9189BC092A79F45300D38783 /* MemoriesViewController + CollectionView.swift in Sources */,
 				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				911092A42A56EE4C002C5928 /* Extension - UIImageView.swift in Sources */,
 				91D5A07B2A39CC3500B093AE /* SceneDelegate.swift in Sources */,
@@ -572,13 +577,12 @@
 				911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */,
 				911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
-				911092AA2A5B0965002C5928 /* SettingViewController - Alert.swift in Sources */,
+				911092AA2A5B0965002C5928 /* SettingViewController + Alert.swift in Sources */,
 				9189BC112A81DF1A00D38783 /* MapViewModel.swift in Sources */,
 				911092D62A6AA0F9002C5928 /* UserAnnotationView.swift in Sources */,
 				91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */,
 				9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */,
 				917CF5602A40809200F02D48 /* Struct - UploadImg.swift in Sources */,
-				917CF55E2A407FAF00F02D48 /* Struct - User.swift in Sources */,
 				911120582A4C18FF0003F923 /* Extension - DateFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

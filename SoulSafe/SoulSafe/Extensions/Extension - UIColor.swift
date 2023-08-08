@@ -6,9 +6,6 @@
 //
 
 import UIKit
-
-// dependency injection 取代 singleton
-
 // swiftlint:disable identifier_name
 class CIC {
     static let shared = CIC()

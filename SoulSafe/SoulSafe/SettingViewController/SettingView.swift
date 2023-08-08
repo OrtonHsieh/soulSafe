@@ -34,7 +34,13 @@ class SettingView: UIView {
     }
     
     private func setupView() {
-        [avatarImgViewContainer, userNameLabel, generalLabel, settingViewBackBtn, settingViewEditBtn].forEach { addSubview($0) }
+        [
+            avatarImgViewContainer,
+            userNameLabel,
+            generalLabel,
+            settingViewBackBtn,
+            settingViewEditBtn
+        ].forEach { addSubview($0) }
         avatarImgViewContainer.addSubview(avatarImgView)
         
         settingViewBackBtn.setImage(UIImage(named: "icon-bigBack-toLeft"), for: .normal)
@@ -64,8 +70,7 @@ class SettingView: UIView {
         avatarImgView.layer.cornerRadius = 54
         
         avatarImgViewContainer = Blur.shared.setViewShadow(avatarImgViewContainer)
-        
-        let userName = UserDefaults.standard.object(forKey: "userName")
+    
         userNameLabel.text = "尚未設定名稱"
         userNameLabel.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         userNameLabel.textColor = .white
@@ -86,8 +91,13 @@ class SettingView: UIView {
     }
     
     private func setupConstraints() {
-        [avatarImgView, userNameLabel, generalLabel,
-         settingViewBackBtn, settingViewEditBtn, avatarImgViewContainer
+        [
+            avatarImgView,
+            userNameLabel,
+            generalLabel,
+            settingViewBackBtn,
+            settingViewEditBtn,
+            avatarImgViewContainer
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

@@ -31,7 +31,7 @@ class CusDateFormatter {
         let currentDate = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute], from: date, to: currentDate)
-        
+        // swiftlint:disable all
         if let hours = components.hour,
            let min = components.minute {
             if hours != 0 {
@@ -42,5 +42,6 @@ class CusDateFormatter {
         } else {
             return "無"
         }
+        // swiftlint:enable all
     }
 }

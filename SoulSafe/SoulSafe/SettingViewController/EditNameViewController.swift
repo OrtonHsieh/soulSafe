@@ -42,7 +42,6 @@ class EditNameViewController: UIViewController {
 extension EditNameViewController: EditNameViewDelegate {
     func didPressSaveBtn(_ view: EditNameView, name: String) {
         Vibration.shared.lightV()
-        print("上傳名稱至 FireStore + 塞入 Label, 記得要在 SettingView 的 ViewDidLoad fetch name.")
         delegate?.didPressSaveBtn(self, name: name)
         dismiss(animated: true)
     }

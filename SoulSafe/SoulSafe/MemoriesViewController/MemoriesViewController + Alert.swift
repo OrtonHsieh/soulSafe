@@ -14,7 +14,7 @@ extension MemoriesViewController {
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
         alertController.addAction(cancelAction)
         
-        let myPostAction = UIAlertAction(title: "我的貼文", style: .default) { action in
+        let myPostAction = UIAlertAction(title: "我的貼文", style: .default) { _ in
             self.selectedGroup = ""
             self.galleryCollection.reloadData()
             self.memoriesView.groupSelectorLabel.text = "我的貼文"
@@ -23,7 +23,7 @@ extension MemoriesViewController {
         alertController.addAction(myPostAction)
         
         for (index, groupTitle) in groupTitles.enumerated() {
-            let action = UIAlertAction(title: "\(groupTitle)", style: .default) { action in
+            let action = UIAlertAction(title: "\(groupTitle)", style: .default) { _ in
                 self.selectedGroup = self.groupIDs[index]
                 self.selectedGroupTitle = self.groupTitles[index]
                 self.galleryCollection.reloadData()
