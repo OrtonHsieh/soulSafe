@@ -122,12 +122,6 @@ extension GroupViewController: UITableViewDelegate {
         Vibration.shared.lightV()
         chatRoom.viewDidLoad()
         present(chatRoom, animated: true)
-        
-//        if let sheetPC = chatRoom.sheetPresentationController {
-//            sheetPC.prefersGrabberVisible = true
-//            sheetPC.delegate = self
-//            sheetPC.preferredCornerRadius = 10
-//        }
     }
 }
 

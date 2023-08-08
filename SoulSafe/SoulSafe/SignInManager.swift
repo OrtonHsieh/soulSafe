@@ -19,6 +19,9 @@ class SignInManager {
     }
     // swiftlint:enable all
     
+    var userAvatar = ""
+    var userName = ""
+    
     func handleAppleIDAuthorization(appleIDCredential: ASAuthorizationAppleIDCredential, nonce: String, completion: @escaping (Bool) -> Void) {
         let userIDForAuth = appleIDCredential.user
         UserDefaults.standard.set(userIDForAuth, forKey: "userIDForAuth")
@@ -46,8 +49,6 @@ class SignInManager {
                 // save it to user defaults
                 UserDefaults.standard.set(userID, forKey: "userID")
                 
-                var userAvatar = ""
-                var userName = ""
                 var didUploadAllInfo = 0 {
                     didSet {
                         if didUploadAllInfo == 2 {
@@ -69,14 +70,14 @@ class SignInManager {
                         } else {
                             guard let snapshot = snapshot else { return }
                             guard let data = snapshot.data() else {
-                                userAvatar = "defaultAvatar"
-                                UserDefaults.standard.set("\(userAvatar)", forKey: "userAvatar")
+                                self.userAvatar = "defaultAvatar"
+                                UserDefaults.standard.set("\(self.userAvatar)", forKey: "userAvatar")
                                 uploadUserAvatar()
                                 return
                             }
                             guard let userAvatarFromUsersCollection = data["userAvatar"] as? String else { return }
-                            userAvatar = userAvatarFromUsersCollection
-                            UserDefaults.standard.set("\(userAvatar)", forKey: "userAvatar")
+                            self.userAvatar = userAvatarFromUsersCollection
+                            UserDefaults.standard.set("\(self.userAvatar)", forKey: "userAvatar")
                             uploadUserAvatar()
                         }
                     }
@@ -95,14 +96,14 @@ class SignInManager {
                         } else {
                             guard let snapshot = snapshot else { return }
                             guard let data = snapshot.data() else {
-                                userName = "尚未設定名稱"
-                                UserDefaults.standard.set("\(userName)", forKey: "userName")
+                                self.userName = "尚未設定名稱"
+                                UserDefaults.standard.set("\(self.userName)", forKey: "userName")
                                 uploadUserName()
                                 return
                             }
                             guard let userAvatarFromUsersCollection = data["userName"] as? String else { return }
-                            userName = userAvatarFromUsersCollection
-                            UserDefaults.standard.set("\(userName)", forKey: "userName")
+                            self.userName = userAvatarFromUsersCollection
+                            UserDefaults.standard.set("\(self.userName)", forKey: "userName")
                             uploadUserName()
                         }
                     }

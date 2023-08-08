@@ -18,7 +18,7 @@ class SignInViewController: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .large)
     var currentNonce: String?
     let siwaButton = ASAuthorizationAppleIDButton()
-    private var signInManager: SignInManager = SignInManager(db: Firestore.firestore())
+    private var signInManager = SignInManager(db: Firestore.firestore())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,12 @@ class SignInViewController: UIViewController {
         if let userIDForAuth = UserDefaults.standard.string(forKey: "userIDForAuth") {
             // Check the login status of Apple sign in for the app
             // Asynchronous
-            guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
+            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+                setupView()
+                setupConstraints()
+                setupSignInWithApple()
+                return
+            }
             let checkIfUserExistedPath = db.collection("users").document("\(userID)")
             checkIfUserExistedPath.getDocument { snapshot, err in
                 if let err = err {
@@ -40,37 +45,34 @@ class SignInViewController: UIViewController {
                 } else {
                     guard let snapshot = snapshot else { return }
                     // 這邊是判斷 users 的 collection 是否也有該 user
-                    guard let data = snapshot.data() else {
+                    if snapshot.data() == nil {
                         self.setupView()
                         self.setupConstraints()
                         self.setupSignInWithApple()
                         return
-                    }
-                    guard let userIDFromUserCollection = data["userID"] as? String else { return }
-                    print(userIDFromUserCollection)
-                    ASAuthorizationAppleIDProvider().getCredentialState(
-                        forUserID: userIDForAuth
-                    ) { credentialState, _ in
-                        switch credentialState {
-                        case .authorized:
-                            print("User remains logged in. Proceed to another view.")
-                            // Present BaseVC
-                            DispatchQueue.main.async {
-                                let bsViewController = BSViewController()
-                                bsViewController.modalPresentationStyle = .fullScreen
-                                Vibration.shared.lightV()
-                                
-                                // Present the BSViewController from the current view controller
-                                self.present(bsViewController, animated: true, completion: nil)
+                    } else {
+                        let provider = ASAuthorizationAppleIDProvider()
+                        provider.getCredentialState(forUserID: userIDForAuth) { credentialState, _ in
+                            switch credentialState {
+                            case .authorized:
+                                print("User remains logged in. Proceed to another view.")
+                                // Present BaseVC
+                                DispatchQueue.main.async {
+                                    let bsViewController = BSViewController()
+                                    bsViewController.modalPresentationStyle = .fullScreen
+                                    Vibration.shared.lightV()
+                                    // Present the BSViewController from the current view controller
+                                    self.present(bsViewController, animated: true, completion: nil)
+                                }
+                            case .revoked:
+                                print("User logged in before but revoked.")
+                                self.setupSignInWithApple()
+                            case .notFound:
+                                print("User logged in before but revoked.")
+                                self.setupSignInWithApple()
+                            default:
+                                print("Unknown state.")
                             }
-                        case .revoked:
-                            print("User logged in before but revoked.")
-                            self.setupSignInWithApple()
-                        case .notFound:
-                            print("User logged in before but revoked.")
-                            self.setupSignInWithApple()
-                        default:
-                            print("Unknown state.")
                         }
                     }
                 }
@@ -252,9 +254,9 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             guard let nonce = currentNonce else {
                 fatalError("Invalid state: a login callback was received, but no login request was sent.")
             }
-            
-            signInManager.handleAppleIDAuthorization(appleIDCredential: appleIDCredential, nonce: nonce) {
-                [weak self] success in
+            signInManager.handleAppleIDAuthorization(
+                appleIDCredential: appleIDCredential,
+                nonce: nonce) { [weak self] success in
                 guard let self = self else { return }
                 if success {
                     DispatchQueue.main.async {
