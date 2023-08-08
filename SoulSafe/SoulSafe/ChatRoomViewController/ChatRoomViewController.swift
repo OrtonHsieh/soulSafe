@@ -28,7 +28,9 @@ class ChatRoomViewController: UIViewController {
     var listener: ListenerRegistration?
     lazy var groupTitle = String()
     var keyboardHeightCons: NSLayoutConstraint?
+    // swiftlint:disable all
     lazy var db = Firestore.firestore()
+    // swiftlint:enable all
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -182,7 +184,11 @@ class ChatRoomViewController: UIViewController {
     }
 
     func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidShow(_:)),
+            name: UIResponder.keyboardDidShowNotification,
+            object: nil)
     }
 
     func unregisterForKeyboardNotifications() {
@@ -191,11 +197,10 @@ class ChatRoomViewController: UIViewController {
     }
 
     @objc func keyboardDidShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        else {
-            return
-        }
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardFrame = (
+            userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        )?.cgRectValue else { return }
 
         let keyboardHeight = keyboardFrame.height
         keyboardHeightCons?.constant = keyboardHeight
