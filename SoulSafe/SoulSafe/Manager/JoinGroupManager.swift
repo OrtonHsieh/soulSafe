@@ -9,7 +9,9 @@ import UIKit
 import FirebaseFirestore
 
 class JoinGroupManager {
+    // swiftlint:disable all
     let db = Firestore.firestore()
+    // swiftlint:enable all
     let viewController: UIViewController?
     
     init(viewController: UIViewController) {
@@ -44,7 +46,7 @@ class JoinGroupManager {
                     index += 1
                 }
                 print(userIDs)
-                joinGroupPath.getDocument  { (document, error) in
+                joinGroupPath.getDocument { document, error in
                     if let document = document, document.exists {
                         let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                         print("Document data: \(dataDescription)")
@@ -55,7 +57,9 @@ class JoinGroupManager {
                         let joinGroupTitle = groupTitle
                         self.showConfirmAlert(joinGroupID, joinGroupTitle)
                     } else {
-                        print("Document does not exist")
+                        if let err = error {
+                            print("Document does not exist : \(err)")
+                        }
                     }
                 }
             }
@@ -68,11 +72,12 @@ class JoinGroupManager {
 
         let rejectButton = UIAlertAction(title: "取消", style: .cancel)
 
-        let confirmButton = UIAlertAction(title: "確認", style: .default) { (action) in
-            let didJoinGroupPath = self.db.collection("groups").document("\(groupID)").collection("members").document("\(UserSetup.userID)")
-            
-//            let addGroupToUser = self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
-            let addGroupToUser = self.db.collection("users").document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
+        let confirmButton = UIAlertAction(title: "確認", style: .default) { _ in
+            let groupPath = self.db.collection("groups")
+            let groupPathToMembers = groupPath.document("\(groupID)").collection("members")
+            let userPath = self.db.collection("users")
+            let didJoinGroupPath = groupPathToMembers.document("\(UserSetup.userID)")
+            let addGroupToUser = userPath.document("\(UserSetup.userID)").collection("groups").document("\(groupID)")
             guard let avatar = UserDefaults.standard.object(forKey: "userAvatar") else { return }
             guard let userName = UserDefaults.standard.object(forKey: "userName") else { return }
             didJoinGroupPath.setData([
@@ -120,7 +125,11 @@ class JoinGroupManager {
     
     // 確認入群後會顯示確認訊息
     func joinedSuccessfullyMsg(_ groupTitle: String) {
-        let alertController = UIAlertController(title: "成功加入", message: "您已加入\(groupTitle)，快去聊天吧！", preferredStyle: .alert)
+        let alertController = UIAlertController(
+            title: "成功加入",
+            message: "您已加入\(groupTitle)，快去聊天吧！",
+            preferredStyle: .alert
+        )
 
         let confirmButton = UIAlertAction(title: "確認", style: .default)
         alertController.addAction(confirmButton)
