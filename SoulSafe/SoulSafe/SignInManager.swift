@@ -116,14 +116,15 @@ class SignInManager {
                             "userID": "\(userID)",
                             "userAvatar": "\(userAvatar)"
                         ],
-                        merge: true) { err in
-                            if let err = err {
-                                print("Error writing document: \(err)")
-                            } else {
-                                print("UploadUserID to fireStore successfully.")
-                                didUploadAllInfo += 1
-                            }
+                        merge: true
+                    ) { err in
+                        if let err = err {
+                            print("Error writing document: \(err)")
+                        } else {
+                            print("UploadUserID to fireStore successfully.")
+                            didUploadAllInfo += 1
                         }
+                    }
                 }
                 
                 func uploadUserName() {
@@ -133,14 +134,15 @@ class SignInManager {
                             "userID": "\(userID)",
                             "userName": "\(userName)"
                         ],
-                        merge: true) { err in
-                            if let err = err {
-                                print("Error writing document: \(err)")
-                            } else {
-                                print("UploadUserID to fireStore successfully.")
-                                didUploadAllInfo += 1
-                            }
+                        merge: true
+                    ) { err in
+                        if let err = err {
+                            print("Error writing document: \(err)")
+                        } else {
+                            print("UploadUserID to fireStore successfully.")
+                            didUploadAllInfo += 1
                         }
+                    }
                 }
             } catch {
                 print("Error authenticating: \(error.localizedDescription)")
