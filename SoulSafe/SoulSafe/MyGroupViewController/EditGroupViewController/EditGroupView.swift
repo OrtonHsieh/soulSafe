@@ -94,7 +94,11 @@ class EditGroupView: UIView {
         leaveBtn.isHidden = true
         
         let symbolSize: CGFloat = 32
-        shareLinkBtn.setImage(UIImage(systemName: "square.and.arrow.up")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: symbolSize)), for: .normal)
+        shareLinkBtn.setImage(
+            UIImage(systemName: "square.and.arrow.up")?.withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: symbolSize)
+            ),
+            for: .normal)
         shareLinkBtn.tintColor = .white
         shareLinkBtn.addTarget(self, action: #selector(didPressCopyLinkBtn), for: .touchUpInside)
         shareLinkBtn.isHidden = true

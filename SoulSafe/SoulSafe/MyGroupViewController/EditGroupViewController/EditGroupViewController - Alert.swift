@@ -28,7 +28,8 @@ extension EditGroupViewController {
             if let textField = alertController.textFields?.first {
                 if let inputText = textField.text {
                     // 將資料建立在 user 集合該創立者下的 group 集合
-                    let groupPath =  self.db.collection("users").document("\(UserSetup.userID)").collection("groups").document()
+                    let userPath = self.db.collection("users")
+                    let groupPath = userPath.document("\(UserSetup.userID)").collection("groups").document()
                     groupPath.setData([
                         "groupID": "\(groupPath.documentID)",
                         "groupTitle": "\(inputText)",
@@ -54,7 +55,9 @@ extension EditGroupViewController {
                     self.currentGroupID = groupPath.documentID
                     self.groupLink = "soulsafe.app.link.page://\(self.currentGroupID)"
                     
-                    let activityViewController = UIActivityViewController(activityItems: [self.groupLink], applicationActivities: nil)
+                    let activityViewController = UIActivityViewController(
+                        activityItems: [self.groupLink],
+                        applicationActivities: nil)
                     self.present(activityViewController, animated: true, completion: nil)
                 }
             }
@@ -72,16 +75,18 @@ extension EditGroupViewController {
         alertController.addAction(cancelAction)
         print("我是\(currentGroupID)")
         let confirmAction = UIAlertAction(title: "確認", style: .default) { _ in
-//            let groupPath =  self.db.collection("testingUploadImg").document("\(UserSetup.userID)").collection("groups").document("\(self.currentGroupID)")
-            let groupPath =  self.db.collection("users").document("\(UserSetup.userID)").collection("groups").document("\(self.currentGroupID)")
-            groupPath.delete() { err in
+            let userPath = self.db.collection("users")
+            let userPathToGroups = userPath.document("\(UserSetup.userID)").collection("groups")
+            let groupPath = userPathToGroups.document("\(self.currentGroupID)")
+            groupPath.delete { err in
                 if let err = err {
                     print("Error removing document: \(err)")
                 } else {
                     print("成功於 fireStore 將群組由個人的群組路徑移除")
-                    
-                    let initGroupPath = self.db.collection("groups").document("\(self.currentGroupID)").collection("members").document("\(UserSetup.userID)")
-                    initGroupPath.delete() { err in
+                    let groupPath = self.db.collection("groups")
+                    let groupPathToMembers = groupPath.document("\(self.currentGroupID)").collection("members")
+                    let initGroupPath = groupPathToMembers.document("\(UserSetup.userID)")
+                    initGroupPath.delete { err in
                         if let err = err {
                             print("Error removing document: \(err)")
                         } else {

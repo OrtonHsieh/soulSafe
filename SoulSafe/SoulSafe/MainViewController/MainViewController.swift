@@ -20,6 +20,7 @@ protocol MainViewControllerDelegate: AnyObject {
 }
 
 class MainViewController: UIViewController {
+    let viewModel = MainViewModel()
     var captureSession: AVCaptureSession?
     var currentCamera: AVCaptureDevice.Position = .back
     var photoOutput: AVCapturePhotoOutput?
