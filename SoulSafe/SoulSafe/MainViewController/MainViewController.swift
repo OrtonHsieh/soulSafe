@@ -108,8 +108,8 @@ class MainViewController: UIViewController {
         guard let captureDevice = AVCaptureDevice.default(
             .builtInWideAngleCamera,
             for: .video,
-            position: currentCamera)
-        else { return }
+            position: currentCamera
+        ) else { return }
         createCamera(captureDevice: captureDevice)
     }
     

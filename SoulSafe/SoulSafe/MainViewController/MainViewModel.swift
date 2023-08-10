@@ -56,8 +56,8 @@ class MainViewModel {
                 print("Document successfully written!")
             }
         }
-        dispatchGroup.enter()
         for groupID in 0..<groupIDArray.count {
+            dispatchGroup.enter()
             let groupPath = db.collection("groups")
             let groupPathToPosts = groupPath.document("\(groupIDArray[groupID])").collection("posts")
             let groupPostPath = groupPathToPosts.document("\(postPath.documentID)")
