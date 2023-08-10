@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-class JoinGroupManager {
+class JoinGroupHelper {
     // swiftlint:disable all
     let db = Firestore.firestore()
     // swiftlint:enable all

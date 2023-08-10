@@ -68,8 +68,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 // 這邊讓 JoinGroupManager 推出去前設立新的 Window，別用 Scene Delegate 的 window
                 // 改用 topViewController 找尋目前最上層的 VC 呈現。
                 if let topVC = window?.topViewController {
-                    let joinGroupManager = JoinGroupManager(viewController: topVC)
-                    joinGroupManager.getJoinGroupInfo(groupID)
+                    let joinGroupHelper = JoinGroupHelper(viewController: topVC)
+                    joinGroupHelper.getJoinGroupInfo(groupID)
                 }
             }
             // present 丟給某個 VC

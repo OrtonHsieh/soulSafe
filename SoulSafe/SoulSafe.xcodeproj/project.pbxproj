@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2BA622A3FDB341C77624419C /* Pods_SoulSafe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */; };
-		910226BA2A6E2BA200EEA468 /* SignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910226B92A6E2BA200EEA468 /* SignInManager.swift */; };
+		910226BA2A6E2BA200EEA468 /* SignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910226B92A6E2BA200EEA468 /* SignInHelper.swift */; };
 		9110928D2A4EB66B002C5928 /* PostViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */; };
 		9110928F2A526EA7002C5928 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9110928E2A526EA7002C5928 /* MapViewController.swift */; };
 		911092922A526EB9002C5928 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092912A526EB9002C5928 /* MapView.swift */; };
@@ -72,7 +72,7 @@
 		91D5A0852A39CC3600B093AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D5A0832A39CC3600B093AE /* LaunchScreen.storyboard */; };
 		91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */; };
 		91DBA5D52A46EB2700D8D790 /* Extension - User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5D42A46EB2700D8D790 /* Extension - User.swift */; };
-		91DBA5DC2A48104700D8D790 /* JoinGroupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5DB2A48104700D8D790 /* JoinGroupManager.swift */; };
+		91DBA5DC2A48104700D8D790 /* JoinGroupHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5DB2A48104700D8D790 /* JoinGroupHelper.swift */; };
 		91DBA5F62A49944900D8D790 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5F52A49944900D8D790 /* ChatRoomViewController.swift */; };
 		91DBA5F92A49947300D8D790 /* ChatRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5F82A49947300D8D790 /* ChatRoomTableViewCell.swift */; };
 		91DBA5FB2A49947D00D8D790 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBA5FA2A49947D00D8D790 /* ChatRoomView.swift */; };
@@ -96,7 +96,7 @@
 /* Begin PBXFileReference section */
 		0494520C1224165E0ED5398A /* Pods-SoulSafe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSafe.debug.xcconfig"; path = "Target Support Files/Pods-SoulSafe/Pods-SoulSafe.debug.xcconfig"; sourceTree = "<group>"; };
 		35F1662022379F1BA92475D2 /* Pods_SoulSafe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSafe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		910226B92A6E2BA200EEA468 /* SignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInManager.swift; sourceTree = "<group>"; };
+		910226B92A6E2BA200EEA468 /* SignInHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHelper.swift; sourceTree = "<group>"; };
 		9110928C2A4EB66B002C5928 /* PostViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostViewController - Alert.swift"; sourceTree = "<group>"; };
 		9110928E2A526EA7002C5928 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		911092912A526EB9002C5928 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 		91DBA5D12A442FA400D8D790 /* EditGroupViewController - Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditGroupViewController - Alert.swift"; sourceTree = "<group>"; };
 		91DBA5D32A458D8B00D8D790 /* SoulSafe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SoulSafe.entitlements; sourceTree = "<group>"; };
 		91DBA5D42A46EB2700D8D790 /* Extension - User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - User.swift"; sourceTree = "<group>"; };
-		91DBA5DB2A48104700D8D790 /* JoinGroupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinGroupManager.swift; sourceTree = "<group>"; };
+		91DBA5DB2A48104700D8D790 /* JoinGroupHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinGroupHelper.swift; sourceTree = "<group>"; };
 		91DBA5F52A49944900D8D790 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		91DBA5F82A49947300D8D790 /* ChatRoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomTableViewCell.swift; sourceTree = "<group>"; };
 		91DBA5FA2A49947D00D8D790 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
@@ -337,7 +337,7 @@
 				91D5A0782A39CC3500B093AE /* AppDelegate.swift */,
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
 				911092A52A57E993002C5928 /* SignInPage.swift */,
-				910226B92A6E2BA200EEA468 /* SignInManager.swift */,
+				910226B92A6E2BA200EEA468 /* SignInHelper.swift */,
 				911092902A526EAA002C5928 /* MapViewController */,
 				91DBA5F72A49944D00D8D790 /* ChatRoomViewController */,
 				91DBA5DF2A482F6500D8D790 /* Manager */,
@@ -360,7 +360,7 @@
 			isa = PBXGroup;
 			children = (
 				9164F1542A84DBB9005FF033 /* AlertManager.swift */,
-				91DBA5DB2A48104700D8D790 /* JoinGroupManager.swift */,
+				91DBA5DB2A48104700D8D790 /* JoinGroupHelper.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -524,7 +524,7 @@
 			files = (
 				9189BC132A81ED7C00D38783 /* MapViewController + CollectionView.swift in Sources */,
 				91DBA5FD2A49A51E00D8D790 /* ChatRoomHeaderView.swift in Sources */,
-				910226BA2A6E2BA200EEA468 /* SignInManager.swift in Sources */,
+				910226BA2A6E2BA200EEA468 /* SignInHelper.swift in Sources */,
 				9189BC1F2A821A8100D38783 /* MainViewModel.swift in Sources */,
 				91D5A07D2A39CC3500B093AE /* MainViewController.swift in Sources */,
 				91DBA5FF2A4A812E00D8D790 /* ChatRoomTableViewCell - Mine.swift in Sources */,
@@ -557,7 +557,7 @@
 				911092BF2A666126002C5928 /* EditNameView.swift in Sources */,
 				911092982A53F23D002C5928 /* FriendsAnnotation.swift in Sources */,
 				9189BC192A8219A800D38783 /* MainViewController + AVFoundation.swift in Sources */,
-				91DBA5DC2A48104700D8D790 /* JoinGroupManager.swift in Sources */,
+				91DBA5DC2A48104700D8D790 /* JoinGroupHelper.swift in Sources */,
 				911092942A52F343002C5928 /* MapCollectionViewCell.swift in Sources */,
 				91DBA5F62A49944900D8D790 /* ChatRoomViewController.swift in Sources */,
 				9189BC152A8211CD00D38783 /* SettingViewController + TableView.swift in Sources */,

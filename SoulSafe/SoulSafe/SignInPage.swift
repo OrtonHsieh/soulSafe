@@ -18,7 +18,7 @@ class SignInViewController: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .large)
     var currentNonce: String?
     let siwaButton = ASAuthorizationAppleIDButton()
-    private var signInManager = SignInManager(db: Firestore.firestore())
+    private var signInManager = SignInHelper(db: Firestore.firestore())
     
     override func viewDidLoad() {
         super.viewDidLoad()

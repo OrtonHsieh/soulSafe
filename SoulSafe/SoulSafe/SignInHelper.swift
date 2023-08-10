@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import CryptoKit
 
-class SignInManager {
+class SignInHelper {
     // swiftlint:disable all
     private let db: Firestore // Assuming Firestore is your database reference
     

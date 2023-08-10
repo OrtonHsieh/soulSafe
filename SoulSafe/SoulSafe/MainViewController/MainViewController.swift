@@ -26,7 +26,6 @@ class MainViewController: UIViewController {
     var photoOutput: AVCapturePhotoOutput?
     var cameraView: CameraView?
     weak var delegate: MainViewControllerDelegate?
-    var joinGroupManager: JoinGroupManager?
     // swiftlint:disable all
     let db = Firestore.firestore()
     // swiftlint:enable all
