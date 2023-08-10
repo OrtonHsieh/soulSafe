@@ -12,10 +12,10 @@ extension SettingViewController: UITableViewDelegate {
         print("\(indexPath.row)")
         if indexPath.row == 0 {
             DispatchQueue.main.async {
-                self.deleteUserAccount()
+                AlertManager.shared.deleteUserAccount(viewController: self)
             }
         } else {
-            userLogOut()
+            AlertManager.shared.userLogOut(viewController: self)
         }
     }
 }

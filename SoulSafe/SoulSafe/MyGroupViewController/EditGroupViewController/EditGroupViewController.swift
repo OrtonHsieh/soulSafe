@@ -182,12 +182,12 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
 
 extension EditGroupViewController: EditGroupViewDelegate {
     func didPressQRCodeBtn(_ view: EditGroupView, button: UIButton) {
-        commingSoonAlert()
+        AlertManager.shared.commingSoonAlert(viewController: self)
     }
     
     func didPressGetLinkBtn(_ view: EditGroupView, button: UIButton) {
         if groupIDs.count == 3 {
-            reachGroupsLimit()
+            AlertManager.shared.reachGroupsLimit(viewController: self)
         } else {
             inputAlertForCreateGroup(from: self)
         }

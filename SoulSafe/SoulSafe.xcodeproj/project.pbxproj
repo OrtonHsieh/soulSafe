@@ -23,7 +23,6 @@
 		911092A42A56EE4C002C5928 /* Extension - UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A32A56EE4C002C5928 /* Extension - UIImageView.swift */; };
 		911092A62A57E993002C5928 /* SignInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A52A57E993002C5928 /* SignInPage.swift */; };
 		911092A82A5AF6D5002C5928 /* Extension - UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A72A5AF6D5002C5928 /* Extension - UIWindow.swift */; };
-		911092AA2A5B0965002C5928 /* SettingViewController + Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092A92A5B0965002C5928 /* SettingViewController + Alert.swift */; };
 		911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BC2A6660AC002C5928 /* EditNameViewController.swift */; };
 		911092BF2A666126002C5928 /* EditNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092BE2A666126002C5928 /* EditNameView.swift */; };
 		911092D42A6A9DEE002C5928 /* MapViewController + Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */; };
@@ -47,6 +46,7 @@
 		9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBDE2A3D8C05008DB929 /* PostViewController.swift */; };
 		9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBE12A3D8C3B008DB929 /* PostTableViewCell - Comments.swift */; };
 		9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBE32A3D958B008DB929 /* TextAreaView.swift */; };
+		9164F1552A84DBB9005FF033 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9164F1542A84DBB9005FF033 /* AlertManager.swift */; };
 		917CF54B2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54A2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift */; };
 		917CF54D2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */; };
 		917CF5502A3EFB1A00F02D48 /* MyGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54F2A3EFB1A00F02D48 /* MyGroupViewController.swift */; };
@@ -112,7 +112,6 @@
 		911092A32A56EE4C002C5928 /* Extension - UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIImageView.swift"; sourceTree = "<group>"; };
 		911092A52A57E993002C5928 /* SignInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPage.swift; sourceTree = "<group>"; };
 		911092A72A5AF6D5002C5928 /* Extension - UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIWindow.swift"; sourceTree = "<group>"; };
-		911092A92A5B0965002C5928 /* SettingViewController + Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingViewController + Alert.swift"; sourceTree = "<group>"; };
 		911092BC2A6660AC002C5928 /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
 		911092BE2A666126002C5928 /* EditNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameView.swift; sourceTree = "<group>"; };
 		911092D32A6A9DEE002C5928 /* MapViewController + Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController + Locations.swift"; sourceTree = "<group>"; };
@@ -136,6 +135,7 @@
 		9127BBDE2A3D8C05008DB929 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		9127BBE12A3D8C3B008DB929 /* PostTableViewCell - Comments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - Comments.swift"; sourceTree = "<group>"; };
 		9127BBE32A3D958B008DB929 /* TextAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaView.swift; sourceTree = "<group>"; };
+		9164F1542A84DBB9005FF033 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		917CF54A2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - Img.swift"; sourceTree = "<group>"; };
 		917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - GroupList.swift"; sourceTree = "<group>"; };
 		917CF54F2A3EFB1A00F02D48 /* MyGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupViewController.swift; sourceTree = "<group>"; };
@@ -271,7 +271,6 @@
 			isa = PBXGroup;
 			children = (
 				9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */,
-				911092A92A5B0965002C5928 /* SettingViewController + Alert.swift */,
 				9189BC142A8211CD00D38783 /* SettingViewController + TableView.swift */,
 				9110929F2A56E79E002C5928 /* SettingView.swift */,
 				911092A12A56E7A6002C5928 /* SettingTableViewCell.swift */,
@@ -371,6 +370,7 @@
 		91DBA5DF2A482F6500D8D790 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				9164F1542A84DBB9005FF033 /* AlertManager.swift */,
 				91DBA5DB2A48104700D8D790 /* JoinGroupManager.swift */,
 			);
 			path = Manager;
@@ -585,6 +585,7 @@
 				91DBA5F92A49947300D8D790 /* ChatRoomTableViewCell.swift in Sources */,
 				917CF54B2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift in Sources */,
 				9127BBD02A3C381B008DB929 /* Extension - Vibration.swift in Sources */,
+				9164F1552A84DBB9005FF033 /* AlertManager.swift in Sources */,
 				9189BC092A79F45300D38783 /* MemoriesViewController + CollectionView.swift in Sources */,
 				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				911092A42A56EE4C002C5928 /* Extension - UIImageView.swift in Sources */,
@@ -593,7 +594,6 @@
 				911092BD2A6660AC002C5928 /* EditNameViewController.swift in Sources */,
 				911092962A53B6B3002C5928 /* UserAnnotation.swift in Sources */,
 				9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */,
-				911092AA2A5B0965002C5928 /* SettingViewController + Alert.swift in Sources */,
 				9189BC112A81DF1A00D38783 /* MapViewModel.swift in Sources */,
 				911092D62A6AA0F9002C5928 /* UserAnnotationView.swift in Sources */,
 				91DBA5D22A442FA400D8D790 /* EditGroupViewController - Alert.swift in Sources */,

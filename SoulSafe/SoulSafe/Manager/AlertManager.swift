@@ -1,17 +1,25 @@
 //
-//  SettingViewController - Alert.swift
+//  AlertManager.swift
 //  SoulSafe
 //
-//  Created by 謝承翰 on 2023/7/9.
+//  Created by 謝承翰 on 2023/8/10.
 //
 
 import UIKit
 import FirebaseAuth
-import AuthenticationServices
 import FirebaseFirestore
 
-extension SettingViewController: UINavigationControllerDelegate {
-    func userLogOut() {
+class AlertManager {
+    static let shared = AlertManager()
+    
+    private init() {}
+    // swiftlint:disable all
+    let db = Firestore.firestore()
+    // swiftlint:enable all
+    
+    typealias ImagePickerAndNaviControllerDelegate = UIImagePickerControllerDelegate & UINavigationControllerDelegate
+    
+    func userLogOut(viewController settingViewController: UIViewController) {
         let alertController = UIAlertController(title: "確認登出", message: nil, preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
@@ -23,10 +31,10 @@ extension SettingViewController: UINavigationControllerDelegate {
         alertController.addAction(myPostAction)
         // 在這裡顯示 UIAlert
         // 例如：
-        present(alertController, animated: true, completion: nil)
+        settingViewController.present(alertController, animated: true, completion: nil)
     }
     
-    func deleteUserAccount() {
+    func deleteUserAccount(viewController settingViewController: UIViewController) {
         let alertController = UIAlertController(title: "注意！", message: "是否確認刪除帳號？", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
@@ -49,7 +57,7 @@ extension SettingViewController: UINavigationControllerDelegate {
                     alertController.addAction(myPostAction)
                     // 在這裡顯示 UIAlert
                     // 例如：
-                    self.present(alertController, animated: true, completion: nil)
+                    settingViewController.present(alertController, animated: true, completion: nil)
                 } else {
                     guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
                     // 先刪掉 group 再刪掉 post 最後刪掉 document 路徑
@@ -58,7 +66,7 @@ extension SettingViewController: UINavigationControllerDelegate {
                         if let err = err {
                             print("Error removing document: \(err)")
                         } else {
-                            self.confirmAccountDeletion()
+                            self.confirmAccountDeletion(viewController: settingViewController)
                             print("Account deleted.")
                         }
                     }
@@ -68,10 +76,10 @@ extension SettingViewController: UINavigationControllerDelegate {
         alertController.addAction(myPostAction)
         // 在這裡顯示 UIAlert
         // 例如：
-        present(alertController, animated: true, completion: nil)
+        settingViewController.present(alertController, animated: true, completion: nil)
     }
     
-    func confirmAccountDeletion() {
+    func confirmAccountDeletion(viewController settingViewController: UIViewController) {
         let alertController = UIAlertController(title: "系統訊息", message: "帳號已刪除", preferredStyle: .alert)
         
         let myPostAction = UIAlertAction(title: "返回登入頁", style: .default) { _ in
@@ -83,20 +91,30 @@ extension SettingViewController: UINavigationControllerDelegate {
         alertController.addAction(myPostAction)
         // 在這裡顯示 UIAlert
         // 例如：
-        present(alertController, animated: true, completion: nil)
+        settingViewController.present(alertController, animated: true, completion: nil)
     }
     
-    func commingSoonAlert() {
+    func commingSoonAlert(viewController: UIViewController) {
         let alertController = UIAlertController(title: "敬請期待新功能", message: nil, preferredStyle: .alert)
         
         let confirmBtn = UIAlertAction(title: "好！", style: .default)
         alertController.addAction(confirmBtn)
         // 在這裡顯示 UIAlert
         // 例如：
-        present(alertController, animated: true, completion: nil)
+        viewController.present(alertController, animated: true, completion: nil)
     }
     
-    func chooseImageAlert() {
+    func reachGroupsLimit(viewController: UIViewController) {
+        let alertController = UIAlertController(title: "系統訊息", message: "已達群組上線", preferredStyle: .alert)
+        
+        let confirmBtn = UIAlertAction(title: "好吧！", style: .default)
+        alertController.addAction(confirmBtn)
+        // 在這裡顯示 UIAlert
+        // 例如：
+        viewController.present(alertController, animated: true, completion: nil)
+    }
+    
+    func chooseImageAlert(viewController settingViewController: UIViewController) {
         let alert = UIAlertController(title: "選擇照片來源", message: nil, preferredStyle: .actionSheet)
         
         let dismissAlert = UIAlertAction(title: "關閉", style: .cancel) { _ in
@@ -106,21 +124,21 @@ extension SettingViewController: UINavigationControllerDelegate {
         let galleryAction = UIAlertAction(title: "從相簿選擇", style: .default) { _ in
             let picController = UIImagePickerController()
             picController.sourceType = .photoLibrary
-            picController.delegate = self
-            self.present(picController, animated: true, completion: nil)
+            picController.delegate = settingViewController as? any ImagePickerAndNaviControllerDelegate
+            settingViewController.present(picController, animated: true, completion: nil)
         }
         
         let cameraAction = UIAlertAction(title: "開啟相機", style: .default) { _ in
             let picController = UIImagePickerController()
             picController.sourceType = .camera
-            picController.delegate = self
-            self.present(picController, animated: true, completion: nil)
+            picController.delegate = settingViewController as? any ImagePickerAndNaviControllerDelegate
+            settingViewController.present(picController, animated: true, completion: nil)
         }
         
         alert.addAction(dismissAlert)
         alert.addAction(galleryAction)
         alert.addAction(cameraAction)
         
-        present(alert, animated: true, completion: nil)
+        settingViewController.present(alert, animated: true, completion: nil)
     }
 }

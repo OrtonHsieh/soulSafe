@@ -124,7 +124,9 @@ class SettingViewController: UIViewController {
             }
         }
     }
-    
+}
+
+extension SettingViewController: UINavigationControllerDelegate {
     func presentCropViewController(_ img: UIImage) {
         let image = img
         let cropViewController = CropViewController(croppingStyle: .circular, image: image)
@@ -136,7 +138,7 @@ class SettingViewController: UIViewController {
 extension SettingViewController: SettingViewDelegate, UISheetPresentationControllerDelegate {
     func presentImagePicker(_ view: SettingView) {
         Vibration.shared.lightV()
-        chooseImageAlert()
+        AlertManager.shared.chooseImageAlert(viewController: self)
     }
     
     func didPressSettingViewBackBtn(_ view: SettingView) {
