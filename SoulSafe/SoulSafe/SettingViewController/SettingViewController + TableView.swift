@@ -12,10 +12,39 @@ extension SettingViewController: UITableViewDelegate {
         print("\(indexPath.row)")
         if indexPath.row == 0 {
             DispatchQueue.main.async {
-                AlertManager.shared.deleteUserAccount(viewController: self)
+                self.showOptionsAlert(title: "注意！", message: "是否確認刪除帳號？", confirmInfo: "確認") { [weak self] in
+                    guard let self = self else { return }
+                    self.settingViewModel.deleteUserAccount { result in
+                        switch result {
+                        case .success:
+                            self.showConfirmAlert(title: "系統訊息", message: "帳號已刪除", confirmInfo: "返回登入頁") {
+                                UserDefaults.standard.removeObject(forKey: "userIDForAuth")
+                                UserDefaults.standard.removeObject(forKey: "userID")
+                                UserDefaults.standard.removeObject(forKey: "userName")
+                                UserDefaults.standard.removeObject(forKey: "userAvatar")
+                            }
+                            print("Account deleted.")
+                        case .failure(let error):
+                            self.handleError(error)
+                        }
+                    }
+                }
             }
         } else {
-            AlertManager.shared.userLogOut(viewController: self)
+            showOptionsAlert(title: "確認登出", message: nil, confirmInfo: "確認") {
+                UserDefaults.standard.removeObject(forKey: "userIDForAuth")
+            }
+        }
+    }
+    
+    func handleError(_ error: SettingViewModel.AccountError) {
+        switch error {
+        case .upload:
+            print("Failed to delete account from fireStore.")
+        case .invalidToken:
+            self.showOptionsAlert(title: "注意", message: "刪除前請再次重新登入", confirmInfo: "登出") {
+                UserDefaults.standard.removeObject(forKey: "userIDForAuth")
+            }
         }
     }
 }

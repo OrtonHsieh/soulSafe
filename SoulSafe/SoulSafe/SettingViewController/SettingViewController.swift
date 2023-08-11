@@ -19,6 +19,7 @@ class SettingViewController: UIViewController {
     weak var delegate: SettingViewControllerDelegate?
     let settingView = SettingView()
     let settingTableView = UITableView()
+    let settingViewModel = SettingViewModel()
     var groupIDs: [String] = []
     // swiftlint:disable all
     let db = Firestore.firestore()
@@ -138,7 +139,7 @@ extension SettingViewController: UINavigationControllerDelegate {
 extension SettingViewController: SettingViewDelegate, UISheetPresentationControllerDelegate {
     func presentImagePicker(_ view: SettingView) {
         Vibration.shared.lightV()
-        AlertManager.shared.chooseImageAlert(viewController: self)
+        chooseImageAlert(viewController: self)
     }
     
     func didPressSettingViewBackBtn(_ view: SettingView) {

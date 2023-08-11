@@ -182,12 +182,21 @@ extension EditGroupViewController: EditGroupTBCellDelegate {
 
 extension EditGroupViewController: EditGroupViewDelegate {
     func didPressQRCodeBtn(_ view: EditGroupView, button: UIButton) {
-        AlertManager.shared.commingSoonAlert(viewController: self)
+        showConfirmAlert(title: "敬請期待新功能", message: nil, confirmInfo: "好！", action: nil)
     }
     
     func didPressGetLinkBtn(_ view: EditGroupView, button: UIButton) {
         if groupIDs.count == 3 {
-            AlertManager.shared.reachGroupsLimit(viewController: self)
+            func reachGroupsLimit(viewController: UIViewController) {
+                let alertController = UIAlertController(title: "系統訊息", message: "已達群組上線", preferredStyle: .alert)
+                
+                let confirmBtn = UIAlertAction(title: "好吧！", style: .default)
+                alertController.addAction(confirmBtn)
+                // 在這裡顯示 UIAlert
+                // 例如：
+                viewController.present(alertController, animated: true, completion: nil)
+            }
+            showConfirmAlert(title: "系統訊息", message: "已達群組上限", confirmInfo: "好吧！", action: nil)
         } else {
             inputAlertForCreateGroup(from: self)
         }

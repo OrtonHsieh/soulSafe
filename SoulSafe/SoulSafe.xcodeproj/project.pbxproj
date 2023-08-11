@@ -46,7 +46,8 @@
 		9127BBDF2A3D8C05008DB929 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBDE2A3D8C05008DB929 /* PostViewController.swift */; };
 		9127BBE22A3D8C3B008DB929 /* PostTableViewCell - Comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBE12A3D8C3B008DB929 /* PostTableViewCell - Comments.swift */; };
 		9127BBE42A3D958B008DB929 /* TextAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBE32A3D958B008DB929 /* TextAreaView.swift */; };
-		9164F1552A84DBB9005FF033 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9164F1542A84DBB9005FF033 /* AlertManager.swift */; };
+		9164F1552A84DBB9005FF033 /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9164F1542A84DBB9005FF033 /* UIViewController + Extension.swift */; };
+		9164F1592A85DA2C005FF033 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9164F1582A85DA2C005FF033 /* SettingViewModel.swift */; };
 		917CF54B2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54A2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift */; };
 		917CF54D2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */; };
 		917CF5502A3EFB1A00F02D48 /* MyGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917CF54F2A3EFB1A00F02D48 /* MyGroupViewController.swift */; };
@@ -134,7 +135,8 @@
 		9127BBDE2A3D8C05008DB929 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		9127BBE12A3D8C3B008DB929 /* PostTableViewCell - Comments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - Comments.swift"; sourceTree = "<group>"; };
 		9127BBE32A3D958B008DB929 /* TextAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaView.swift; sourceTree = "<group>"; };
-		9164F1542A84DBB9005FF033 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		9164F1542A84DBB9005FF033 /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
+		9164F1582A85DA2C005FF033 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		917CF54A2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - Img.swift"; sourceTree = "<group>"; };
 		917CF54C2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostTableViewCell - GroupList.swift"; sourceTree = "<group>"; };
 		917CF54F2A3EFB1A00F02D48 /* MyGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 		9127BBD42A3C66EC008DB929 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9164F1542A84DBB9005FF033 /* UIViewController + Extension.swift */,
 				9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */,
 				9110929D2A56C2AA002C5928 /* Extension - UIImage.swift */,
 				911092A32A56EE4C002C5928 /* Extension - UIImageView.swift */,
@@ -270,6 +273,7 @@
 			children = (
 				9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */,
 				9189BC142A8211CD00D38783 /* SettingViewController + TableView.swift */,
+				9164F1582A85DA2C005FF033 /* SettingViewModel.swift */,
 				9110929F2A56E79E002C5928 /* SettingView.swift */,
 				911092A12A56E7A6002C5928 /* SettingTableViewCell.swift */,
 				911092BC2A6660AC002C5928 /* EditNameViewController.swift */,
@@ -289,6 +293,15 @@
 				9127BBE32A3D958B008DB929 /* TextAreaView.swift */,
 			);
 			path = PostViewController;
+			sourceTree = "<group>";
+		};
+		9164F1572A84EFD3005FF033 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				910226B92A6E2BA200EEA468 /* SignInHelper.swift */,
+				91DBA5DB2A48104700D8D790 /* JoinGroupHelper.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		917CF54E2A3EFAEA00F02D48 /* MyGroupViewController */ = {
@@ -337,9 +350,9 @@
 				91D5A0782A39CC3500B093AE /* AppDelegate.swift */,
 				91D5A07A2A39CC3500B093AE /* SceneDelegate.swift */,
 				911092A52A57E993002C5928 /* SignInPage.swift */,
-				910226B92A6E2BA200EEA468 /* SignInHelper.swift */,
 				911092902A526EAA002C5928 /* MapViewController */,
 				91DBA5F72A49944D00D8D790 /* ChatRoomViewController */,
+				9164F1572A84EFD3005FF033 /* Helper */,
 				91DBA5DF2A482F6500D8D790 /* Manager */,
 				9127BBD72A3C6813008DB929 /* SettingViewController */,
 				9127BBD42A3C66EC008DB929 /* Extensions */,
@@ -359,8 +372,6 @@
 		91DBA5DF2A482F6500D8D790 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				9164F1542A84DBB9005FF033 /* AlertManager.swift */,
-				91DBA5DB2A48104700D8D790 /* JoinGroupHelper.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -522,6 +533,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9164F1592A85DA2C005FF033 /* SettingViewModel.swift in Sources */,
 				9189BC132A81ED7C00D38783 /* MapViewController + CollectionView.swift in Sources */,
 				91DBA5FD2A49A51E00D8D790 /* ChatRoomHeaderView.swift in Sources */,
 				910226BA2A6E2BA200EEA468 /* SignInHelper.swift in Sources */,
@@ -574,7 +586,7 @@
 				91DBA5F92A49947300D8D790 /* ChatRoomTableViewCell.swift in Sources */,
 				917CF54B2A3DF7AA00F02D48 /* PostTableViewCell - Img.swift in Sources */,
 				9127BBD02A3C381B008DB929 /* Extension - Vibration.swift in Sources */,
-				9164F1552A84DBB9005FF033 /* AlertManager.swift in Sources */,
+				9164F1552A84DBB9005FF033 /* UIViewController + Extension.swift in Sources */,
 				9189BC092A79F45300D38783 /* MemoriesViewController + CollectionView.swift in Sources */,
 				9127BBD22A3C3F1D008DB929 /* Extension - Blur.swift in Sources */,
 				911092A42A56EE4C002C5928 /* Extension - UIImageView.swift in Sources */,
