@@ -353,7 +353,6 @@
 				911092902A526EAA002C5928 /* MapViewController */,
 				91DBA5F72A49944D00D8D790 /* ChatRoomViewController */,
 				9164F1572A84EFD3005FF033 /* Helper */,
-				91DBA5DF2A482F6500D8D790 /* Manager */,
 				9127BBD72A3C6813008DB929 /* SettingViewController */,
 				9127BBD42A3C66EC008DB929 /* Extensions */,
 				9127BBD32A3C66D8008DB929 /* BaseViewController */,
@@ -367,13 +366,6 @@
 				917CF55A2A3FFEC700F02D48 /* GoogleService-Info.plist */,
 			);
 			path = SoulSafe;
-			sourceTree = "<group>";
-		};
-		91DBA5DF2A482F6500D8D790 /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Manager;
 			sourceTree = "<group>";
 		};
 		91DBA5F72A49944D00D8D790 /* ChatRoomViewController */ = {

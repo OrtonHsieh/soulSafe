@@ -112,19 +112,19 @@ class SettingViewController: UIViewController {
         ])
     }
     
-    func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
-        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        if let data = image.jpegData(compressionQuality: 0.1) {
-            fileReference.putData(data, metadata: nil) { result in
-                switch result {
-                case .success:
-                    fileReference.downloadURL(completion: completion)
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
+//    func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+//        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
+//        if let data = image.jpegData(compressionQuality: 0.1) {
+//            fileReference.putData(data, metadata: nil) { result in
+//                switch result {
+//                case .success:
+//                    fileReference.downloadURL(completion: completion)
+//                case .failure(let error):
+//                    completion(.failure(error))
+//                }
+//            }
+//        }
+//    }
 }
 
 extension SettingViewController: UINavigationControllerDelegate {
@@ -172,42 +172,32 @@ extension SettingViewController: UIImagePickerControllerDelegate {
 
 extension SettingViewController: CropViewControllerDelegate {
     func cropViewController(_ cropViewController: CropViewController, didCropToCircularImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
-        uploadPhoto(image: image) { result in
+        settingViewModel.uploadPhoto(image: image) { [weak self] result in
+            guard let self = self else { return }
             guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
             switch result {
             case .success(let url):
-                print(url)
                 // 拿到 url 後上傳到 fireStore 跟存到 UserDefault
                 UserDefaults.standard.set("\(url)", forKey: "userAvatar")
-                let storeAvatarPath = self.db.collection("users").document("\(UserSetup.userID)")
-                storeAvatarPath.setData(
-                    [
-                        "userAvatar": "\(url)",
-                        "userID": "\(userID)"
-                    ],
-                    merge: true) { err in
-                    if let err = err {
-                        print("Failed to upload img: \(err)")
-                    } else {
-                        print("Upload userAvatar to user path successfully.")
+                self.settingViewModel.storeAvatarToFireStoreUsersCollection(url: url, userID: userID) { result in
+                    switch result {
+                    case .success:
                         cropViewController.dismiss(animated: true) {
                             DispatchQueue.main.async {
                                 self.settingView.avatarImgView.kf.setImage(with: url)
                             }
                         }
+                    case .failure(let err):
+                        print("Failed to upload img: \(err)")
                     }
                 }
-                
+                // 如果 groupIDs 有值，也要分別存到個別的資料夾裡，方便抓取
                 if !self.groupIDs.isEmpty {
-                    let groupPath = self.db.collection("groups")
-                    for groupID in self.groupIDs {
-                        let groupPathToMembers = groupPath.document("\(groupID)").collection("members")
-                        let storeAvatarInGroupMemberListPath = groupPathToMembers.document("\(userID)")
-                        storeAvatarInGroupMemberListPath.setData(
-                            ["userAvatar": "\(url)"],
-                            merge: true
-                        )
-                    }
+                    self.settingViewModel.storeAvatarToFireStoreGroupsCollection(
+                        groupIDs: self.groupIDs,
+                        url: url,
+                        userID: userID
+                    )
                 }
             case .failure(let error):
                 print(error)
