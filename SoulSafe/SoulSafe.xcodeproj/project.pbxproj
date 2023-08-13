@@ -33,7 +33,7 @@
 		9111205E2A4D39580003F923 /* GroupSelectionView - DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */; };
 		911120602A4D39630003F923 /* GroupSelectionView - Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111205F2A4D39630003F923 /* GroupSelectionView - Delegate.swift */; };
 		911120622A4DB00F0003F923 /* MemoriesViewController + Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911120612A4DB00F0003F923 /* MemoriesViewController + Alert.swift */; };
-		9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC32A3ABCD5008DB929 /* BSViewController.swift */; };
+		9127BBC42A3ABCD5008DB929 /* GroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC32A3ABCD5008DB929 /* GroundViewController.swift */; };
 		9127BBC62A3ABD39008DB929 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */; };
 		9127BBC82A3ABD4B008DB929 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */; };
 		9127BBCA2A3AC771008DB929 /* Extension - UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */; };
@@ -122,7 +122,7 @@
 		9111205D2A4D39580003F923 /* GroupSelectionView - DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - DataSource.swift"; sourceTree = "<group>"; };
 		9111205F2A4D39630003F923 /* GroupSelectionView - Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSelectionView - Delegate.swift"; sourceTree = "<group>"; };
 		911120612A4DB00F0003F923 /* MemoriesViewController + Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoriesViewController + Alert.swift"; sourceTree = "<group>"; };
-		9127BBC32A3ABCD5008DB929 /* BSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSViewController.swift; sourceTree = "<group>"; };
+		9127BBC32A3ABCD5008DB929 /* GroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundViewController.swift; sourceTree = "<group>"; };
 		9127BBC52A3ABD39008DB929 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
 		9127BBC72A3ABD4B008DB929 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		9127BBC92A3AC771008DB929 /* Extension - UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension - UIColor.swift"; sourceTree = "<group>"; };
@@ -212,12 +212,12 @@
 			path = MapViewController;
 			sourceTree = "<group>";
 		};
-		9127BBD32A3C66D8008DB929 /* BaseViewController */ = {
+		9127BBD32A3C66D8008DB929 /* GroundViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9127BBC32A3ABCD5008DB929 /* BSViewController.swift */,
+				9127BBC32A3ABCD5008DB929 /* GroundViewController.swift */,
 			);
-			path = BaseViewController;
+			path = GroundViewController;
 			sourceTree = "<group>";
 		};
 		9127BBD42A3C66EC008DB929 /* Extensions */ = {
@@ -355,7 +355,7 @@
 				9164F1572A84EFD3005FF033 /* Helper */,
 				9127BBD72A3C6813008DB929 /* SettingViewController */,
 				9127BBD42A3C66EC008DB929 /* Extensions */,
-				9127BBD32A3C66D8008DB929 /* BaseViewController */,
+				9127BBD32A3C66D8008DB929 /* GroundViewController */,
 				9127BBD62A3C6809008DB929 /* MemoriesViewController */,
 				917CF54E2A3EFAEA00F02D48 /* MyGroupViewController */,
 				9127BBD52A3C6713008DB929 /* MainViewController */,
@@ -571,7 +571,7 @@
 				9127BBD92A3C8131008DB929 /* MemoriesView.swift in Sources */,
 				911092D82A6BA167002C5928 /* MainViewController + CameraView.swift in Sources */,
 				9110928F2A526EA7002C5928 /* MapViewController.swift in Sources */,
-				9127BBC42A3ABCD5008DB929 /* BSViewController.swift in Sources */,
+				9127BBC42A3ABCD5008DB929 /* GroundViewController.swift in Sources */,
 				917CF5502A3EFB1A00F02D48 /* MyGroupViewController.swift in Sources */,
 				917CF54D2A3DF80900F02D48 /* PostTableViewCell - GroupList.swift in Sources */,
 				9111205C2A4D390E0003F923 /* GroupSelectionView.swift in Sources */,

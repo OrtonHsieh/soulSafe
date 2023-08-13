@@ -107,7 +107,6 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // 這邊是當取用的位置偵測到使用者更新位置時會執行的 code
         // 也就是說自己會看到最精準的自己，但別人會因為上傳至 FireStore 的時間不同而有所差異
-        // 這邊如果執行的話會一直跑回預設的位置有點 bothering
         guard let location = locations.last else { return }
         let center = CLLocationCoordinate2D(
             latitude: location.coordinate.latitude,

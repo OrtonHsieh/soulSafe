@@ -58,11 +58,11 @@ class SignInViewController: UIViewController {
                                 print("User remains logged in. Proceed to another view.")
                                 // Present BaseVC
                                 DispatchQueue.main.async {
-                                    let bsViewController = BSViewController()
-                                    bsViewController.modalPresentationStyle = .fullScreen
+                                    let groundViewController = GroundViewController()
+                                    groundViewController.modalPresentationStyle = .fullScreen
                                     Vibration.shared.lightV()
-                                    // Present the BSViewController from the current view controller
-                                    self.present(bsViewController, animated: true, completion: nil)
+                                    // Present the GroundViewController from the current view controller
+                                    self.present(groundViewController, animated: true, completion: nil)
                                 }
                             case .revoked:
                                 print("User logged in before but revoked.")
@@ -262,12 +262,12 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                     DispatchQueue.main.async {
                         self.activityIndicator.stopAnimating()
                         self.siwaButton.isUserInteractionEnabled = true
-                        let bsViewController = BSViewController()
-                        bsViewController.modalPresentationStyle = .fullScreen
+                        let groundViewController = GroundViewController()
+                        groundViewController.modalPresentationStyle = .fullScreen
                         Vibration.shared.lightV()
                         
-                        // Present the BSViewController from the current view controller
-                        self.present(bsViewController, animated: true, completion: nil)
+                        // Present the GroundViewController from the current view controller
+                        self.present(groundViewController, animated: true, completion: nil)
                     }
                 } else {
                     print("Error authenticating.")

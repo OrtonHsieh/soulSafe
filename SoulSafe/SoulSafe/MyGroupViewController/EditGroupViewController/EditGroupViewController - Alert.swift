@@ -73,7 +73,6 @@ extension EditGroupViewController {
         
         let cancelAction = UIAlertAction(title: "取消", style: .cancel)
         alertController.addAction(cancelAction)
-        print("我是\(currentGroupID)")
         let confirmAction = UIAlertAction(title: "確認", style: .default) { _ in
             let userPath = self.db.collection("users")
             let userPathToGroups = userPath.document("\(UserSetup.userID)").collection("groups")
@@ -82,7 +81,6 @@ extension EditGroupViewController {
                 if let err = err {
                     print("Error removing document: \(err)")
                 } else {
-                    print("成功於 fireStore 將群組由個人的群組路徑移除")
                     let groupPath = self.db.collection("groups")
                     let groupPathToMembers = groupPath.document("\(self.currentGroupID)").collection("members")
                     let initGroupPath = groupPathToMembers.document("\(UserSetup.userID)")

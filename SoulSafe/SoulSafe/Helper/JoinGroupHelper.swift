@@ -98,7 +98,7 @@ class JoinGroupHelper {
             ])
             
             self.joinedSuccessfullyMsg(groupTitle)
-            print("傳訊息給相關的 VC")
+            // 傳訊息給相關的 VC
         }
 
         alertController.addAction(rejectButton)

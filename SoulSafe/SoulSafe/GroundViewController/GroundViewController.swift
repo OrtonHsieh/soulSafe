@@ -9,7 +9,7 @@ import UIKit
 import FirebaseFirestore
 import AuthenticationServices
 
-class BSViewController: UIViewController {
+class GroundViewController: UIViewController {
     let scrollView = UIScrollView()
     var viewControllers: [UIViewController] = []
     let mainVC = MainViewController()
@@ -117,7 +117,7 @@ class BSViewController: UIViewController {
                     signInViewController.modalPresentationStyle = .fullScreen
                     Vibration.shared.lightV()
                     
-                    // Present the BSViewController from the current view controller
+                    // Present the GroundViewController from the current view controller
                     self.present(signInViewController, animated: true, completion: nil)
                 }
             }
@@ -145,14 +145,14 @@ class BSViewController: UIViewController {
     }
 }
 
-extension BSViewController: UIScrollViewDelegate {
+extension GroundViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // 鎖住垂直滾動，將 y 軸偏移量設為 0
         scrollView.contentOffset.y = 0
     }
 }
 
-extension BSViewController: MainViewControllerDelegate {
+extension GroundViewController: MainViewControllerDelegate {
     func didPressSettingBtn(_ viewController: MainViewController) {
         switchToSetting()
     }
@@ -172,13 +172,13 @@ extension BSViewController: MainViewControllerDelegate {
     }
 }
 
-extension BSViewController: MemoriesViewControllerDelegate {
+extension GroundViewController: MemoriesViewControllerDelegate {
     func didPressBackBtn(_ viewController: MemoriesViewController) {
         switchToMain()
     }
 }
 
-extension BSViewController: SettingViewControllerDelegate {
+extension GroundViewController: SettingViewControllerDelegate {
     func didPressSettingViewBackBtn(_ viewController: SettingViewController) {
         switchToMain()
     }

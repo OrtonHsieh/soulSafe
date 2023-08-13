@@ -74,13 +74,12 @@ class MemoriesView: UIView {
     }
     
     @objc func buttonDidPress() {
-        print("滑動回去 mainVC")
+        // 滑動回去 mainVC
         Vibration.shared.lightV()
         delegate?.didPressBackBtn(self)
     }
     
     @objc func didClickGroupSelector() {
-        print("選項片集")
         Vibration.shared.lightV()
         delegate?.didPressGroupSelector(self)
     }
