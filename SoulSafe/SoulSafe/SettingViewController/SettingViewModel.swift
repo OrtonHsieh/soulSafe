@@ -19,6 +19,25 @@ class SettingViewModel {
     let db = Firestore.firestore()
     // swiftlint:enable all
     
+    func setupPersonalInfo(completion: @escaping (Result<[String: Any], Error>) -> Void) {
+        guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
+        let getPersonalInfoPath = db.collection("users").document("\(userID)")
+        getPersonalInfoPath.getDocument { snapshot, err in
+            if let err = err {
+                completion(.failure(err))
+            } else {
+                guard let snapshot = snapshot else { return }
+                guard let data = snapshot.data() else { return }
+                guard let userAvatar = data["userAvatar"] as? String else { return }
+                guard let userName = data["userName"] as? String else { return }
+                var userInfo: [String: Any] = [:]
+                userInfo["userAvatar"] = userAvatar
+                userInfo["userName"] = userName
+                completion(.success(userInfo))
+            }
+        }
+    }
+    
     func deleteUserAccount(completion: @escaping (Result<Void, AccountError>) -> Void) {
         let user = Auth.auth().currentUser
         user?.delete { error in
@@ -70,6 +89,36 @@ class SettingViewModel {
             } else {
                 print("Upload userAvatar to user path successfully.")
                 completion(.success(()))
+            }
+        }
+    }
+    
+    func updateUserName(userName: String, userID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let storeNamePath = self.db.collection("users").document("\(userID)")
+        storeNamePath.setData(
+            ["userName": "\(userName)"],
+            merge: true) { err in
+            if let err = err {
+                completion(.failure(err))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func updateUserNameInGroups(userID: String, userName: String, groupIDs: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+        let groupPath = db.collection("groups")
+        for groupID in groupIDs {
+            let groupPathToMembers = groupPath.document("\(groupID)").collection("members")
+            let storeNameInGroupMemberListPath = groupPathToMembers.document("\(userID)")
+            storeNameInGroupMemberListPath.setData(
+                ["userName": "\(userName)"],
+                merge: true) { err in
+                if let err = err {
+                    completion(.failure(err))
+                } else {
+                    completion(.success(()))
+                }
             }
         }
     }

@@ -21,9 +21,6 @@ class SettingViewController: UIViewController {
     let settingTableView = UITableView()
     let settingViewModel = SettingViewModel()
     var groupIDs: [String] = []
-    // swiftlint:disable all
-    let db = Firestore.firestore()
-    // swiftlint:enable all
     
     var userAvatar = "" {
         didSet {
@@ -57,18 +54,16 @@ class SettingViewController: UIViewController {
     }
     
     func setupPersonalInfo() {
-        guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
-        let getPersonalInfoPath = db.collection("users").document("\(userID)")
-        getPersonalInfoPath.getDocument { snapshot, err in
-            if let err = err {
-                print(err)
-            } else {
-                guard let snapshot = snapshot else { return }
-                guard  let data = snapshot.data() else { return }
-                guard let userAvatar = data["userAvatar"] as? String else { return }
-                guard let userName = data["userName"] as? String else { return }
-                self.userAvatar = userAvatar
+        settingViewModel.setupPersonalInfo { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case.success(let userInfo):
+                guard let userName = userInfo["userName"] as? String else { return }
+                guard let userAvatar = userInfo["userAvatar"] as? String else { return }
                 self.userName = userName
+                self.userAvatar = userAvatar
+            case.failure(let err):
+                print("Failed to get userInfo from server: \(err)")
             }
         }
     }
@@ -194,33 +189,25 @@ extension SettingViewController: CropViewControllerDelegate {
 
 extension SettingViewController: EditNameViewControllerDelegate {
     func didPressSaveBtn(_ view: EditNameViewController, name: String) {
-        guard let userID = UserDefaults.standard.object(forKey: "userID") else { return }
+        guard let userID = UserDefaults.standard.object(forKey: "userID") as? String else { return }
         UserDefaults.standard.set("\(name)", forKey: "userName")
         settingView.userNameLabel.text = name
-        let storeNamePath = self.db.collection("users").document("\(userID)")
-        storeNamePath.setData(
-            ["userName": "\(name)"],
-            merge: true) { err in
-            if let err = err {
-                print("Failed to upload img: \(err)")
-            } else {
+        settingViewModel.updateUserName(userName: name, userID: userID) { result in
+            switch result {
+            case.success(()):
                 print("Upload userAvatar to user path successfully.")
+            case.failure(let err):
+                print("Failed to update userName: \(err)")
             }
         }
         
         if !self.groupIDs.isEmpty {
-            let groupPath = db.collection("groups")
-            for groupID in self.groupIDs {
-                let groupPathToMembers = groupPath.document("\(groupID)").collection("members")
-                let storeNameInGroupMemberListPath = groupPathToMembers.document("\(userID)")
-                storeNameInGroupMemberListPath.setData(
-                    ["userName": "\(name)"],
-                    merge: true) { err in
-                    if let err = err {
-                        print(err)
-                    } else {
-                        print("stored userName in groups")
-                    }
+            settingViewModel.updateUserNameInGroups(userID: userID, userName: name, groupIDs: self.groupIDs) { result in
+                switch result {
+                case.success(()):
+                    print("stored userName in groups")
+                case.failure(let err):
+                    print("Failed to update userName in existing groups: \(err)")
                 }
             }
         } else {
