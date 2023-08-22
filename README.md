@@ -1,5 +1,5 @@
 # SoulSafe
-[Download link](https://testflight.apple.com/join/VbZucyPi)
+[TestFlight download link](https://testflight.apple.com/join/VbZucyPi)
 
 ## Description
 
