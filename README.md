@@ -1,5 +1,5 @@
 # SoulSafe
-[TestFlight download link](https://testflight.apple.com/join/VbZucyPi) {+Available+}
+[TestFlight download link](https://testflight.apple.com/join/VbZucyPi) <span style="color:green;">Available</span>
 
 ## Description
 
