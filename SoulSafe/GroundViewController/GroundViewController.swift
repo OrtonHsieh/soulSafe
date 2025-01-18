@@ -11,11 +11,22 @@ import AuthenticationServices
 
 final class GroundViewController: UIViewController {
     // MARK: - Properties
-    private let scrollView = UIScrollView()
-    private var viewControllers: [UIViewController] = []
-    private let mainVC = MainViewController()
-    private let memoriesVC = MemoriesViewController()
-    private let settingVC = SettingViewController()
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.frame = self.view.bounds
+        view.isPagingEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.delegate = self
+        view.isPagingEnabled = true
+        view.bounces = false // Disable bouncing behavior
+        view.showsVerticalScrollIndicator = false
+        return view
+    }()
+    
+    private lazy var viewControllers: [UIViewController] = []
+    private lazy var mainVC = MainViewController()
+    private lazy var memoriesVC = MemoriesViewController()
+    private lazy var settingVC = SettingViewController()
     private var groupTitles: [String] = [] {
         didSet {
             memoriesVC.groupTitles = groupTitles
@@ -37,8 +48,8 @@ final class GroundViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
+        view.addSubview(scrollView)
         setupUserInfo()
-        setupScrollView()
         setupScrollViewConponents()
         mainVC.delegate = self
         memoriesVC.delegate = self
@@ -78,18 +89,6 @@ final class GroundViewController: UIViewController {
         UserSetup.userName = "尚未設定名稱"
         // 這邊要打 API 去 fireStore 拿最新的大頭貼存到 UserDefaults
         UserSetup.userImage = UserDefaults.standard.string(forKey: "userAvatar") ?? "defaultAvatar"
-    }
-    
-    private func setupScrollView() {
-        scrollView.frame = view.bounds
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.isPagingEnabled = true
-        scrollView.bounces = false // Disable bouncing behavior
-        scrollView.showsVerticalScrollIndicator = false
-        
-        view.addSubview(scrollView)
     }
     
     private func setupScrollViewConponents() {
