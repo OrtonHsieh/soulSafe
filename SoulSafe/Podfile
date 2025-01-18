@@ -10,7 +10,7 @@ target 'SoulSafe' do
   pod 'GrowingTextView', '0.7.2'
   pod 'FirebaseAuth', '9.0'
   pod 'FirebaseFirestore', '9.0'
-  pod 'FirebaseStorage', '9.0'
+  pod 'FirebaseStorage', '10.15.0'
   pod 'Kingfisher', '~> 7.0'
   pod 'FirebaseFirestoreSwift', '> 7.0-beta'
   pod 'CropViewController'
