@@ -9,26 +9,31 @@ import UIKit
 import FirebaseFirestore
 import AuthenticationServices
 
-class GroundViewController: UIViewController {
-    let scrollView = UIScrollView()
-    var viewControllers: [UIViewController] = []
-    let mainVC = MainViewController()
-    let memoriesVC = MemoriesViewController()
-    let settingVC = SettingViewController()
-    var groupTitles: [String] = [] {
+final class GroundViewController: UIViewController {
+    // MARK: - Properties
+    private let scrollView = UIScrollView()
+    private var viewControllers: [UIViewController] = []
+    private let mainVC = MainViewController()
+    private let memoriesVC = MemoriesViewController()
+    private let settingVC = SettingViewController()
+    private var groupTitles: [String] = [] {
         didSet {
             memoriesVC.groupTitles = groupTitles
         }
     }
-    var groupIDs: [String] = [] {
+    
+    private var groupIDs: [String] = [] {
         didSet {
             memoriesVC.groupIDs = groupIDs
             settingVC.groupIDs = groupIDs
         }
     }
+    
     // swiftlint:disable all
-    let db = Firestore.firestore()
+    private let db = Firestore.firestore()
     // swiftlint:enable all
+    
+    // MARK: - Initialization
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
@@ -46,6 +51,7 @@ class GroundViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
+    // MARK: - Methods for UI SetUp
     private func observeAppleIDSessionChanges() {
         NotificationCenter.default.addObserver(
             forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification,
@@ -66,7 +72,7 @@ class GroundViewController: UIViewController {
         )
     }
     
-    func setupUserInfo() {
+    private func setupUserInfo() {
         // 這邊要將資料從 FireBase 拿回來存
         UserSetup.userID = UserDefaults.standard.string(forKey: "userID") ?? "尚未登入"
         UserSetup.userName = "尚未設定名稱"
@@ -74,7 +80,7 @@ class GroundViewController: UIViewController {
         UserSetup.userImage = UserDefaults.standard.string(forKey: "userAvatar") ?? "defaultAvatar"
     }
     
-    func setupScrollView() {
+    private func setupScrollView() {
         scrollView.frame = view.bounds
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
@@ -86,7 +92,7 @@ class GroundViewController: UIViewController {
         view.addSubview(scrollView)
     }
     
-    func setupScrollViewConponents() {
+    private func setupScrollViewConponents() {
         viewControllers = [memoriesVC, mainVC, settingVC]
         
         // Add the child view controllers to the scroll view
@@ -109,7 +115,7 @@ class GroundViewController: UIViewController {
         scrollView.bringSubviewToFront(viewControllers[1].view)
     }
     
-    @objc func userDefaultsDidChange(notification: Notification) {
+    @objc private func userDefaultsDidChange(notification: Notification) {
         if let defaults = notification.object as? UserDefaults {
             if defaults.object(forKey: "userIDForAuth") == nil {
                 DispatchQueue.main.async {
@@ -123,21 +129,22 @@ class GroundViewController: UIViewController {
             }
         }
     }
-    func switchToMemories() {
+    
+    private func switchToMemories() {
         let pageNumber = 0
         let scrollViewWidth = scrollView.bounds.width
         let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
         scrollView.setContentOffset(contentOffset, animated: true)
     }
     
-    func switchToMain() {
+    private func switchToMain() {
         let pageNumber = 1
         let scrollViewWidth = scrollView.bounds.width
         let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
         scrollView.setContentOffset(contentOffset, animated: true)
     }
     
-    func switchToSetting() {
+    private func switchToSetting() {
         let pageNumber = 2
         let scrollViewWidth = scrollView.bounds.width
         let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
