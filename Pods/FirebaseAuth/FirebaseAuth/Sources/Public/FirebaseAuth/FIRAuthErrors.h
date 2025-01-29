@@ -21,19 +21,19 @@ NS_ASSUME_NONNULL_BEGIN
 /** @class FIRAuthErrors
     @remarks Error Codes common to all API Methods:
 
-        + `FIRAuthErrorCodeNetworkError`
-        + `FIRAuthErrorCodeUserNotFound`
-        + `FIRAuthErrorCodeUserTokenExpired`
-        + `FIRAuthErrorCodeTooManyRequests`
-        + `FIRAuthErrorCodeInvalidAPIKey`
-        + `FIRAuthErrorCodeAppNotAuthorized`
-        + `FIRAuthErrorCodeKeychainError`
-        + `FIRAuthErrorCodeInternalError`
+        + `AuthErrorCodeNetworkError`
+        + `AuthErrorCodeUserNotFound`
+        + `AuthErrorCodeUserTokenExpired`
+        + `AuthErrorCodeTooManyRequests`
+        + `AuthErrorCodeInvalidAPIKey`
+        + `AuthErrorCodeAppNotAuthorized`
+        + `AuthErrorCodeKeychainError`
+        + `AuthErrorCodeInternalError`
 
-    @remarks Common error codes for `FIRUser` operations:
+    @remarks Common error codes for `User` operations:
 
-        + `FIRAuthErrorCodeInvalidUserToken`
-        + `FIRAuthErrorCodeUserDisabled`
+        + `AuthErrorCodeInvalidUserToken`
+        + `AuthErrorCodeUserDisabled`
 
  */
 NS_SWIFT_NAME(AuthErrors)
@@ -51,10 +51,10 @@ extern NSString *const FIRAuthErrorUserInfoNameKey NS_SWIFT_NAME(AuthErrorUserIn
 
 /**
     @brief Errors with one of the following three codes:
-          - `FIRAuthErrorCodeAccountExistsWithDifferentCredential`
-          - `FIRAuthErrorCodeCredentialAlreadyInUse`
-          - `FIRAuthErrorCodeEmailAlreadyInUse`
-        may contain  an `NSError.userInfo` dictinary object which contains this key. The value
+          - `AuthErrorCodeAccountExistsWithDifferentCredential`
+          - `AuthErrorCodeCredentialAlreadyInUse`
+          - `AuthErrorCodeEmailAlreadyInUse`
+        may contain an `NSError.userInfo` dictinary object which contains this key. The value
         associated with this key is an NSString of the email address of the account that already
         exists.
  */
@@ -275,12 +275,12 @@ typedef NS_ERROR_ENUM(FIRAuthErrorDomain, FIRAuthErrorCode){
     FIRAuthErrorCodeQuotaExceeded = 17052,
 
     /** Indicates that the APNs device token could not be obtained. The app may not have set up
-        remote notification correctly, or may fail to forward the APNs device token to FIRAuth
+        remote notification correctly, or may fail to forward the APNs device token to Auth
         if app delegate swizzling is disabled.
      */
     FIRAuthErrorCodeMissingAppToken = 17053,
 
-    /** Indicates that the app fails to forward remote notification to FIRAuth.
+    /** Indicates that the app fails to forward remote notification to Auth.
      */
     FIRAuthErrorCodeNotificationNotForwarded = 17054,
 
@@ -409,13 +409,54 @@ typedef NS_ERROR_ENUM(FIRAuthErrorDomain, FIRAuthErrorCode){
      */
     FIRAuthErrorCodeEmailChangeNeedsVerification = 17090,
 
+    /** Indicates that the request does not contain a client identifier.
+     */
+    FIRAuthErrorCodeMissingClientIdentifier = 17093,
+
     /** Indicates that the nonce is missing or invalid.
      */
     FIRAuthErrorCodeMissingOrInvalidNonce = 17094,
 
-    /** Indicates an error for when the client identifier is missing.
+    /** Raised when a Cloud Function returns a blocking error. Will include a message returned from
+     * the function.
      */
-    FIRAuthErrorCodeMissingClientIdentifier = 17993,
+    FIRAuthErrorCodeBlockingCloudFunctionError = 17105,
+
+    /** Indicates that reCAPTCHA Enterprise integration is not enabled for this project.
+     */
+    FIRAuthErrorCodeRecaptchaNotEnabled = 17200,
+
+    /** Indicates that the reCAPTCHA token is missing from the backend request.
+     */
+    FIRAuthErrorCodeMissingRecaptchaToken = 17201,
+
+    /** Indicates that the reCAPTCHA token sent with the backend request is invalid.
+     */
+    FIRAuthErrorCodeInvalidRecaptchaToken = 17202,
+
+    /** Indicates that the requested reCAPTCHA action is invalid.
+     */
+    FIRAuthErrorCodeInvalidRecaptchaAction = 17203,
+
+    /** Indicates that the client type is missing from the request.
+     */
+    FIRAuthErrorCodeMissingClientType = 17204,
+
+    /** Indicates that the reCAPTCHA version is missing from the request.
+     */
+    FIRAuthErrorCodeMissingRecaptchaVersion = 17205,
+
+    /** Indicates that the reCAPTCHA version sent to the backend is invalid.
+     */
+    FIRAuthErrorCodeInvalidRecaptchaVersion = 17206,
+
+    /** Indicates that the request type sent to the backend is invalid.
+     */
+    FIRAuthErrorCodeInvalidReqType = 17207,
+
+    /** Indicates that the reCAPTCHA SDK is not linked to the app.
+     */
+    FIRAuthErrorCodeRecaptchaSDKNotLinked = 17208,
 
     /** Indicates an error occurred while attempting to access the keychain.
      */
