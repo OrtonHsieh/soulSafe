@@ -9,6 +9,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    var appCoordinator: AppCoordinator?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -18,8 +19,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         // swiftlint:enable all
         
+        // Create main navigation controller
+        let navigationController = UINavigationController()
+        
+        // Create window
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
+        window?.rootViewController = navigationController
+        
+        // Create and start app coordinator
+        let viewModelFactory = ViewModelFactory(container: DependencyContainer.shared)
+        appCoordinator = AppCoordinator(
+            navigationController: navigationController,
+            viewModelFactory: viewModelFactory
+        )
+        appCoordinator?.start()
+        
         window?.makeKeyAndVisible()
     }
     

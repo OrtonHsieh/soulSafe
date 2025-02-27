@@ -1,5 +1,5 @@
 //
-//  SignInPage.swift
+//  SignInViewController.swift
 //  SoulSafe
 //
 //  Created by 謝承翰 on 2023/7/7.
@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import CryptoKit
 
-class SignInViewController: UIViewController {
+class SignInViewController<ViewModel: SignInViewModel>: UIViewController, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
     let brandImgView = UIImageView()
     // swiftlint:disable all
     let db = Firestore.firestore()
@@ -18,72 +18,83 @@ class SignInViewController: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .large)
     var currentNonce: String?
     let siwaButton = ASAuthorizationAppleIDButton()
-    private var signInManager = SignInHelper(db: Firestore.firestore())
+    private var signInHelper: SignInHelper
+    let viewModel: ViewModel
+    
+    init(signInHelper: SignInHelper, viewModel: ViewModel) {
+        self.signInHelper = signInHelper
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
         self.setupConstraints()
         self.view.backgroundColor = UIColor(hex: CIC.shared.M1)
-        checkSignInStatus()
+//        checkSignInStatus()
     }
     
-    private func checkSignInStatus() {
-        if let userIDForAuth = UserDefaults.standard.string(forKey: "userIDForAuth") {
-            // Check the login status of Apple sign in for the app
-            // Asynchronous
-            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
-                setupView()
-                setupConstraints()
-                setupSignInWithApple()
-                return
-            }
-            let checkIfUserExistedPath = db.collection("users").document("\(userID)")
-            checkIfUserExistedPath.getDocument { snapshot, err in
-                if let err = err {
-                    print(err)
-                } else {
-                    guard let snapshot = snapshot else { return }
-                    // 這邊是判斷 users 的 collection 是否也有該 user
-                    if snapshot.data() == nil {
-                        self.setupView()
-                        self.setupConstraints()
-                        self.setupSignInWithApple()
-                        return
-                    } else {
-                        let provider = ASAuthorizationAppleIDProvider()
-                        provider.getCredentialState(forUserID: userIDForAuth) { credentialState, _ in
-                            switch credentialState {
-                            case .authorized:
-                                print("User remains logged in. Proceed to another view.")
-                                // Present BaseVC
-                                DispatchQueue.main.async {
-                                    let groundViewController = GroundViewController()
-                                    groundViewController.modalPresentationStyle = .fullScreen
-                                    Vibration.shared.lightV()
-                                    // Present the GroundViewController from the current view controller
-                                    self.present(groundViewController, animated: true, completion: nil)
-                                }
-                            case .revoked:
-                                print("User logged in before but revoked.")
-                                self.setupSignInWithApple()
-                            case .notFound:
-                                print("User logged in before but revoked.")
-                                self.setupSignInWithApple()
-                            default:
-                                print("Unknown state.")
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            setupView()
-            setupConstraints()
-            setupSignInWithApple()
-        }
-    }
-    
+//    private func checkSignInStatus() {
+//        if let userIDForAuth = UserDefaults.standard.string(forKey: "userIDForAuth") {
+//            // Check the login status of Apple sign in for the app
+//            // Asynchronous
+//            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+//                setupView()
+//                setupConstraints()
+//                setupSignInWithApple()
+//                return
+//            }
+//            let checkIfUserExistedPath = db.collection("users").document("\(userID)")
+//            checkIfUserExistedPath.getDocument { snapshot, err in
+//                if let err = err {
+//                    print(err)
+//                } else {
+//                    guard let snapshot = snapshot else { return }
+//                    // 這邊是判斷 users 的 collection 是否也有該 user
+//                    if snapshot.data() == nil {
+//                        self.setupView()
+//                        self.setupConstraints()
+//                        self.setupSignInWithApple()
+//                        return
+//                    } else {
+//                        let provider = ASAuthorizationAppleIDProvider()
+//                        provider.getCredentialState(forUserID: userIDForAuth) { credentialState, _ in
+//                            switch credentialState {
+//                            case .authorized:
+//                                print("User remains logged in. Proceed to another view.")
+//                                // Present BaseVC
+//                                DispatchQueue.main.async {
+//                                    let groundViewController = GroundViewController()
+//                                    groundViewController.modalPresentationStyle = .fullScreen
+//                                    Vibration.shared.lightV()
+//                                    // Present the GroundViewController from the current view controller
+//                                    self.present(groundViewController, animated: true, completion: nil)
+//                                }
+//                            case .revoked:
+//                                print("User logged in before but revoked.")
+//                                self.setupSignInWithApple()
+//                            case .notFound:
+//                                print("User logged in before but revoked.")
+//                                self.setupSignInWithApple()
+//                            default:
+//                                print("Unknown state.")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            setupView()
+//            setupConstraints()
+//            setupSignInWithApple()
+//        }
+//    }
+//    
     func setupView() {
         DispatchQueue.main.async {
             self.view.addSubview(self.brandImgView)
@@ -198,18 +209,17 @@ class SignInViewController: UIViewController {
         
         return hashString
     }
-}
-
-extension SignInViewController: ASAuthorizationControllerPresentationContextProviding {
+    
+    // MARK: - ASAuthorizationControllerPresentationContextProviding
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         // return the current view window
         // swiftlint:disable all
         return self.view.window!
         // swiftlint:enable all
     }
-}
-
-extension SignInViewController: ASAuthorizationControllerDelegate {
+    
+    // MARK: - ASAuthorizationControllerDelegate
+    
     /// 授權失敗
     /// - Parameters:
     ///   - controller: _
@@ -238,7 +248,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             print("Failed")
         case .notInteractive:
             print("Note interactive")
-        @unknown default:
+        default:
             print("Default")
         }
     }
@@ -254,7 +264,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             guard let nonce = currentNonce else {
                 fatalError("Invalid state: a login callback was received, but no login request was sent.")
             }
-            signInManager.handleAppleIDAuthorization(
+            signInHelper.handleAppleIDAuthorization(
                 appleIDCredential: appleIDCredential,
                 nonce: nonce) { [weak self] success in
                 guard let self = self else { return }
@@ -262,12 +272,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                     DispatchQueue.main.async {
                         self.activityIndicator.stopAnimating()
                         self.siwaButton.isUserInteractionEnabled = true
-                        let groundViewController = GroundViewController()
-                        groundViewController.modalPresentationStyle = .fullScreen
-                        Vibration.shared.lightV()
-                        
-                        // Present the GroundViewController from the current view controller
-                        self.present(groundViewController, animated: true, completion: nil)
+                        self.viewModel.cancel()
                     }
                 } else {
                     print("Error authenticating.")

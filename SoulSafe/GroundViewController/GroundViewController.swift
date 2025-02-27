@@ -7,10 +7,10 @@
 
 import UIKit
 import FirebaseFirestore
-import AuthenticationServices
 
-final class GroundViewController: UIViewController {
+final class GroundViewController<ViewModel: GroundViewModel>: UIViewController, UIScrollViewDelegate {
     // MARK: - Properties
+    let viewModel: ViewModel
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.frame = self.view.bounds
@@ -45,6 +45,15 @@ final class GroundViewController: UIViewController {
     // swiftlint:enable all
     
     // MARK: - Initialization
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
@@ -54,8 +63,6 @@ final class GroundViewController: UIViewController {
         mainVC.delegate = self
         memoriesVC.delegate = self
         settingVC.delegate = self
-        observeAppleIDSessionChanges()
-        observeIfUserLogout()
     }
     
     deinit {
@@ -63,26 +70,6 @@ final class GroundViewController: UIViewController {
     }
     
     // MARK: - Methods for UI SetUp
-    private func observeAppleIDSessionChanges() {
-        NotificationCenter.default.addObserver(
-            forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification,
-            object: nil,
-            queue: nil
-        ) { _ in
-            // Sign user in or out
-            print("Sign user in or out...")
-        }
-    }
-    
-    private func observeIfUserLogout() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(userDefaultsDidChange),
-            name: UserDefaults.didChangeNotification,
-            object: nil
-        )
-    }
-    
     private func setupUserInfo() {
         // 這邊要將資料從 FireBase 拿回來存
         UserSetup.userID = UserDefaults.standard.string(forKey: "userID") ?? "尚未登入"
@@ -114,21 +101,6 @@ final class GroundViewController: UIViewController {
         scrollView.bringSubviewToFront(viewControllers[1].view)
     }
     
-    @objc private func userDefaultsDidChange(notification: Notification) {
-        if let defaults = notification.object as? UserDefaults {
-            if defaults.object(forKey: "userIDForAuth") == nil {
-                DispatchQueue.main.async {
-                    let signInViewController = SignInViewController()
-                    signInViewController.modalPresentationStyle = .fullScreen
-                    Vibration.shared.lightV()
-                    
-                    // Present the GroundViewController from the current view controller
-                    self.present(signInViewController, animated: true, completion: nil)
-                }
-            }
-        }
-    }
-    
     private func switchToMemories() {
         let pageNumber = 0
         let scrollViewWidth = scrollView.bounds.width
@@ -149,9 +121,8 @@ final class GroundViewController: UIViewController {
         let contentOffset = CGPoint(x: scrollViewWidth * CGFloat(pageNumber), y: 0)
         scrollView.setContentOffset(contentOffset, animated: true)
     }
-}
-
-extension GroundViewController: UIScrollViewDelegate {
+    
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // 鎖住垂直滾動，將 y 軸偏移量設為 0
         scrollView.contentOffset.y = 0
