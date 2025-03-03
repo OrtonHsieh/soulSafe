@@ -33,7 +33,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             cameraView?.photoImageView.layer.masksToBounds = true
             cameraView?.photoImageView.layer.shouldRasterize = true
             cameraView?.photoImageView.layer.rasterizationScale = UIScreen.main.scale
-            conponentsArrangementWhenCameraOff()
+            componentsArrangementWhenCameraOff()
         }
     }
 }

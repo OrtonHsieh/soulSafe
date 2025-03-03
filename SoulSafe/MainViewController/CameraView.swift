@@ -100,8 +100,8 @@ class CameraView: UIView {
         }
         
         groupContainerView.backgroundColor = UIColor(hex: CIC.shared.M2)
-        let tapGestureForGroup = UITapGestureRecognizer(target: self, action: #selector(groupContainerViewTapped))
-        groupContainerView.addGestureRecognizer(tapGestureForGroup)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(groupContainerViewTapped))
+        groupContainerView.addGestureRecognizer(tapGesture)
         groupLabel.text = "群組"
         groupLabel.textColor = UIColor(hex: CIC.shared.F2)
         groupImgView.image = UIImage(systemName: "person.3.fill")?.withConfiguration(
@@ -115,7 +115,7 @@ class CameraView: UIView {
         
         NSLayoutConstraint.activate([
             groupContainerView.bottomAnchor.constraint(
-                equalTo: safeAreaLayoutGuide.bottomAnchor,
+                equalTo: bottomAnchor,
                 constant: -20
             ),
             groupContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -282,22 +282,36 @@ class CameraView: UIView {
         videoPreviewLayer?.frame = CGRect(x: 0, y: 0, width: width, height: height)
     }
     
-    @objc func takePic() {delegate?.didTakePic(self)}
+    @objc func takePic() {
+        delegate?.didTakePic(self)
+    }
     
-    @objc func closeBtmPressed() {delegate?.didPressCloseBtn(self)}
+    @objc func closeBtmPressed() {
+        delegate?.didPressCloseBtn(self)
+    }
     
     @objc func sendBtmPressed() {
         guard let picImage = photoImageView.image else { return }
         delegate?.didPressSendBtn(self, image: picImage)
     }
     
-    @objc func groupContainerViewTapped() {delegate?.didPressGroupBtn(self)}
+    @objc func groupContainerViewTapped() {
+        delegate?.didPressGroupBtn(self)
+    }
     
-    @objc func mapContainerViewTapped() {delegate?.didPressMapBtn(self)}
+    @objc func mapContainerViewTapped() {
+        delegate?.didPressMapBtn(self)
+    }
     
-    @objc func didPressMemoriesBtn() {delegate?.didPressMemoriesBtn(self)}
+    @objc func didPressMemoriesBtn() {
+        delegate?.didPressMemoriesBtn(self)
+    }
     
-    @objc func didPressSettingBtn() {delegate?.didPressSettingBtn(self)}
+    @objc func didPressSettingBtn() {
+        delegate?.didPressSettingBtn(self)
+    }
     
-    @objc func didPressReverseBtn() {delegate?.didPressReverseBtn(self)}
+    @objc func didPressReverseBtn() {
+        delegate?.didPressReverseBtn(self)
+    }
 }

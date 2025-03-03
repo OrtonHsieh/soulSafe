@@ -145,6 +145,13 @@ class MainViewController: UIViewController {
             guard let cameraView = cameraView else { return }
             cameraView.delegate = self
             view.addSubview(cameraView)
+            cameraView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                cameraView.topAnchor.constraint(equalTo: view.topAnchor),
+                cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                cameraView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                cameraView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
             
             DispatchQueue.global(qos: .background).async {
                 // Start running the capture session

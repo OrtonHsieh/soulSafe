@@ -52,7 +52,7 @@ extension MainViewController: CameraViewDelegate {
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
     
-    func conponentsArrangementWhenCameraOn() {
+    func componentsArrangementWhenCameraOn() {
         cameraView?.photoImageView.isHidden = true
         cameraView?.cameraView.isHidden = false
         cameraView?.closeButton.isHidden = true
@@ -64,7 +64,7 @@ extension MainViewController: CameraViewDelegate {
         groupStackView.isHidden = true
     }
     
-    func conponentsArrangementWhenCameraOff() {
+    func componentsArrangementWhenCameraOff() {
         cameraView?.photoImageView.isHidden = false
         cameraView?.cameraView.isHidden = true
         cameraView?.closeButton.isHidden = false
@@ -78,13 +78,13 @@ extension MainViewController: CameraViewDelegate {
     
     func didPressCloseBtn(_ view: CameraView) {
         Vibration.shared.mediumV()
-        conponentsArrangementWhenCameraOn()
+        componentsArrangementWhenCameraOn()
         cleanGroupSelection()
     }
     
     func didPressSendBtn(_ view: CameraView, image: UIImage) {
         Vibration.shared.lightV()
-        conponentsArrangementWhenCameraOn()
+        componentsArrangementWhenCameraOn()
         uploadPhoto(image: image) { result in
             switch result {
             case .success(let url):
