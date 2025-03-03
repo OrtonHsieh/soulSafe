@@ -13,6 +13,7 @@ import Kingfisher
 
 protocol SettingViewControllerDelegate: AnyObject {
     func didPressSettingViewBackBtn(_ viewController: SettingViewController)
+    func didConfirmLogout(_ viewController: SettingViewController)
 }
 
 class SettingViewController: UIViewController {

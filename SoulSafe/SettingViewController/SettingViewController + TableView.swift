@@ -31,7 +31,9 @@ extension SettingViewController: UITableViewDelegate {
                 }
             }
         } else {
-            showOptionsAlert(title: "確認登出", message: nil, confirmInfo: "確認") {
+            showOptionsAlert(title: "確認登出", message: nil, confirmInfo: "確認") { [weak self] in
+                guard let self = self else { return }
+                delegate?.didConfirmLogout(self)
                 UserDefaults.standard.removeObject(forKey: "userIDForAuth")
             }
         }

@@ -33,9 +33,10 @@ class SignInViewController<ViewModel: SignInViewModel>: UIViewController, ASAuth
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupView()
-        self.setupConstraints()
-        self.view.backgroundColor = UIColor(hex: CIC.shared.M1)
+        setupView()
+        setupConstraints()
+        setupSignInWithApple()
+        view.backgroundColor = UIColor(hex: CIC.shared.M1)
 //        checkSignInStatus()
     }
     

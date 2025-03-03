@@ -101,11 +101,23 @@ final class SignInCoordinator: Coordinator {
     }
     
     private func routeToSignInViewController() {
-        let viewController = SignInViewController(
-            signInHelper: SignInHelper(db: Firestore.firestore()),
-            viewModel: viewModelFactory.makeSignInViewModel(delegate: self)
-        )
-        navigationController.pushViewController(viewController, animated: true)
+        print("Current navigation stack:", navigationController.viewControllers)
+        
+        // Check if SignInViewController exists in navigation stack
+        if let existingSignInVC = navigationController.viewControllers.first(where: { $0 is SignInViewController<SignInViewModelDefault> }) {
+            print("Found existing SignInViewController, popping to it")
+            navigationController.popToViewController(existingSignInVC, animated: true)
+        } else {
+            print("No existing SignInViewController found, creating new one")
+            let viewController = SignInViewController(
+                signInHelper: SignInHelper(db: Firestore.firestore()),
+                viewModel: viewModelFactory.makeSignInViewModel(delegate: self)
+            )
+            
+            // Clear stack and set SignInViewController as root
+            navigationController.setViewControllers([viewController], animated: false)
+            print("Set new SignInViewController as root")
+        }
     }
 }
 

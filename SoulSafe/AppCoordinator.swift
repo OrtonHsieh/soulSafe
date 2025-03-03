@@ -22,8 +22,11 @@ class AppCoordinator: Coordinator {
     }
     
     func start() {
+        print("AppCoordinator starting...")
+        print("Navigation controller:", navigationController)
+        
         observeAppleIDSessionChanges()
-        observeIfUserLogout()
+//        observeIfUserLogout()
         showAuthFlow()
     }
     
@@ -32,28 +35,31 @@ class AppCoordinator: Coordinator {
             forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification,
             object: nil,
             queue: nil
-        ) { _ in
+        ) { [weak self] _ in
+            guard let self = self else { return }
             // Sign user in or out
             print("Sign user in or out...")
+            navigationController.setViewControllers([] , animated: true)
+            showAuthFlow()
         }
     }
     
-    private func observeIfUserLogout() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(userDefaultsDidChange),
-            name: UserDefaults.didChangeNotification,
-            object: nil
-        )
-    }
-    
-    @objc private func userDefaultsDidChange(notification: Notification) {
-        if let defaults = notification.object as? UserDefaults {
-            if defaults.object(forKey: "userIDForAuth") == nil {
-                routeToSignInViewController()
-            }
-        }
-    }
+//    private func observeIfUserLogout() {
+//        NotificationCenter.default.addObserver(
+//            self,
+//            selector: #selector(userDefaultsDidChange),
+//            name: UserDefaults.didChangeNotification,
+//            object: nil
+//        )
+//    }
+//    
+//    @objc private func userDefaultsDidChange(notification: Notification) {
+//        if let defaults = notification.object as? UserDefaults {
+//            if defaults.object(forKey: "userIDForAuth") == nil {
+//                routeToSignInViewController()
+//            }
+//        }
+//    }
     
     func handleDeepLink(_ deepLink: DeepLink) {
         switch deepLink {
@@ -77,13 +83,14 @@ class AppCoordinator: Coordinator {
     }
     
     private func showAuthFlow() {
-        let authCoordinator = SignInCoordinator(
+        print("Showing auth flow...")
+        let signInCoordinator = SignInCoordinator(
             navigationController: navigationController,
             viewModelFactory: viewModelFactory,
             delegate: self
         )
-        addChildCoordinator(authCoordinator)
-        authCoordinator.start()
+        addChildCoordinator(signInCoordinator)
+        signInCoordinator.start()
     }
     
     private func showMainFlow() {
@@ -105,6 +112,7 @@ extension AppCoordinator: SignInCoordinatorDelegate {
 
 extension AppCoordinator: GroundCoordinatorDelegate {
     func routeToSignInViewController() {
+        UserDefaults.standard.removeObject(forKey: "userIDForAuth")
         showAuthFlow()
     }
 }

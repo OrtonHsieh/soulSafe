@@ -11,7 +11,7 @@ import IQKeyboardManagerSwift
 import Kingfisher
 
 class ChatRoomViewController: UIViewController {
-    lazy var closeBtn = UIButton()
+//    lazy var closeBtn = UIButton()
     lazy var chatTableView = UITableView()
     lazy var textAreaView = ChatRoomView()
     lazy var headerAreaView = ChatRoomHeaderView()
@@ -88,7 +88,7 @@ class ChatRoomViewController: UIViewController {
         [chatTableView, textAreaView, headerAreaView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
-            headerAreaView.topAnchor.constraint(equalTo: view.topAnchor, constant: 336),
+            headerAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 336),
             headerAreaView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerAreaView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerAreaView.heightAnchor.constraint(equalToConstant: 76),

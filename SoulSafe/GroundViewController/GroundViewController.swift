@@ -57,7 +57,8 @@ final class GroundViewController<ViewModel: GroundViewModel>: UIViewController, 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
-        view.addSubview(scrollView)
+        view.backgroundColor = UIColor(hex: CIC.shared.M1)
+        setupScrollView()
         setupUserInfo()
         setupScrollViewConponents()
         mainVC.delegate = self
@@ -65,11 +66,19 @@ final class GroundViewController<ViewModel: GroundViewModel>: UIViewController, 
         settingVC.delegate = self
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    // MARK: - Methods for UI SetUp
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
-    // MARK: - Methods for UI SetUp
     private func setupUserInfo() {
         // 這邊要將資料從 FireBase 拿回來存
         UserSetup.userID = UserDefaults.standard.string(forKey: "userID") ?? "尚未登入"
@@ -156,6 +165,10 @@ extension GroundViewController: MemoriesViewControllerDelegate {
 }
 
 extension GroundViewController: SettingViewControllerDelegate {
+    func didConfirmLogout(_ viewController: SettingViewController) {
+        viewModel.routeToSignInViewController()
+    }
+    
     func didPressSettingViewBackBtn(_ viewController: SettingViewController) {
         switchToMain()
     }
