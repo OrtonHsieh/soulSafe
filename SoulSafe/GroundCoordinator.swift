@@ -27,16 +27,6 @@ final class GroundCoordinator: Coordinator {
     }
     
     func start() {
-//        DispatchQueue.main.async { [weak self] in
-//            guard let self = self else { return }
-//            let groundViewController = GroundViewController(
-//                viewModel: viewModelFactory.makeGroundViewModel(delegate: self)
-//            )
-//            groundViewController.modalPresentationStyle = .fullScreen
-//            Vibration.shared.lightV()
-//            // Present the GroundViewController from the current view controller
-//            navigationController.present(groundViewController, animated: true, completion: nil)
-//        }
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let groundViewController = GroundViewController(
@@ -54,9 +44,6 @@ final class GroundCoordinator: Coordinator {
 }
 
 extension GroundCoordinator: GroundViewModelDelegate {
-//    func routeToSignInViewController() {
-//        delegate?.routeToSignInViewController()
-//    }
     func routeToSignInViewController() {
         // First dismiss the current view controller
         navigationController.dismiss(animated: true) { [weak self] in

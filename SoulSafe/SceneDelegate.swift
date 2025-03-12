@@ -21,6 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // Create main navigation controller
         let navigationController = UINavigationController()
+        navigationController.view.backgroundColor = UIColor(hex: "081F39")
+        navigationController.navigationBar.isHidden = true
         
         // Create window
         window = UIWindow(windowScene: windowScene)

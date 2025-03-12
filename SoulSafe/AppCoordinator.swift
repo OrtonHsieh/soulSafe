@@ -26,7 +26,6 @@ class AppCoordinator: Coordinator {
         print("Navigation controller:", navigationController)
         
         observeAppleIDSessionChanges()
-//        observeIfUserLogout()
         showAuthFlow()
     }
     
@@ -43,23 +42,6 @@ class AppCoordinator: Coordinator {
             showAuthFlow()
         }
     }
-    
-//    private func observeIfUserLogout() {
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(userDefaultsDidChange),
-//            name: UserDefaults.didChangeNotification,
-//            object: nil
-//        )
-//    }
-//    
-//    @objc private func userDefaultsDidChange(notification: Notification) {
-//        if let defaults = notification.object as? UserDefaults {
-//            if defaults.object(forKey: "userIDForAuth") == nil {
-//                routeToSignInViewController()
-//            }
-//        }
-//    }
     
     func handleDeepLink(_ deepLink: DeepLink) {
         switch deepLink {
