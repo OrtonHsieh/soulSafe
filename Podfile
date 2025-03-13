@@ -34,6 +34,8 @@ target 'SoulSafe' do
   pod 'FirebaseAuth', $FirebaseSDKVersion
   pod 'FirebaseStorage', $FirebaseSDKVersion
   pod 'FirebaseFirestore', $FirebaseSDKVersion
+  pod 'Firebase/Crashlytics'
+
 
   pod 'Kingfisher', '~> 7.0'
   # pod 'FirebaseFirestoreSwift', '> 7.0-beta'
