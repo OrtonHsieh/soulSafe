@@ -10,7 +10,10 @@ import FirebaseFirestore
 import FirebaseAuth
 import CryptoKit
 
-class SignInViewController<ViewModel: SignInViewModel>: UIViewController, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
+class SignInViewController<ViewModel: SignInViewModel>:
+    UIViewController,
+    ASAuthorizationControllerPresentationContextProviding,
+    ASAuthorizationControllerDelegate {
     let brandImgView = UIImageView()
     // swiftlint:disable all
     let db = Firestore.firestore()

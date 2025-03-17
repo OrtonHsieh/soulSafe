@@ -18,9 +18,11 @@ final class GroundCoordinator: Coordinator {
     private let viewModelFactory: ViewModelFactory
     private weak var delegate: GroundCoordinatorDelegate?
     
-    init(navigationController: UINavigationController,
-         viewModelFactory: ViewModelFactory,
-         delegate: GroundCoordinatorDelegate) {
+    init(
+        navigationController: UINavigationController,
+        viewModelFactory: ViewModelFactory,
+        delegate: GroundCoordinatorDelegate
+    ) {
         self.navigationController = navigationController
         self.viewModelFactory = viewModelFactory
         self.delegate = delegate
@@ -38,9 +40,7 @@ final class GroundCoordinator: Coordinator {
         }
     }
     
-    func showJoinGroup(groupID: String) {
-        
-    }
+    func showJoinGroup(groupID: String) {}
 }
 
 extension GroundCoordinator: GroundViewModelDelegate {
@@ -52,4 +52,3 @@ extension GroundCoordinator: GroundViewModelDelegate {
         }
     }
 }
-

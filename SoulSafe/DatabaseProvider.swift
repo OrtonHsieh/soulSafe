@@ -14,7 +14,7 @@ enum ApiResult<T> {
     case failure(Error)
 }
 
-final class DatabaseProvider {
+enum DatabaseProvider {
     static let database = Firestore.firestore()
     
     static func getData(collection: String, document: String) -> DocumentReference {

@@ -15,8 +15,10 @@ class AppCoordinator: Coordinator {
     private let viewModelFactory: ViewModelFactory
     private var pendingDeepLink: DeepLink?
     
-    init(navigationController: UINavigationController,
-         viewModelFactory: ViewModelFactory) {
+    init(
+        navigationController: UINavigationController,
+        viewModelFactory: ViewModelFactory
+    ) {
         self.navigationController = navigationController
         self.viewModelFactory = viewModelFactory
     }
@@ -38,7 +40,7 @@ class AppCoordinator: Coordinator {
             guard let self = self else { return }
             // Sign user in or out
             print("Sign user in or out...")
-            navigationController.setViewControllers([] , animated: true)
+            navigationController.setViewControllers([], animated: true)
             showAuthFlow()
         }
     }

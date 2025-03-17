@@ -20,17 +20,18 @@ final class SignInCoordinator: Coordinator {
     private let viewModelFactory: ViewModelFactory
     private weak var delegate: SignInCoordinatorDelegate?
     
-    init(navigationController: UINavigationController,
-         viewModelFactory: ViewModelFactory,
-         delegate: SignInCoordinatorDelegate) {
+    init(
+        navigationController: UINavigationController,
+        viewModelFactory: ViewModelFactory,
+        delegate: SignInCoordinatorDelegate
+    ) {
         self.navigationController = navigationController
         self.viewModelFactory = viewModelFactory
         self.delegate = delegate
     }
     
     func start() {
-        guard let authID = getAuthID(),
-              let userID = getUserID() else {
+        guard let authID = getAuthID(), let userID = getUserID() else {
             routeToSignInViewController()
             return
         }
@@ -39,7 +40,7 @@ final class SignInCoordinator: Coordinator {
             guard let self = self else { return }
             switch result {
             case .success(let data):
-                guard let _ = data.data() else {
+                guard data.data() != nil else {
                     routeToSignInViewController()
                     return
                 }
@@ -104,7 +105,9 @@ final class SignInCoordinator: Coordinator {
         print("Current navigation stack:", navigationController.viewControllers)
         
         // Check if SignInViewController exists in navigation stack
-        if let existingSignInVC = navigationController.viewControllers.first(where: { $0 is SignInViewController<SignInViewModelDefault> }) {
+        if let existingSignInVC = navigationController.viewControllers.first(where: {
+            $0 is SignInViewController<SignInViewModelDefault>
+        }) {
             print("Found existing SignInViewController, popping to it")
             navigationController.popToViewController(existingSignInVC, animated: true)
         } else {
